@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://www.millenniumstar.be/</loc>
+    <priority>1.0</priority>
+    <changefreq>daily</changefreq>
+  </url>
+
+  <!-- Core Pages -->
+  <url>
+    <loc>https://www.millenniumstar.be/about-us</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://www.millenniumstar.be/contact</loc>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://www.millenniumstar.be/services</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Example Product/Category Pages -->
+  <url>
+    <loc>https://www.millenniumstar.be/diamonds</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://www.millenniumstar.be/gemstones</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://www.millenniumstar.be/jewelry</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Blog (if available) -->
+  <url>
+    <loc>https://www.millenniumstar.be/blog</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+</urlset>

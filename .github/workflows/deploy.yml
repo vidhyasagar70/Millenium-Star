@@ -1,0 +1,94 @@
+name: Deploy React App to S3 and CloudFront
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    concurrency:
+      group: ${{ github.event.inputs.environment }}
+      cancel-in-progress: true
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Fail if prod is selected on non-main branch
+        if: github.event.inputs.environment == 'prod' && github.ref != 'refs/heads/main'
+        run: |
+          echo "❌ Cannot deploy to prod from non-main branch!"
+          exit 1
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Checkout external repository
+        uses: actions/checkout@v4
+        with:
+          repository: caratlogic/caratlogic-ci-cd
+          ref: main
+          path: external-repo
+          token: ${{ secrets.TOKEN_CI_CD_GITHUB }}
+
+      - name: Set environment-specific variables
+        run: |
+          if [ "${{ github.event.inputs.environment }}" == "dev" ]; then
+            echo "S3_BUCKET=millennium-inventory-website-dev" >> $GITHUB_ENV
+            echo "ENV_PATH=.configuration/millennium-inventory-website/dev/.env" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_DEV }}" >> $GITHUB_ENV
+            echo "VAULT_PASSWORD=${{ secrets.ANSIBLE_VAULT_DEV }}" >> $GITHUB_ENV
+          else
+            echo "S3_BUCKET=millennium-inventory-website-prod" >> $GITHUB_ENV
+            echo "ENV_PATH=.configuration/millennium-inventory-website/prod/.env" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_PROD }}" >> $GITHUB_ENV
+            echo "VAULT_PASSWORD=${{ secrets.ANSIBLE_VAULT_PROD }}" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Decrypt and copy environment file
+        run: |
+          ansible-vault decrypt --output=.env external-repo/${{ env.ENV_PATH }} --vault-password-file <(echo "$VAULT_PASSWORD")
+        shell: bash
+
+      - name: Build app
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync .next/ s3://${{ env.S3_BUCKET }}/ --delete \
+            --cache-control "max-age=0, no-cache, no-store"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
