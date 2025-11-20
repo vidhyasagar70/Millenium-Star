@@ -258,7 +258,7 @@ const HomePage = () => {
                 </section>
             </AnimatedContainer>
 
-            {/* <Testimonial /> */}
+            {/* <Testimonial />*/}
         </div>
     );
 };
