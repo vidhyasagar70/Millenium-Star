@@ -65,14 +65,21 @@ const HeroSection = () => {
     };
 
     return (
-        <div className="  flex items-center justify-center overflow-hidden min-h-[80vh] w-full relative   ">
-            <Image
-                src={BannerImage}
-                alt="Hero Background"
-                layout="fill"
-                objectFit="cover"
-                priority
-            />
+        <div className="flex items-start lg:items-center justify-center overflow-hidden min-h-[80vh] w-full relative pt-8 lg:pt-0">
+            {/* Desktop Background Image - Hidden on mobile */}
+            <div className="hidden lg:block absolute inset-0">
+                <Image
+                    src={BannerImage}
+                    alt="Hero Background"
+                    layout="fill"
+                    objectFit="cover"
+                    priority
+                />
+            </div>
+            
+            {/* Mobile Background - White */}
+            <div className="lg:hidden absolute inset-0 bg-white" />
+            
             <Container>
                 <Carousel
                     className="w-full h-full"
@@ -87,11 +94,11 @@ const HeroSection = () => {
                 >
                     <CarouselContent>
                         <CarouselItem>
-                            <div className="flex flex-col lg:flex-row items-center justify-start w-full h-full ">
-                                <div className=" px-6 ">
+                            <div className="flex flex-col lg:flex-row items-center justify-start w-full h-full">
+                                <div className="px-6 lg:px-6 w-full lg:w-auto">
                                     <TextAnimation
                                         text="Certified & Non Certified Diamonds Designed for Business"
-                                        className={`mb-6 text-left max-w-lg text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
+                                        className={`mb-4 lg:mb-6 text-left max-w-lg text-black font-semibold text-2xl md:text-4xl lg:text-5xl font-abhaya`}
                                     />
                                     <AnimatedContainer
                                         direction="up"
@@ -109,108 +116,28 @@ const HeroSection = () => {
                                                 accessInventoryClickHandler();
                                             }}
                                             variant={"outline"}
-                                            className=" cursor-pointer border-black rounded-full px-8 py-3 font-medium  transition-colors "
+                                            className="cursor-pointer border-black rounded-full px-8 py-3 font-medium transition-colors mb-6 lg:mb-0"
                                         >
                                             Partner With Us
                                         </Button>
+                                        
+                                        {/* Mobile Image - Only visible on mobile */}
+                                        <div className="block lg:hidden mt-6">
+                                            <Image
+                                                src={"/assets/home/home.png"}
+                                                alt="Diamond collection showcase"
+                                                width={400}
+                                                height={300}
+                                                className="object-contain w-full rounded-lg"
+                                                priority
+                                            />
+                                        </div>
                                     </AnimatedContainer>
-                                </div>
-                                {/* <div className="py-10">
-                                    <AnimatedContainer
-                                        direction="up"
-                                        delay={0.3}
-                                    >
-                                        <Image
-                                            src={"/assets/hero-3.png"}
-                                            alt="Close-up of a large, sparkling diamond held by tweezers"
-                                            width={500}
-                                            height={450}
-                                            className="object-contain  rounded-tr-[40%] rounded-bl-[40%]"
-                                            priority
-                                        />
-                                    </AnimatedContainer>
-                                </div> */}
-                            </div>
-                        </CarouselItem>
-                        {/* <CarouselItem>
-                            <div className="flex flex-col lg:flex-row items-center justify-around w-full h-full ">
-                                <div className=" px-6 ">
-                                    <Title
-                                        className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
-                                    >
-                                        Certified & non certified diamond
-                                        designed for business
-                                    </Title>
-                                    <Description
-                                        className={`mb-8 text-black max-w-md text-left lg:text-base md:text-base text-base font-maven`}
-                                    >
-                                        Ethically sourced diamonds crafted
-                                        specifically for traders, retailers, and
-                                        private labels across the globe.
-                                    </Description>
-                                    <Button
-                                        onClick={() => {
-                                            accessInventoryClickHandler();
-                                        }}
-                                        variant={"outline"}
-                                        className=" cursor-pointer border-black rounded-full px-8 py-3 font-medium  transition-colors "
-                                    >
-                                        Partner With Us
-                                    </Button>
-                                </div>
-                                <div className="py-10">
-                                    <Image
-                                        src={"/assets/hero-3.png"}
-                                        alt="Close-up of a large, sparkling diamond held by tweezers"
-                                        width={500}
-                                        height={450}
-                                        className="object-contain  rounded-tr-[40%] rounded-bl-[40%]"
-                                        priority
-                                    />
                                 </div>
                             </div>
                         </CarouselItem>
-                        <CarouselItem>
-                            <div className="flex flex-col lg:flex-row items-center justify-around w-full h-full ">
-                                <div className=" px-6 ">
-                                    <Title
-                                        className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
-                                    >
-                                        Certified & non certified diamond
-                                        designed for business
-                                    </Title>
-                                    <Description
-                                        className={`mb-8 text-black max-w-md text-left lg:text-base md:text-base text-base font-maven`}
-                                    >
-                                        Ethically sourced diamonds crafted
-                                        specifically for traders, retailers, and
-                                        private labels across the globe.
-                                    </Description>
-                                    <Button
-                                        onClick={() => {
-                                            accessInventoryClickHandler();
-                                        }}
-                                        variant={"outline"}
-                                        className=" cursor-pointer border-black rounded-full px-8 py-3 font-medium  transition-colors "
-                                    >
-                                        Partner With Us
-                                    </Button>
-                                </div>
-                                <div className="py-10">
-                                    <Image
-                                        src={"/assets/hero-3.png"}
-                                        alt="Close-up of a large, sparkling diamond held by tweezers"
-                                        width={500}
-                                        height={450}
-                                        className="object-contain  rounded-tr-[40%] rounded-bl-[40%]"
-                                        priority
-                                    />
-                                </div>
-                            </div>
-                        </CarouselItem> */}
                     </CarouselContent>
                 </Carousel>
-                {/* Centered Content */}
 
                 {/* Modals - Only show when not authenticated */}
                 {!isAuthenticated() && (

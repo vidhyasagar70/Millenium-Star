@@ -41,7 +41,7 @@ const Navbar = () => {
             setLastScrollY(currentScrollY);
         }
     });
-    // Add authentication state
+
     const { user, isAuthenticated, logout, loading } = useAuth();
 
     const accessInventoryClickHandler = () => {
@@ -52,7 +52,6 @@ const Navbar = () => {
         }
     };
 
-    // Base nav items
     const baseNavItems = [
         { href: "/", label: "Home" },
         { href: "/about", label: "About us" },
@@ -69,14 +68,12 @@ const Navbar = () => {
             : []),
     ];
 
-    // Admin-only nav items
     const adminNavItems = [
         { href: "/admin", label: "Admin Panel" },
         { href: "/admin/members", label: "Members" },
         { href: "/admin/quotations", label: "Offer Enquiry" },
     ];
 
-    // Combined nav items based on authentication and role
     const navItems = isAuthenticated()
         ? user?.role === "ADMIN"
             ? [...baseNavItems, ...adminNavItems]
@@ -112,7 +109,6 @@ const Navbar = () => {
     };
 
     const handleProfileClick = () => {
-        // Navigate to appropriate dashboard based on user role
         router.push("/profile");
         setIsMobileMenuOpen(false);
     };
@@ -125,20 +121,19 @@ const Navbar = () => {
         setIsMobileMenuOpen(false);
     };
 
-    // Show loading state while checking authentication
     if (loading) {
         return (
             <div className="sticky top-0 z-50 bg-white shadow-md">
                 <Container className="flex items-center justify-between py-4">
                     <div className="flex items-center space-x-3">
-                        <div className="w-20 h-8 bg-gray-200 animate-pulse rounded=full"></div>
+                        <div className="w-20 h-8 bg-gray-200 animate-pulse rounded-full"></div>
                         <div className="w-16 h-8 bg-gray-200 animate-pulse rounded-full"></div>
                     </div>
 
-                    <div className="flex lg:justify-center  justify-start flex-1">
+                    <div className="flex lg:justify-center justify-start flex-1">
                         <Link
                             href="/"
-                            className="flex flex-col shrink items-center gap-x-2 "
+                            className="flex flex-col shrink items-center gap-x-2"
                         >
                             <Image
                                 src="/assets/logo.png"
@@ -147,14 +142,14 @@ const Navbar = () => {
                                 height={200}
                                 className="h-14 w-auto"
                             />
-                            <h1 className="font-playfair text-xl  font-semibold">
+                            <h1 className="font-playfair text-xl font-semibold">
                                 MILLENNIUM&nbsp;STAR
                             </h1>
                         </Link>
                     </div>
                     <div className="flex items-center space-x-3">
                         <div className="w-16 h-8 bg-gray-200 animate-pulse rounded-full"></div>
-                        <div className="w-20 h-8 bg-gray-200 animate-pulse rounded=full"></div>
+                        <div className="w-20 h-8 bg-gray-200 animate-pulse rounded-full"></div>
                     </div>
                 </Container>
             </div>
@@ -176,20 +171,19 @@ const Navbar = () => {
                     duration: 0.3,
                     ease: "easeInOut",
                 }}
-                className="sticky top-0 z-50 bg-white "
+                className="sticky top-0 z-50 bg-white"
             >
-                <Container className="flex max-w-[1500px] items-center justify-between  py-4">
+                <Container className="flex max-w-[1500px] items-center justify-between py-4">
                     {/* Desktop Navigation */}
                     <div className="hidden lg:flex flex-1 justify-start">
                         <ul className="hidden lg:flex flex-wrap list-none gap-x-4 gap-y-3 font-sans font-light text-sm">
                             {navItems.map((item) => (
                                 <li key={item.href}>
                                     <Link
-                                        // onClick={item.onClick}
                                         href={item.href}
                                         className={`transition-colors duration-200 flex justify-center items-center ${
                                             pathname === item.href
-                                                ? "bg-black rounded-xl  px-2 py-1 pb-1.5 text-white font-semibold "
+                                                ? "bg-black rounded-xl px-2 py-1 pb-1.5 text-white font-semibold"
                                                 : "text-black hover:text-black"
                                         }`}
                                     >
@@ -200,28 +194,28 @@ const Navbar = () => {
                         </ul>
                     </div>
 
-                    {/* Logo */}
-                    <div className="flex lg:justify-center  justify-start flex-1">
+                    {/* Logo - Centered on desktop, left-aligned on mobile */}
+                    <div className="flex lg:justify-center justify-start flex-1 lg:flex-none">
                         <Link
                             href="/"
-                            className="flex flex-col shrink items-center gap-x-2 "
+                            className="flex flex-col shrink-0 items-center gap-x-2"
                         >
                             <Image
                                 src="/assets/logo.png"
                                 alt="Logo"
                                 width={200}
                                 height={200}
-                                className="h-14 w-auto"
+                                className="h-8 sm:h-14 w-auto"
                             />
-                            <h1 className="font-playfair text-xl  font-semibold">
+                            <h1 className="font-playfair text-sm sm:text-xl font-semibold whitespace-nowrap">
                                 MILLENNIUM&nbsp;STAR
                             </h1>
                         </Link>
                     </div>
+
                     {/* Desktop Auth/Profile Buttons */}
                     <div className="hidden lg:flex flex-1 justify-end space-x-3">
                         {isAuthenticated() ? (
-                            // Authenticated user buttons
                             <>
                                 <Button
                                     variant="outline"
@@ -241,10 +235,9 @@ const Navbar = () => {
                                 </Button>
                             </>
                         ) : (
-                            // Guest user buttons
                             <>
                                 <div
-                                    className="bg-white  cursor-pointer border-2 rounded-full border-black text-black px-4 py-2 hover:bg-gray-200 transition-colors"
+                                    className="bg-white cursor-pointer border-2 rounded-full border-black text-black px-4 py-2 hover:bg-gray-200 transition-colors"
                                     onClick={handleRegistrationClick}
                                 >
                                     Register
@@ -259,35 +252,73 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    {/* Mobile Hamburger Button */}
-                    <button
-                        className="lg:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
-                        onClick={toggleMobileMenu}
-                        aria-label="Toggle menu"
-                    >
-                        {isMobileMenuOpen ? (
-                            <X className="h-6 w-6 text-black" />
+                    {/* Mobile Right Section - Auth Buttons + Hamburger */}
+                    <div className="flex lg:hidden items-center gap-2">
+                        {!isAuthenticated() ? (
+                            // Guest user - show Register & Login buttons
+                            <>
+                                <button
+                                    className="bg-white text-black border border-black rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-100 transition-colors whitespace-nowrap"
+                                    onClick={handleRegistrationClick}
+                                >
+                                    Register
+                                </button>
+                                <button
+                                    className="bg-black text-white border border-black rounded-full px-3 py-1.5 text-sm font-medium hover:bg-black/80 transition-colors whitespace-nowrap"
+                                    onClick={handleLoginClick}
+                                >
+                                    Login
+                                </button>
+                            </>
                         ) : (
-                            <Menu className="h-6 w-6 text-black" />
+                            // Authenticated user - show username button
+                            <button
+                                className="bg-white text-black border border-black rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-100 transition-colors flex items-center gap-1.5"
+                                onClick={handleProfileClick}
+                            >
+                                <User className="h-3.5 w-3.5" />
+                                <span className="max-w-[80px] truncate">
+                                    {user?.username || "Profile"}
+                                </span>
+                            </button>
                         )}
-                    </button>
+
+                        {/* Hamburger Menu Button */}
+                        <button
+                            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+                            onClick={toggleMobileMenu}
+                            aria-label="Toggle menu"
+                        >
+                            {isMobileMenuOpen ? (
+                                <X className="h-6 w-6 text-black" />
+                            ) : (
+                                <Menu className="h-6 w-6 text-black" />
+                            )}
+                        </button>
+                    </div>
                 </Container>
-                <div className="h-1 border-b border-black mx-auto max-w-100"></div>
+                <div className="hidden lg:block h-px bg-black mx-auto max-w-full"></div>
 
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
-                    <div className="lg:hidden bg-white border-t border-gray-200 shadow-lg">
+                    <Motion.motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="lg:hidden bg-white border-t border-gray-200 shadow-lg"
+                    >
                         <Container className="py-4">
                             {/* Mobile Navigation Links */}
-                            <ul className="space-y-4 mb-6">
+                            <ul className="space-y-3 mb-6">
                                 {navItems.map((item) => (
                                     <li key={item.href}>
                                         <Link
                                             href={item.href}
-                                            className={`block py-2 transition-colors duration-200 ${
+                                            className={`block py-2 px-3 rounded-md transition-colors duration-200 ${
                                                 pathname === item.href
-                                                    ? "text-[#A6A6A6] font-medium"
-                                                    : "text-black hover:text-gray-600"
+                                                    ? "bg-black text-white font-medium"
+                                                    : "text-black hover:bg-gray-100"
                                             }`}
                                             onClick={closeMobileMenu}
                                         >
@@ -297,48 +328,20 @@ const Navbar = () => {
                                 ))}
                             </ul>
 
-                            {/* Mobile Auth/Profile Buttons */}
-                            <div className="space-y-3">
-                                {isAuthenticated() ? (
-                                    // Authenticated user mobile buttons
-                                    <>
-                                        <Button
-                                            onClick={handleProfileClick}
-                                            className="w-full bg-white border-2 border-black text-black hover:bg-gray-50 py-3 rounded-[3px] flex items-center justify-center space-x-2"
-                                        >
-                                            <User className="h-4 w-4" />
-                                            <span>
-                                                {user?.username || "Profile"}
-                                            </span>
-                                        </Button>
-                                        <Button
-                                            onClick={handleLogout}
-                                            className="w-full bg-[#4D4D4D] border-2 border-black text-white hover:bg-gray-700 py-3 rounded-[3px] flex items-center justify-center space-x-2"
-                                        >
-                                            <LogOut className="h-4 w-4" />
-                                            <span>Logout</span>
-                                        </Button>
-                                    </>
-                                ) : (
-                                    // Guest user mobile buttons
-                                    <>
-                                        <div
-                                            className="w-full text-center bg-white cursor-pointer border-2 rounded-[3px] border-black text-black px-4 py-3 hover:bg-gray-50 transition-colors"
-                                            onClick={handleRegistrationClick}
-                                        >
-                                            Register
-                                        </div>
-                                        <div
-                                            className="w-full text-center bg-[#4D4D4D] cursor-pointer border-2 rounded-[3px] border-black text-white px-4 py-3 hover:bg-gray-700 transition-colors"
-                                            onClick={handleLoginClick}
-                                        >
-                                            Login
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+                            {/* Mobile Auth/Profile Actions */}
+                            {isAuthenticated() && (
+                                <div className="pt-4 border-t border-gray-200">
+                                    <Button
+                                        onClick={handleLogout}
+                                        className="w-full bg-black border-2 border-black text-white hover:bg-black/80 py-3 rounded-full flex items-center justify-center space-x-2"
+                                    >
+                                        <LogOut className="h-4 w-4" />
+                                        <span>Logout</span>
+                                    </Button>
+                                </div>
+                            )}
                         </Container>
-                    </div>
+                    </Motion.motion.div>
                 )}
 
                 {/* Modals - Only show when not authenticated */}
