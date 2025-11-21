@@ -89,49 +89,53 @@ const clarityGrades = [
 ];
 
 const ClaritySection = () => (
-    <div className="py-8 md:py-12">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Clarity</h2>
-        <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-4">
+    <div className="py-8 md:py-12 lg:py-16">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4 md:mb-6 lg:mb-8">
+            Clarity
+        </h2>
+        <p className="text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 md:mb-6">
             With clarity, we define a diamond's purity. Diamonds occur naturally
             and are a result of carbon exposed to extreme heat and pressure deep
             in the earth. This process can result in a variety of internal
             characteristics called 'inclusions' and external characteristics
             called 'blemishes.
         </p>
-        <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-6 md:mb-8">
+        <p className="text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed mb-6 md:mb-8 lg:mb-10">
             Following are the 6 categories into which the clarity is divided,
             some of which are sub- divided, for a total of 11 specific grades.
         </p>
 
-        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-12 xl:gap-16">
             {/* Left Column: Text Content */}
-            <div className="lg:w-1/2 space-y-4 md:space-y-5">
+            <div className="lg:w-1/2 xl:w-[55%] space-y-4 md:space-y-5 lg:space-y-6">
                 {clarityGrades.map((grade) => (
                     <div key={grade.name}>
-                        <h3 className="font-semibold text-base md:text-lg text-gray-800">
+                        <h3 className="font-semibold text-base md:text-lg lg:text-xl text-gray-800 mb-1 md:mb-2">
                             {grade.name}
                         </h3>
-                        <p className="text-sm md:text-base text-gray-600">{grade.description}</p>
+                        <p className="text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed">
+                            {grade.description}
+                        </p>
                     </div>
                 ))}
             </div>
 
             {/* Right Column: Image */}
-            <div className="lg:w-1/2 flex items-center justify-center mt-6 lg:mt-0">
-                <div className="relative w-full max-w-xs md:max-w-sm">
+            <div className="lg:w-1/2 xl:w-[45%] flex items-center justify-center mt-6 lg:mt-0">
+                <div className="relative w-full max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg">
                     <Image
                         src="/assets/dia_know4.jpg"
                         alt="Diamond clarity grades diagram"
                         width={500}
                         height={500}
-                        className="object-contain w-full h-auto"
+                        className="object-contain w-full h-auto rounded-lg shadow-md"
                         quality={100}
                     />
                 </div>
             </div>
         </div>
 
-        <p className="text-sm md:text-base text-gray-700 leading-relaxed mt-6 md:mt-10">
+        <p className="text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed mt-6 md:mt-8 lg:mt-10">
             Evaluating diamond clarity involves determining the number, size,
             nature, and position of these characteristics, as well as how these
             affect the overall appearance of the stone. While no diamond is
@@ -142,26 +146,28 @@ const ClaritySection = () => (
 );
 
 const CutSection = () => (
-    <div className="py-8 md:py-12">
-        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16 items-center">
+    <div className="py-8 md:py-12 lg:py-16">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center">
             {/* Image - Shows first on mobile, left on desktop */}
-            <div className="lg:w-1/2 flex items-center justify-center w-full order-2 lg:order-1">
-                <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-lg bg-black p-3 md:p-4 rounded-lg shadow-lg">
+            <div className="lg:w-1/2 xl:w-[45%] flex items-center justify-center w-full order-2 lg:order-1">
+                <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl bg-black p-3 md:p-4 lg:p-6 rounded-lg shadow-lg">
                     <Image
                         src="/assets/diamond-knowledge5.jpg"
                         alt="Diagram of Diamond Cut and its types"
                         width={600}
                         height={350}
-                        className="object-contain w-full h-auto"
+                        className="object-contain w-full h-auto rounded"
                         quality={100}
                     />
                 </div>
             </div>
 
             {/* Text Content - Shows second on mobile, right on desktop */}
-            <div className="lg:w-1/2 order-1 lg:order-2">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Cut</h2>
-                <div className="space-y-3 md:space-y-4 text-sm md:text-base text-gray-700 leading-relaxed">
+            <div className="lg:w-1/2 xl:w-[55%] order-1 lg:order-2">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4 md:mb-6 lg:mb-8">
+                    Cut
+                </h2>
+                <div className="space-y-3 md:space-y-4 lg:space-y-5 text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed">
                     <p>
                         A diamond's cut is essential to its final beauty and
                         value. The cut is divided into 3 grades: Proportion,
@@ -243,6 +249,7 @@ const AboutUs = () => {
         // called every scroll
         console.log(lenis);
     });
+    
     return (
         <div className="min-h-screen bg-white">
             <ReactLenis root />
@@ -255,14 +262,14 @@ const AboutUs = () => {
                     height={600}
                     sizes="(max-width: 768px) 100vw, (min-width: 769px) 50vw"
                     alt="Legacy Image"
-                    className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover"
+                    className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[400px] xl:h-[450px] 2xl:h-[500px] object-cover"
                 />
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-semibold font-playfair absolute left-4 sm:left-8 md:left-12 lg:left-20 top-1/2 -translate-y-1/2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-white font-semibold font-playfair absolute left-4 sm:left-8 md:left-12 lg:left-20 xl:left-24 2xl:left-32 top-1/2 -translate-y-1/2">
                     OUR DIAMONDS
                 </h1>
             </section>
 
-            <Container className="my-10 md:my-20 px-4 sm:px-6 md:px-8 lg:px-10">
+            <Container className="my-10 md:my-16 lg:my-20 xl:my-24 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 max-w-7xl mx-auto">
                 <ContentSection data={aboutUsData} />
                 <ClaritySection />
                 <CutSection />

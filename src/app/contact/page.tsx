@@ -14,7 +14,7 @@ interface ContactFormData {
     lastName: string;
     email: string;
     phoneNumber: string;
-    countryCode: string; // Add this field
+    countryCode: string;
     message: string;
 }
 
@@ -76,7 +76,7 @@ export default function ContactPage() {
         lastName: "",
         email: "",
         phoneNumber: "",
-        countryCode: "+33", // Default to France
+        countryCode: "+33",
         message: "",
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -118,7 +118,7 @@ export default function ContactPage() {
                     lastName: "",
                     email: "",
                     phoneNumber: "",
-                    countryCode: "+33", // Reset to default
+                    countryCode: "+33",
                     message: "",
                 });
             } else {
@@ -139,10 +139,10 @@ export default function ContactPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-6 py-16">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    {/* Left Image Section */}
-                    <div className="relative hidden md:block h-[500px] lg:h-[600px]">
+            <div className="max-w-7xl mx-auto px-6 py-8 md:py-16">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                    {/* Image Section - Shows on top for mobile, left side for desktop */}
+                    <div className="relative h-[300px] md:h-[500px] lg:h-[600px] order-1 lg:order-1">
                         <Image
                             src="/assets/contact-diamond1.png"
                             alt="Luxury diamonds collection"
@@ -152,8 +152,8 @@ export default function ContactPage() {
                         />
                     </div>
 
-                    {/* Right Form Section */}
-                    <div className="bg-gray-100 p-8 lg:p-12 rounded-lg">
+                    {/* Form Section - Shows below image for mobile, right side for desktop */}
+                    <div className="bg-gray-100 p-6 md:p-8 lg:p-12 rounded-lg order-2 lg:order-2">
                         <div className="max-w-md mx-auto">
                             {!isMessageSent ? (
                                 <>
