@@ -111,7 +111,42 @@ const HomePage = () => {
             <AnimatedContainer direction="up" delay={0.6}>
                 <section className="flex flex-col lg:flex-row py-10">
                     <div className="flex flex-col lg:flex-row items-center justify-around w-full h-full">
-                        <div className="pl-4 pr-6 md:px-6">
+                        <div className="pl-4 pr-6 md:px-6 w-full">
+                            <div className="block lg:hidden px-4">
+                                <Title
+                                    className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
+                                >
+                                    Grow Your Business By Sourcing Efficiently
+                                </Title>
+                                <Description
+                                    className={`mb-8 text-black max-w-md text-left lg:text-base md:text-base text-base font-maven`}
+                                >
+                                    Serving hundreds of retailers, exporters and private-label jewellery 
+                                    manufacturer with consistently graded stones.{" "}
+                                    <span className="font-semibold">
+                                        Millennium Star
+                                    </span>
+                                </Description>
+                                <div className="flex flex-row gap-2 mb-4">
+                                    <Link href={"/inventory"}>
+                                        <Button
+                                            variant={"outline"}
+                                            className="cursor-pointer border-black rounded-full px-4 py-2 text-xs font-medium transition-colors"
+                                        >
+                                            EXPLORE MORE
+                                        </Button>
+                                    </Link>
+                                    <Link href={"/contact"}>
+                                        <Button
+                                            variant={"default"}
+                                            className="cursor-pointer border-black rounded-full px-4 py-2 text-xs font-medium transition-colors"
+                                        >
+                                            SCHEDULE A CALL
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className="hidden lg:block">
                             <Title
                                 className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
                             >
@@ -143,6 +178,7 @@ const HomePage = () => {
                                         SCHEDULE A CALL
                                     </Button>
                                 </Link>
+                            </div>
                             </div>
                         </div>
                         {/* Desktop Image */}
