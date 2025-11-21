@@ -37,9 +37,12 @@ const socialLinks = [
 
 const Footer = () => {
     return (
-        <>
-        <footer className="overflow-hidden bg-[#212121] text-white w-full">
-            <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <footer
+            className="overflow-hidden bg-[#212121] text-white w-full sm:w-full max-w-none"
+        >
+            <div
+                className="w-screen max-w-none mx-[-16px] sm:mx-auto px-0 sm:px-6 lg:px-8"
+            >
                 {/* Logo Section */}
                 <div className="w-full flex items-center justify-center pt-6 sm:pt-8 mb-8 sm:mb-20">
                     <Link
@@ -140,25 +143,7 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
-        {/* Extra style for mobile to ensure no right gap */}
-        <style jsx global>{`
-            @media (max-width: 640px) {
-                footer {
-                    width: 100vw !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    left: 0;
-                    right: 0;
-                }
-                footer > div {
-                    width: 100vw !important;
-                    margin: 0 !important;
-                    padding-left: 0 !important;
-                    padding-right: 0 !important;
-                }
-            }
-        `}</style>
-        </>
+        
     );
 };
 

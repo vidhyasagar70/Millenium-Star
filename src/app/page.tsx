@@ -111,7 +111,7 @@ const HomePage = () => {
             <AnimatedContainer direction="up" delay={0.6}>
                 <section className="flex flex-col lg:flex-row py-10">
                     <div className="flex flex-col lg:flex-row items-center justify-around w-full h-full">
-                        <div className="px-6">
+                        <div className="pl-4 pr-6 md:px-6">
                             <Title
                                 className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
                             >
