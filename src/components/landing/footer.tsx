@@ -37,8 +37,9 @@ const socialLinks = [
 
 const Footer = () => {
     return (
-        <footer className="overflow-hidden bg-[#212121] text-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <>
+        <footer className="overflow-hidden bg-[#212121] text-white w-full">
+            <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 {/* Logo Section */}
                 <div className="w-full flex items-center justify-center pt-6 sm:pt-8 mb-8 sm:mb-20">
                     <Link
@@ -59,7 +60,7 @@ const Footer = () => {
                 </div>
 
                 {/* Links Section - Always in row */}
-                <div className="grid grid-cols-2 gap-4 sm:gap-8 max-w-6xl mx-auto mb-6 sm:mb-5 px-2 sm:px-0">
+                <div className="grid grid-cols-2 gap-4 sm:gap-8 max-w-6xl mx-auto mb-6 sm:mb-5 px-0 w-full">
                     {/* Millennium Star Links */}
                     <div className="text-center">
                         <h3 className="font-maven text-sm sm:text-xl md:text-2xl font-medium mb-2 sm:mb-4">
@@ -99,10 +100,10 @@ const Footer = () => {
                 </div>
 
                 {/* Divider */}
-                <div className="border-t border-gray-700 mx-4 sm:mx-0"></div>
+                <div className="border-t border-gray-700 mx-0 w-full"></div>
 
                 {/* Bottom Section */}
-                <div className="py-4 sm:py-6 flex flex-col sm:flex-row-reverse items-center justify-center gap-3 sm:gap-x-30">
+                <div className="py-4 sm:py-6 flex flex-col sm:flex-row-reverse items-center justify-center gap-3 sm:gap-x-30 w-full">
                     {/* Copyright */}
                     <p
                         className={`${inter.className} text-[10px] sm:text-sm text-gray-400 order-2 sm:order-1 text-center`}
@@ -139,6 +140,25 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
+        {/* Extra style for mobile to ensure no right gap */}
+        <style jsx global>{`
+            @media (max-width: 640px) {
+                footer {
+                    width: 100vw !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    left: 0;
+                    right: 0;
+                }
+                footer > div {
+                    width: 100vw !important;
+                    margin: 0 !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+            }
+        `}</style>
+        </>
     );
 };
 
