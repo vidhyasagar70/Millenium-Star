@@ -158,14 +158,16 @@ const HomePage = () => {
                         </div>
                         {/* Mobile Image */}
                         <div className="py-10 block lg:hidden">
-                            <Image
-                                src={"/assets/home/home2.png"}
-                                alt="Diamond showcase"
-                                width={500}
-                                height={450}
-                                className="object-contain"
-                                priority
-                            />
+                            <div className="px-4">
+                                <Image
+                                    src={"/assets/home/home2.png"}
+                                    alt="Diamond showcase"
+                                    width={500}
+                                    height={450}
+                                    className="object-contain"
+                                    priority
+                                />
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -206,14 +208,16 @@ const HomePage = () => {
                         </div>
                         <div className="py-10">
                             <AnimatedContainer direction="up" delay={0.3}>
-                                <Image
-                                    src={"/assets/microscopeLab.png"}
-                                    alt="Close-up of a large, sparkling diamond held by tweezers"
-                                    width={550}
-                                    height={450}
-                                    className="object-contain rounded-tl-[40%] rounded-br-[40%]"
-                                    priority
-                                />
+                                <div className="px-4 lg:px-0">
+                                    <Image
+                                        src={"/assets/microscopeLab.png"}
+                                        alt="Close-up of a large, sparkling diamond held by tweezers"
+                                        width={550}
+                                        height={450}
+                                        className="object-contain rounded-tl-[40%] rounded-br-[40%]"
+                                        priority
+                                    />
+                                </div>
                             </AnimatedContainer>
                         </div>
                     </div>
@@ -227,17 +231,36 @@ const HomePage = () => {
 
             {/* Numbers Section */}
             <AnimatedContainer direction="up" delay={0.6}>
-                <section className="py-20 px-6 text-center">
-                    <Title className="text-black md:text-3xl lg:text-4xl font-semibold max-w-lg mx-auto">
-                        Whether You are Retailer Or WholeSeller You can Rely On
-                        Millennium Star
+                <section className="py-16 px-4 md:py-20 md:px-6 text-center">
+                    <Title className="text-black text-2xl font-semibold max-w-xs mx-auto md:text-3xl lg:text-4xl md:max-w-lg">
+                        Whether You are Retailer Or WholeSeller You can Rely On Millennium Star
                     </Title>
-                    <Description className="text-black text-sm md:text-sm lg:text-sm mt-3 max-w-xl mx-auto">
-                        We helps retailers, wholesalers and traders securely
-                        source the perfect diamond with complete ease
+                    <Description className="text-black text-xs mt-2 max-w-xs mx-auto md:text-sm md:mt-3 md:max-w-xl">
+                        We help retailers, wholesalers and traders securely source the perfect diamond with complete ease
                     </Description>
 
-                    <div className="flex flex-row justify-center gap-4 max-w-xl mx-auto my-7">
+                    {/* Mobile Buttons */}
+                    <div className="flex flex-row justify-center gap-2 max-w-xs mx-auto my-5 md:hidden">
+                        <Link href={"/inventory"}>
+                            <Button
+                                variant={"outline"}
+                                className="cursor-pointer border-black rounded-full px-4 py-2 text-xs font-medium transition-colors min-w-[110px]"
+                            >
+                                Explore More
+                            </Button>
+                        </Link>
+                        <Link href={"/contact"}>
+                            <Button
+                                variant={"default"}
+                                className="cursor-pointer border-black rounded-full px-4 py-2 text-xs font-medium transition-colors min-w-[110px]"
+                            >
+                                Schedule a Call
+                            </Button>
+                        </Link>
+                    </div>
+
+                    {/* Desktop Buttons */}
+                    <div className="hidden md:flex flex-row justify-center gap-4 max-w-xl mx-auto my-7">
                         <Link href={"/inventory"}>
                             <Button
                                 variant={"outline"}

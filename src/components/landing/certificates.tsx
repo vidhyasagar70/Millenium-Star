@@ -39,16 +39,6 @@ const MobileCarousel = ({ children, length }: { children: React.ReactNode[]; len
             <div className="w-full flex justify-center items-center">
                 {children[current]}
             </div>
-            <div className="flex justify-center mt-4 gap-2">
-                {Array.from({ length }).map((_, idx) => (
-                    <button
-                        key={idx}
-                        className={`w-2 h-2 rounded-full transition-all duration-200 ${current === idx ? "bg-gray-800" : "bg-gray-300"}`}
-                        onClick={() => setCurrent(idx)}
-                        aria-label={`Go to slide ${idx + 1}`}
-                    />
-                ))}
-            </div>
             <div className="absolute top-1/2 left-2 -translate-y-1/2">
                 <button
                     className="bg-white/80 rounded-full p-1 shadow hover:bg-white"
