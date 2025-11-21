@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import cert1 from "../../../public/assets/cert-1.jpg";
 import cert2 from "../../../public/assets/igi-cert.jpg";
 import cert3 from "../../../public/assets/hrd-cert2.jpg";
@@ -11,6 +12,64 @@ import img3 from "../../../public/assets/Marquee/client_3.png";
 import { Playfair_Display, Open_Sans } from "next/font/google";
 import { Button } from "../ui/button";
 import Marquee from "react-fast-marquee";
+
+// Simple mobile carousel implementation
+const MobileCarousel = ({ children, length }: { children: React.ReactNode[]; length: number }) => {
+    const [current, setCurrent] = useState(0);
+
+    // Swipe support (optional, basic)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        touchStartX = e.changedTouches[0].screenX;
+    };
+    const onTouchEnd = (e: React.TouchEvent) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > minSwipeDistance) {
+            setCurrent((prev) => (prev + 1) % length);
+        } else if (touchEndX - touchStartX > minSwipeDistance) {
+            setCurrent((prev) => (prev - 1 + length) % length);
+        }
+    };
+
+    return (
+        <div className="w-full relative" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div className="w-full flex justify-center items-center">
+                {children[current]}
+            </div>
+            <div className="flex justify-center mt-4 gap-2">
+                {Array.from({ length }).map((_, idx) => (
+                    <button
+                        key={idx}
+                        className={`w-2 h-2 rounded-full transition-all duration-200 ${current === idx ? "bg-gray-800" : "bg-gray-300"}`}
+                        onClick={() => setCurrent(idx)}
+                        aria-label={`Go to slide ${idx + 1}`}
+                    />
+                ))}
+            </div>
+            <div className="absolute top-1/2 left-2 -translate-y-1/2">
+                <button
+                    className="bg-white/80 rounded-full p-1 shadow hover:bg-white"
+                    onClick={() => setCurrent((prev) => (prev - 1 + length) % length)}
+                    aria-label="Previous"
+                >
+                    <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+            </div>
+            <div className="absolute top-1/2 right-2 -translate-y-1/2">
+                <button
+                    className="bg-white/80 rounded-full p-1 shadow hover:bg-white"
+                    onClick={() => setCurrent((prev) => (prev + 1) % length)}
+                    aria-label="Next"
+                >
+                    <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                </button>
+            </div>
+        </div>
+    );
+};
 
 // Certificate data array with expanded content
 const certificateData = [
@@ -98,21 +157,103 @@ const DiamondCards = () => {
                     </Marquee>
                 </div>
 
-                {/* Certificate Cards Grid */}
-                <div className="flex flex-col items-center md:flex-row gap-8 lg:gap-10">
+                {/* Mobile Carousel View */}
+                <div className="block md:hidden">
+                    <MobileCarousel length={certificateData.length}>
+                        {certificateData.map((certificate) => {
+                            const isExpanded = expandedCards[certificate.id];
+                            return (
+                                <div
+                                    key={certificate.id}
+                                    className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-500 ease-out overflow-hidden border border-gray-200 max-w-md mx-auto"
+                                >
+                                    {/* Certificate Image */}
+                                    <div className="relative aspect-[4/3] overflow-hidden">
+                                        <Image
+                                            src={certificate.image}
+                                            alt={certificate.alt}
+                                            fill
+                                            priority
+                                            quality={100}
+                                            className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></div>
+                                    </div>
+                                    {/* Card Content */}
+                                    <div className="p-6 lg:p-8 transition-all duration-500 ease-out">
+                                        <h2 className="text-xl text-center mb-4 font-maven text-gray-900 transition-all duration-300 ease-out group-hover:text-gray-700">
+                                            {certificate.title}
+                                        </h2>
+                                        <div
+                                            className={`text-gray-600 text-sm text-center leading-relaxed mb-6 font-maven transition-all duration-1000 ease-out max-w-sm ${
+                                                isExpanded ? "max-h-96 opacity-100" : "max-h-24 opacity-90"
+                                            }`}
+                                        >
+                                            <div
+                                                className={`transition-all duration-500 ease-out ${
+                                                    isExpanded ? "transform translate-y-0" : "transform -translate-y-1"
+                                                }`}
+                                            >
+                                                {isExpanded ? (
+                                                    <div className="whitespace-pre-line animate-in fade-in duration-500">
+                                                        {certificate.fullDescription}
+                                                    </div>
+                                                ) : (
+                                                    <p className="animate-in fade-in duration-300">
+                                                        {truncateText(certificate.fullDescription, 150)}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col justify-between items-center space-y-4">
+                                            <button
+                                                className={`px-4 py-2 text-center flex items-center justify-center text-black/80 font-medium font-maven transition-all duration-300 ease-out hover:text-black group-hover:scale-105 rounded-md hover:bg-gray-50`}
+                                                onClick={() => toggleExpanded(certificate.id)}
+                                            >
+                                                <span className="transition-all duration-300 ease-out">
+                                                    {isExpanded ? "View Less" : "View More"}
+                                                </span>
+                                                <svg
+                                                    className={`ml-2 w-4 h-4 transition-transform duration-300 ease-out ${
+                                                        isExpanded ? "rotate-180" : "rotate-0"
+                                                    }`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                            <a href="/inventory" className="w-full">
+                                                <Button
+                                                    value={"default"}
+                                                    className="w-full bg-[#282828] hover:bg-[#1a1a1a] text-white font-maven uppercase text-sm rounded-full transition-all duration-300 ease-out transform hover:scale-105 hover:shadow-lg"
+                                                >
+                                                    Explore Inventory
+                                                </Button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </MobileCarousel>
+                </div>
+
+                {/* Desktop Grid View (unchanged) */}
+                <div className="hidden md:flex flex-col items-center md:flex-row gap-8 lg:gap-10">
                     {certificateData.map((certificate) => {
                         const isExpanded = expandedCards[certificate.id];
-
                         return (
                             <div
                                 key={certificate.id}
                                 className={`group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-500 ease-out overflow-hidden border border-gray-200 max-w-md transform hover:-translate-y-2 hover:scale-101`}
-                                // onMouseEnter={() =>
-                                //     toggleExpanded(certificate.id)
-                                // }
-                                // onMouseLeave={() =>
-                                //     toggleExpanded(certificate.id)
-                                // }
                             >
                                 {/* Certificate Image */}
                                 <div className="relative aspect-[4/3] overflow-hidden">
@@ -127,66 +268,43 @@ const DiamondCards = () => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></div>
                                 </div>
-
                                 {/* Card Content */}
                                 <div className="p-6 lg:p-8 transition-all duration-500 ease-out">
-                                    {/* Certificate Title */}
-                                    <h2
-                                        className={`text-xl text-center mb-4 font-maven text-gray-900 transition-all duration-300 ease-out group-hover:text-gray-700`}
-                                    >
+                                    <h2 className="text-xl text-center mb-4 font-maven text-gray-900 transition-all duration-300 ease-out group-hover:text-gray-700">
                                         {certificate.title}
                                     </h2>
-
-                                    {/* Certificate Description */}
                                     <div
                                         className={`text-gray-600 text-sm text-center leading-relaxed mb-6 font-maven transition-all duration-1000 ease-out max-w-sm ${
-                                            isExpanded
-                                                ? "max-h-96 opacity-100"
-                                                : "max-h-24 opacity-90"
+                                            isExpanded ? "max-h-96 opacity-100" : "max-h-24 opacity-90"
                                         }`}
                                     >
                                         <div
                                             className={`transition-all duration-500 ease-out ${
-                                                isExpanded
-                                                    ? "transform translate-y-0"
-                                                    : "transform -translate-y-1"
+                                                isExpanded ? "transform translate-y-0" : "transform -translate-y-1"
                                             }`}
                                         >
                                             {isExpanded ? (
                                                 <div className="whitespace-pre-line animate-in fade-in duration-500">
-                                                    {
-                                                        certificate.fullDescription
-                                                    }
+                                                    {certificate.fullDescription}
                                                 </div>
                                             ) : (
                                                 <p className="animate-in fade-in duration-300">
-                                                    {truncateText(
-                                                        certificate.fullDescription,
-                                                        150
-                                                    )}
+                                                    {truncateText(certificate.fullDescription, 150)}
                                                 </p>
                                             )}
                                         </div>
                                     </div>
-
-                                    {/* Learn More / Show Less Button */}
                                     <div className="flex flex-col justify-between items-center space-y-4">
                                         <button
                                             className={`px-4 py-2 text-center flex items-center justify-center text-black/80 font-medium font-maven transition-all duration-300 ease-out hover:text-black group-hover:scale-105 rounded-md hover:bg-gray-50`}
-                                            onClick={() =>
-                                                toggleExpanded(certificate.id)
-                                            }
+                                            onClick={() => toggleExpanded(certificate.id)}
                                         >
                                             <span className="transition-all duration-300 ease-out">
-                                                {isExpanded
-                                                    ? "View Less"
-                                                    : "View More"}
+                                                {isExpanded ? "View Less" : "View More"}
                                             </span>
                                             <svg
                                                 className={`ml-2 w-4 h-4 transition-transform duration-300 ease-out ${
-                                                    isExpanded
-                                                        ? "rotate-180"
-                                                        : "rotate-0"
+                                                    isExpanded ? "rotate-180" : "rotate-0"
                                                 }`}
                                                 fill="none"
                                                 stroke="currentColor"
@@ -200,7 +318,6 @@ const DiamondCards = () => {
                                                 />
                                             </svg>
                                         </button>
-
                                         <a href="/inventory" className="w-full">
                                             <Button
                                                 value={"default"}

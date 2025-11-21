@@ -65,7 +65,7 @@ const HeroSection = () => {
     };
 
     return (
-        <div className="flex items-start lg:items-center justify-center overflow-hidden min-h-[80vh] w-full relative pt-8 lg:pt-0">
+        <div className="flex items-center justify-center overflow-hidden lg:min-h-[80vh] sm:min-h-fit w-full relative pt-8 lg:pt-0">
             {/* Desktop Background Image - Hidden on mobile */}
             <div className="hidden lg:block absolute inset-0">
                 <Image
@@ -122,7 +122,7 @@ const HeroSection = () => {
                                         </Button>
                                         
                                         {/* Mobile Image - Only visible on mobile */}
-                                        <div className="block lg:hidden mt-6">
+                                        <div className="block lg:hidden">
                                             <Image
                                                 src={"/assets/home/home.png"}
                                                 alt="Diamond collection showcase"

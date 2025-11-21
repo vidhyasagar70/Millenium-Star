@@ -74,7 +74,7 @@ const HomePage = () => {
                                     key={card.id}
                                     className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden"
                                 >
-                                    <div className="relative h-32">
+                                    <div className="relative h-40">
                                         <Image
                                             src={card.imageUrl}
                                             alt={card.title}

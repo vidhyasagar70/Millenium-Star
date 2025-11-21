@@ -37,38 +37,40 @@ const socialLinks = [
 
 const Footer = () => {
     return (
-        <footer className=" overflow-hidden bg-[#212121] text-white">
-            <div className=" max-w-7xl mx-auto px-6 lg:px-8 ">
-                <div className="w-full flex items-center justify-center pt-8 mb-20">
+        <footer className="overflow-hidden bg-[#212121] text-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Logo Section */}
+                <div className="w-full flex items-center justify-center pt-6 sm:pt-8 mb-8 sm:mb-20">
                     <Link
                         href="/"
-                        className="flex flex-col justify-between  items-center space-y-1"
+                        className="flex flex-col justify-between items-center space-y-1"
                     >
                         <Image
                             src="/assets/logo.png"
                             alt="Logo"
                             width={100}
                             height={100}
-                            className="h-16 w-auto"
+                            className="h-10 sm:h-16 w-auto"
                         />
-                        <h1 className="font-playfair text-xl md:text-2xl font-semibold">
+                        <h1 className="font-playfair text-base sm:text-xl md:text-2xl font-semibold">
                             MILLENNIUM&nbsp;STAR
                         </h1>
                     </Link>
                 </div>
-                {/* Top section */}
-                <div className="flex flex-wrap justify-around items-center  max-w-6xl mx-auto mb-5">
-                    {/* Quick Links */}
+
+                {/* Links Section - Always in row */}
+                <div className="grid grid-cols-2 gap-4 sm:gap-8 max-w-6xl mx-auto mb-6 sm:mb-5 px-2 sm:px-0">
+                    {/* Millennium Star Links */}
                     <div className="text-center">
-                        <h3 className={`font-maven text-2xl font-medium mb-4`}>
+                        <h3 className="font-maven text-sm sm:text-xl md:text-2xl font-medium mb-2 sm:mb-4">
                             Millennium Star
                         </h3>
-                        <ul className="space-y-3">
+                        <ul className="space-y-1.5 sm:space-y-3">
                             {quickLinks.map((link) => (
                                 <li key={link.href}>
                                     <Link
                                         href={link.href}
-                                        className={`${inter.className} text-gray-300 hover:text-white transition-colors text-sm font-medium`}
+                                        className={`${inter.className} text-gray-300 hover:text-white transition-colors text-[11px] sm:text-sm font-medium`}
                                     >
                                         {link.label}
                                     </Link>
@@ -76,32 +78,17 @@ const Footer = () => {
                             ))}
                         </ul>
                     </div>
-                    {/* <div className="text-center">
-                        <h3 className={`font-maven text-2xl font-medium mb-4`}>
-                            Quick Links
-                        </h3>
-                        <ul className="space-y-3">
-                            {quickLinks.map((link) => (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        className={`${inter.className} text-gray-300 hover:text-white transition-colors text-sm font-medium`}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div> */}
+
+                    {/* Our Promise Links */}
                     <div className="text-center">
-                        <h3 className={`font-maven text-2xl font-medium mb-4`}>
+                        <h3 className="font-maven text-sm sm:text-xl md:text-2xl font-medium mb-2 sm:mb-4">
                             Our Promise
                         </h3>
-                        <ul className="space-y-3">
+                        <ul className="space-y-1.5 sm:space-y-3">
                             {promiseLinks.map((link) => (
                                 <li key={link.href}>
                                     <p
-                                        className={`${inter.className} text-gray-300 hover:text-white transition-colors text-sm font-medium`}
+                                        className={`${inter.className} text-gray-300 hover:text-white transition-colors text-[11px] sm:text-sm font-medium`}
                                     >
                                         {link.label}
                                     </p>
@@ -111,43 +98,40 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Bottom section */}
-                <div className=" py-6 flex flex-col sm:flex-row-reverse items-center justify-center gap-x-30">
+                {/* Divider */}
+                <div className="border-t border-gray-700 mx-4 sm:mx-0"></div>
+
+                {/* Bottom Section */}
+                <div className="py-4 sm:py-6 flex flex-col sm:flex-row-reverse items-center justify-center gap-3 sm:gap-x-30">
+                    {/* Copyright */}
                     <p
-                        className={`${inter.className} text-sm text-gray-400 order-2 sm:order-1 mt-4 sm:mt-0`}
+                        className={`${inter.className} text-[10px] sm:text-sm text-gray-400 order-2 sm:order-1 text-center`}
                     >
                         &copy; {new Date().getFullYear()} Millennium Star. All
                         rights reserved.
                     </p>
-                    {/* <div
-                        className={`${inter.className} flex items-center space-x-6 text-sm text-gray-400 order-1 sm:order-2`}
-                    >
-                        <Link
-                            href="/privacy"
-                            className="hover:text-white transition-colors"
-                        >
-                            Privacy
-                        </Link>
-                        <Link
-                            href="/terms"
-                            className="hover:text-white transition-colors"
-                        >
-                            Terms
-                        </Link>
-                    </div> */}
-                    {/* Follow Us */}
-                    <div className="flex justify-center items-center gap-3">
-                        <h3 className={`font-maven text-lg font-medium `}>
+
+                    {/* Social Links */}
+                    <div className="flex items-center gap-2 sm:gap-3 order-1 sm:order-2">
+                        <h3 className="font-maven text-xs sm:text-lg font-medium">
                             Follow Us
                         </h3>
-                        <div className="flex justify-center items-center space-x-4">
+                        <div className="flex items-center space-x-3 sm:space-x-4">
                             {socialLinks.map((social, index) => (
                                 <Link
                                     key={index}
                                     href={social.href}
-                                    className="text-gray-300  hover:text-white transition-colors text-xl"
+                                    className="text-gray-300 hover:text-white transition-colors"
                                 >
-                                    {social.icon}
+                                    <span className="block sm:hidden">
+                                        {social.icon.type === Facebook && <Facebook size={14} />}
+                                        {social.icon.type === Instagram && <Instagram size={14} />}
+                                        {social.icon.type === Linkedin && <Linkedin size={14} />}
+                                        {social.icon.type === Twitter && <Twitter size={14} />}
+                                    </span>
+                                    <span className="hidden sm:block">
+                                        {social.icon}
+                                    </span>
                                 </Link>
                             ))}
                         </div>
