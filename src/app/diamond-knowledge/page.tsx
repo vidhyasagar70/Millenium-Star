@@ -10,7 +10,7 @@ import image1 from "../../../public/assets/aboutus-diamond1.png";
 import image2 from "../../../public/assets/aboutus-diamond2.png";
 import image3 from "../../../public/assets/aboutus-diamond3.png";
 import ContentSection from "@/components/landing/aboutusCard";
-// Data for the content sections
+
 // Data for the content sections
 const aboutUsData = [
     {
@@ -24,7 +24,7 @@ const aboutUsData = [
         id: 2,
         title: "Origins & Formation: How Diamonds Are Born",
         content:
-            "Diamonds are crystalline forms of carbon, created under immense pressure and heat deep within the Earth’s mantle, typically at depths of 140–190 kilometers. Over billions of years, volcanic eruptions transport these gems upward, embedding them in kimberlite and lamproite rocks.Some diamonds are also discovered in alluvial deposits, carried downstream by natural forces. Each stone may contain inclusions or growth patterns that act as unique fingerprints of its formation. A few rare diamonds even have extraterrestrial origins, forming in meteorite impacts or in space, adding to their mystique.",
+            "Diamonds are crystalline forms of carbon, created under immense pressure and heat deep within the Earth's mantle, typically at depths of 140–190 kilometers. Over billions of years, volcanic eruptions transport these gems upward, embedding them in kimberlite and lamproite rocks.Some diamonds are also discovered in alluvial deposits, carried downstream by natural forces. Each stone may contain inclusions or growth patterns that act as unique fingerprints of its formation. A few rare diamonds even have extraterrestrial origins, forming in meteorite impacts or in space, adding to their mystique.",
         image: "/assets/diamondKnowledge/MultipleBlueDiamonds.jpg",
     },
     {
@@ -89,36 +89,36 @@ const clarityGrades = [
 ];
 
 const ClaritySection = () => (
-    <div className="py-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Clarity</h2>
-        <p className="text-gray-700 leading-relaxed mb-4">
+    <div className="py-8 md:py-12">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Clarity</h2>
+        <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-4">
             With clarity, we define a diamond's purity. Diamonds occur naturally
             and are a result of carbon exposed to extreme heat and pressure deep
             in the earth. This process can result in a variety of internal
             characteristics called 'inclusions' and external characteristics
             called 'blemishes.
         </p>
-        <p className="text-gray-700 leading-relaxed mb-8">
+        <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-6 md:mb-8">
             Following are the 6 categories into which the clarity is divided,
             some of which are sub- divided, for a total of 11 specific grades.
         </p>
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16">
             {/* Left Column: Text Content */}
-            <div className="lg:w-1/2 space-y-5">
+            <div className="lg:w-1/2 space-y-4 md:space-y-5">
                 {clarityGrades.map((grade) => (
                     <div key={grade.name}>
-                        <h3 className="font-semibold text-lg text-gray-800">
+                        <h3 className="font-semibold text-base md:text-lg text-gray-800">
                             {grade.name}
                         </h3>
-                        <p className="text-gray-600">{grade.description}</p>
+                        <p className="text-sm md:text-base text-gray-600">{grade.description}</p>
                     </div>
                 ))}
             </div>
 
             {/* Right Column: Image */}
-            <div className="lg:w-1/2 flex items-center justify-center">
-                <div className="relative w-full max-w-sm">
+            <div className="lg:w-1/2 flex items-center justify-center mt-6 lg:mt-0">
+                <div className="relative w-full max-w-xs md:max-w-sm">
                     <Image
                         src="/assets/dia_know4.jpg"
                         alt="Diamond clarity grades diagram"
@@ -131,7 +131,7 @@ const ClaritySection = () => (
             </div>
         </div>
 
-        <p className="text-gray-700 leading-relaxed mt-10">
+        <p className="text-sm md:text-base text-gray-700 leading-relaxed mt-6 md:mt-10">
             Evaluating diamond clarity involves determining the number, size,
             nature, and position of these characteristics, as well as how these
             affect the overall appearance of the stone. While no diamond is
@@ -142,11 +142,11 @@ const ClaritySection = () => (
 );
 
 const CutSection = () => (
-    <div className="py-12">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
-            {/* Left Column: Image */}
-            <div className="lg:w-1/2 flex items-center justify-center">
-                <div className="relative w-full max-w-lg bg-black p-4 rounded-lg shadow-lg">
+    <div className="py-8 md:py-12">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16 items-center">
+            {/* Image - Shows first on mobile, left on desktop */}
+            <div className="lg:w-1/2 flex items-center justify-center w-full order-2 lg:order-1">
+                <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-lg bg-black p-3 md:p-4 rounded-lg shadow-lg">
                     <Image
                         src="/assets/diamond-knowledge5.jpg"
                         alt="Diagram of Diamond Cut and its types"
@@ -158,10 +158,10 @@ const CutSection = () => (
                 </div>
             </div>
 
-            {/* Right Column: Text Content */}
-            <div className="lg:w-1/2">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Cut</h2>
-                <div className="space-y-4 text-gray-700 leading-relaxed">
+            {/* Text Content - Shows second on mobile, right on desktop */}
+            <div className="lg:w-1/2 order-1 lg:order-2">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Cut</h2>
+                <div className="space-y-3 md:space-y-4 text-sm md:text-base text-gray-700 leading-relaxed">
                     <p>
                         A diamond's cut is essential to its final beauty and
                         value. The cut is divided into 3 grades: Proportion,
@@ -255,14 +255,14 @@ const AboutUs = () => {
                     height={600}
                     sizes="(max-width: 768px) 100vw, (min-width: 769px) 50vw"
                     alt="Legacy Image"
-                    className="w-full lg:h-[350px] h-auto object-cover"
+                    className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover"
                 />
-                <h1 className="text-3xl md:text-5xl text-white font-semibold font-playfair absolute left-20 top-1/2 -translate-y-1/2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-semibold font-playfair absolute left-4 sm:left-8 md:left-12 lg:left-20 top-1/2 -translate-y-1/2">
                     OUR DIAMONDS
                 </h1>
             </section>
 
-            <Container className="my-20 px-10">
+            <Container className="my-10 md:my-20 px-4 sm:px-6 md:px-8 lg:px-10">
                 <ContentSection data={aboutUsData} />
                 <ClaritySection />
                 <CutSection />
