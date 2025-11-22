@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ClientDiamond } from "@/types/client/diamond";
 import { clientDiamondAPI } from "@/services/client-api";
@@ -75,10 +75,11 @@ const getDiamondFieldValue = (diamond: any, key: string) => {
     const value = diamond[key];
     return value ? `${value}%` : "-";
   }
+
   return diamond[key] !== undefined && diamond[key] !== null && diamond[key] !== ""
     ? diamond[key]
     : "-";
-};
+}
 
 const getShapeImage = (shapeValue: string) => {
   const shapeMap: { [key: string]: string } = {
@@ -106,7 +107,7 @@ const getShapeImage = (shapeValue: string) => {
     : `/assets/diamondShapes/others.png`;
 };
 
-const ComparePage = () => {
+function ComparePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const idsParam = searchParams.get("ids");
@@ -245,6 +246,12 @@ const ComparePage = () => {
       </div>
     </div>
   );
-};
+}
+
+const ComparePage = () => (
+  <Suspense>
+    <ComparePageContent />
+  </Suspense>
+);
 
 export default ComparePage;
