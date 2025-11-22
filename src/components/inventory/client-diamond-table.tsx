@@ -1,7 +1,12 @@
+"use client"
+import { Badge } from "../ui/badge";
+import { ClientPagination } from "./client-pagination";
+import { ClientTableColumnHeader } from "./client-table-column-header";
 // src/components/client/client-diamond-table.tsx
-"use client";
 
-import React from "react";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ClientDiamond } from "@/types/client/diamond";
 import {
     Table,
@@ -11,11 +16,40 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
-import { DiamondImage } from "../diamond-image";
-import { ClientTableColumnHeader } from "./client-table-column-header";
-import { ClientPagination } from "./client-pagination";
-import { Badge } from "../ui/badge";
+import { Checkbox } from "../ui/checkbox";
+interface PaginationData {
+    currentPage: number;
+    totalPages: number;
+    totalRecords: number;
+    recordsPerPage: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+}
+
+interface ClientDiamondTableProps {
+    diamonds: ClientDiamond[];
+    loading: boolean;
+    pagination: PaginationData;
+    onPageChange: (page: number) => void;
+    onPageSizeChange?: (pageSize: number) => void;
+    onSortChange?: (sorting: { id: string; desc: boolean }[]) => void;
+    currentSorting?: { id: string; desc: boolean }[];
+    selected: string[];
+    setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export function ClientDiamondTable(props: ClientDiamondTableProps) {
+    const {
+        diamonds,
+        loading,
+        pagination,
+        onPageChange,
+        onPageSizeChange,
+        onSortChange,
+        currentSorting = [],
+        selected,
+        setSelected,
+    } = props;
 
 // Helper function to get shape image path
 const getShapeImage = (shapeValue: string) => {
@@ -67,16 +101,27 @@ interface ClientDiamondTableProps {
     currentSorting?: { id: string; desc: boolean }[];
 }
 
-export function ClientDiamondTable({
-    diamonds,
-    loading,
-    pagination,
-    onPageChange,
-    onPageSizeChange,
-    onSortChange,
-    currentSorting = [],
-}: ClientDiamondTableProps) {
+// ...existing code...
     const router = useRouter();
+
+    // Checkbox state is now managed by parent
+    const allIds = diamonds.map((d) => d._id);
+    const allSelected = allIds.length > 0 && allIds.every((id) => selected.includes(id));
+    // const someSelected = selected.length > 0 && !allSelected;
+
+    const handleSelectAll = () => {
+        if (allSelected) {
+            setSelected([]);
+        } else {
+            setSelected(allIds);
+        }
+    };
+
+    const handleSelectRow = (id: string) => {
+        setSelected((prev) =>
+            prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+        );
+    };
 
     if (loading) {
         return (
@@ -104,6 +149,17 @@ export function ClientDiamondTable({
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-gray-200">
+                            {/* Checkbox Header */}
+                            <TableHead className="text-xs font-medium text-gray-700 text-center w-8">
+                                <div className="bg-white rounded p-1 flex justify-center items-center">
+                                    <Checkbox
+                                        checked={allSelected}
+                                        onCheckedChange={handleSelectAll}
+                                        aria-label="Select all rows"
+                                        className="m-2 scale-125"
+                                    />
+                                </div>
+                            </TableHead>
                             {/* <TableHead className="text-xs font-medium text-gray-700 text-left pl-3">
                                 <ClientTableColumnHeader
                                     title="Img."
@@ -301,6 +357,15 @@ export function ClientDiamondTable({
                                 key={diamond._id}
                                 className={`hover:bg-gray-50 text-center odd:bg-white even:bg-gray-100 `}
                             >
+                                {/* Checkbox Cell */}
+                                <TableCell className="text-center w-8">
+                                    <Checkbox
+                                        checked={selected.includes(diamond._id)}
+                                        onCheckedChange={() => handleSelectRow(diamond._id)}
+                                        aria-label={`Select row for ${diamond.certificateNumber}`}
+                                        className="m-2 scale-125"
+                                    />
+                                </TableCell>
                                 {/* <TableCell className="text-sm font-mono">
                                     <div className="aspect-square relative w-15 mx-auto m-2 ml-2">
                                         <DiamondImage

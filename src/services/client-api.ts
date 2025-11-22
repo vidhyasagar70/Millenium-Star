@@ -1,11 +1,11 @@
-// src/services/client-api.ts
+
 import {
     ClientDiamond,
     ClientFilters,
     FilterOptions,
 } from "@/types/client/diamond";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL; // Updated to match API docs
+const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 interface ApiResponse<T> {
     success: boolean;
@@ -41,15 +41,10 @@ class ClientDiamondAPI {
         limit: number = 20
     ): Promise<SearchResponse> {
         const params = new URLSearchParams();
-
-        // Add pagination parameters
         params.append("page", page.toString());
         params.append("limit", limit.toString());
-
-        // Add filter parameters
         Object.entries(filters).forEach(([key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
-                // Special handling for multiple size ranges
                 if (key === "sizeRanges" && Array.isArray(value)) {
                     value.forEach((range) => {
                         if (
@@ -61,7 +56,6 @@ class ClientDiamondAPI {
                         }
                     });
                 } else if (Array.isArray(value)) {
-                    // For other array filters, add each value as a separate parameter
                     if (value.length > 0) {
                         value.forEach((item) => {
                             params.append(key, item);
@@ -72,24 +66,19 @@ class ClientDiamondAPI {
                 }
             }
         });
-
         const response = await fetch(
             `${API_BASE_URL}/diamonds/search?${params}`,
             {
-                credentials: "include", // Include cookies for authentication
+                credentials: "include",
             }
         );
-
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const result: ApiResponse<ClientDiamond[]> = await response.json();
-
         if (!result.success) {
             throw new Error(result.message || "Failed to fetch diamonds");
         }
-
         return {
             data: result.data,
             pagination: result.pagination || {
@@ -103,6 +92,23 @@ class ClientDiamondAPI {
         };
     }
 
+    async getDiamondsByIds(ids: string[]): Promise<ClientDiamond[]> {
+        if (!ids || ids.length === 0) return [];
+        const params = new URLSearchParams();
+        ids.forEach((id) => params.append("ids", id));
+        const response = await fetch(`${API_BASE_URL}/diamonds/by-ids?${params.toString()}`, {
+            credentials: "include",
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result: ApiResponse<ClientDiamond[]> = await response.json();
+        if (!result.success) {
+            throw new Error(result.message || "Failed to fetch diamonds by ids");
+        }
+        return result.data;
+    }
+
     async getFilterOptions(): Promise<FilterOptions> {
         const response = await fetch(
             `${API_BASE_URL}/diamonds/filter-options`,
@@ -110,18 +116,13 @@ class ClientDiamondAPI {
                 credentials: "include",
             }
         );
-
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const result: ApiResponse<any> = await response.json();
-
         if (!result.success) {
             throw new Error(result.message || "Failed to fetch filter options");
         }
-
-        // Map API response to FilterOptions format
         return {
             colors: result.data.colors || [],
             clarities: result.data.clarities || [],
@@ -138,17 +139,13 @@ class ClientDiamondAPI {
         const response = await fetch(`${API_BASE_URL}/diamonds/all`, {
             credentials: "include",
         });
-
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const result: ApiResponse<ClientDiamond[]> = await response.json();
-
         if (!result.success) {
             throw new Error(result.message || "Failed to fetch diamonds");
         }
-
         return result.data;
     }
 }

@@ -45,6 +45,8 @@ export default function ClientPage() {
     const [filters, setFilters] = useState<ClientFilters>({});
     const [searchTerm, setSearchTerm] = useState("");
     const [view, setView] = useState<"table" | "grid">("table");
+    // Add selected state for ClientDiamondTable
+    const [selected, setSelected] = useState<any[]>([]);
 
     const handleFiltersChange = (newFilters: ClientFilters) => {
         setFilters(newFilters);
@@ -157,6 +159,14 @@ export default function ClientPage() {
         );
     }
 
+    // Handler for compare button
+    const handleCompare = () => {
+        if (selected.length >= 2) {
+            const ids = selected.map((d) => d._id || d).join(",");
+            router.push(`/compare?ids=${ids}`);
+        }
+    };
+
     return (
         <InventoryGuard>
             <UserStatusHandler>
@@ -202,7 +212,7 @@ export default function ClientPage() {
                                                 </TabsTrigger>
                                             </TabsList>
                                         </Tabs>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2 items-center">
                                             <div className="flex items-center space-x-2">
                                                 <Input
                                                     placeholder="Search by Diamond ID"
@@ -236,6 +246,14 @@ export default function ClientPage() {
                                                 <FunnelX className="w-4 h-4" />
                                                 Reset
                                             </Button>
+                                            {/* Compare Button */}
+                                            <Button
+                                                onClick={handleCompare}
+                                                disabled={selected.length < 2}
+                                                className="rounded-full h-10 z-10 bg-black text-white px-6 ml-2"
+                                            >
+                                                Compare
+                                            </Button>
                                         </div>
                                     </div>
 
@@ -268,6 +286,8 @@ export default function ClientPage() {
                                         onPageSizeChange={handlePageSizeChange}
                                         onSortChange={handleSortChange}
                                         currentSorting={currentSorting}
+                                        selected={selected}
+                                        setSelected={setSelected}
                                     />
                                 ) : (
                                     <ClientDiamondGrid
