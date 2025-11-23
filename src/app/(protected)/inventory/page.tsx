@@ -18,6 +18,7 @@ import {
     Table as TableIcon,
     RotateCcw,
     GitCompare,
+    Filter,
 } from "lucide-react";
 import { InventoryGuard } from "@/components/auth/routeGuard";
 import { UserStatusHandler } from "@/components/auth/statusGuard";
@@ -48,6 +49,7 @@ export default function ClientPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [view, setView] = useState<"table" | "grid">("table");
     const [selected, setSelected] = useState<any[]>([]);
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
     const handleFiltersChange = (newFilters: ClientFilters) => {
         setFilters(newFilters);
@@ -339,6 +341,20 @@ export default function ClientPage() {
                                         <RotateCcw className="w-4 h-4" />
                                     </Button>
 
+                                    {/* Filter Toggle Button - Icon Only */}
+                                    <Button
+                                        onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                                        size="sm"
+                                        className={`rounded-full h-9 w-9 p-0 ${
+                                            mobileFiltersOpen 
+                                                ? "bg-black text-white" 
+                                                : "bg-gray-100 text-black border border-gray-300"
+                                        }`}
+                                        title="Toggle Filters"
+                                    >
+                                        <Filter className="w-4 h-4" />
+                                    </Button>
+
                                     {/* Compare Button - Icon Only */}
                                     <Button
                                         onClick={handleCompare}
@@ -363,20 +379,22 @@ export default function ClientPage() {
 
                             {/* Two Column Layout - Mobile */}
                             <div className="flex flex-1 overflow-hidden">
-                                {/* Left Column - Filter Sidebar */}
-                                <div className="w-1/3 border-r overflow-y-auto bg-gray-50">
-                                    <ClientFilterSidebar
-                                        filters={filters}
-                                        onFiltersChange={handleFiltersChange}
-                                        filterOptions={filterOptions}
-                                        onSearch={handleSearch}
-                                        onReset={handleReset}
-                                        loading={loading}
-                                    />
-                                </div>
+                                {/* Left Column - Filter Sidebar (Conditional) */}
+                                {mobileFiltersOpen && (
+                                    <div className="w-1/3 border-r overflow-y-auto bg-gray-50">
+                                        <ClientFilterSidebar
+                                            filters={filters}
+                                            onFiltersChange={handleFiltersChange}
+                                            filterOptions={filterOptions}
+                                            onSearch={handleSearch}
+                                            onReset={handleReset}
+                                            loading={loading}
+                                        />
+                                    </div>
+                                )}
 
                                 {/* Right Column - Diamond Display */}
-                                <div className="w-2/3 overflow-y-auto bg-white">
+                                <div className={`${mobileFiltersOpen ? 'w-2/3' : 'w-full'} overflow-y-auto bg-white`}>
                                     <div className="p-2">
                                         {view === "table" ? (
                                             <ClientDiamondTable

@@ -37,9 +37,6 @@ export function ClientFilterSidebar({
     onReset,
     loading = false,
 }: ClientFilterSidebarProps) {
-    // Mobile filter visibility state
-    const [isFilterVisible, setIsFilterVisible] = useState(false);
-    
     // Individual section collapse states for mobile
     const [expandedSections, setExpandedSections] = useState({
         shape: true,
@@ -175,23 +172,6 @@ export function ClientFilterSidebar({
 
     return (
         <div className="w-full rounded-lg py-2 mb-1">
-            {/* Mobile Filter Toggle Button */}
-            <div className="lg:hidden mb-4 px-4">
-                <Button
-                    onClick={() => setIsFilterVisible(!isFilterVisible)}
-                    className="w-full flex items-center justify-between bg-white border border-gray-300 text-black hover:bg-gray-50"
-                >
-                    <span className="font-medium">
-                        {isFilterVisible ? "Hide Filters" : "Show Filters"}
-                    </span>
-                    {isFilterVisible ? (
-                        <ChevronUp className="w-5 h-5" />
-                    ) : (
-                        <ChevronDown className="w-5 h-5" />
-                    )}
-                </Button>
-            </div>
-
             {/* Desktop View - Original Layout (unchanged) */}
             <div className="hidden lg:block">
                 <Container className="max-w-[1536px]">
@@ -593,8 +573,13 @@ export function ClientFilterSidebar({
                 </Container>
             </div>
 
-            {/* Mobile View - Accordion Layout */}
-            <div className={`${isFilterVisible ? 'block' : 'hidden'} lg:hidden px-4`}>
+            {/* Mobile View - Accordion Layout with Filters Heading */}
+            <div className="lg:hidden px-4">
+                {/* Filters Heading */}
+                <div className="mb-4">
+                    <h2 className="text-lg font-semibold text-black">Filters</h2>
+                </div>
+
                 <div className="space-y-2">
                     {/* Shape Filter - Mobile */}
                     <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
