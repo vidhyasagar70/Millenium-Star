@@ -591,6 +591,63 @@ export function ClientFilterSidebar({
                                 <ShapeIcon className="w-4 h-4" />
                                 <span className="text-sm font-medium text-black">Shape</span>
                             </div>
+                            {expandedSections.shape ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.shape && (
+                            <div className="p-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                    {shape_options.slice(0, 12).map((shape) => (
+                                        <div key={shape.value}>
+                                            <Checkbox
+                                                id={`shape-mobile-${shape.value}`}
+                                                checked={(filters.shape || []).includes(shape.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("shape", shape.value, checked as boolean)
+                                                }
+                                                className="sr-only peer"
+                                            />
+                                            <label
+                                                htmlFor={`shape-mobile-${shape.value}`}
+                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded-md border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] py-2 px-1 ${
+                                                    (filters.shape || []).includes(shape.value)
+                                                        ? "bg-gray-200 border-black"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {getShapeImage(shape.label) ? (
+                                                    <img
+                                                        src={getShapeImage(shape.label)!}
+                                                        alt={shape.label}
+                                                        className="w-12 h-12 object-contain mb-0.5"
+                                                    />
+                                                ) : (
+                                                    <span className="text-[10px]">{shape.value}</span>
+                                                )}
+                                                <span className="text-[10px] text-gray-600 text-center leading-tight">
+                                                    {shape.label}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Carat Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('carat')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <div className="flex items-center gap-2">
+                                <CaratIcon className="w-4 h-4" />
+                                <span className="text-sm font-medium text-black">Carat</span>
+                            </div>
                             {expandedSections.carat ? (
                                 <ChevronUp className="w-4 h-4" />
                             ) : (
