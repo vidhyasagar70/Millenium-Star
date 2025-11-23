@@ -16,8 +16,10 @@ import {
     FunnelX,
     Grid3X3,
     Table as TableIcon,
+    RotateCcw,
+    GitCompare,
 } from "lucide-react";
-import { InventoryGuard } from "@/components/auth/routeGuard"; // Updated import
+import { InventoryGuard } from "@/components/auth/routeGuard";
 import { UserStatusHandler } from "@/components/auth/statusGuard";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -26,7 +28,7 @@ import Rapaport from "@/components/rapaport/rapaport";
 import Container from "@/components/ui/container";
 
 export default function ClientPage() {
-    const { user } = useAuth(); // Get user for conditional rendering
+    const { user } = useAuth();
     const router = useRouter();
     const {
         diamonds,
@@ -45,7 +47,6 @@ export default function ClientPage() {
     const [filters, setFilters] = useState<ClientFilters>({});
     const [searchTerm, setSearchTerm] = useState("");
     const [view, setView] = useState<"table" | "grid">("table");
-    // Add selected state for ClientDiamondTable
     const [selected, setSelected] = useState<any[]>([]);
 
     const handleFiltersChange = (newFilters: ClientFilters) => {
@@ -58,7 +59,7 @@ export default function ClientPage() {
             searchTerm: searchTerm || filters.searchTerm,
         };
 
-        console.log("Searching with filters:", filtersToUse); // Add this for debugging
+        console.log("Searching with filters:", filtersToUse);
         await searchDiamonds(filtersToUse, 1);
     };
 
@@ -76,23 +77,18 @@ export default function ClientPage() {
         const newFilters = { ...filters };
 
         if (key === "priceMax") {
-            // Remove price max filter and reset min to range minimum
             delete newFilters.priceMax;
             delete newFilters.priceMin;
         } else if (key === "sizeMax") {
-            // Remove size max filter and reset min to range minimum
             delete newFilters.sizeMax;
             delete newFilters.sizeMin;
         } else if (key === "discountMax") {
-            // Remove discount max filter and reset min to range minimum
             delete newFilters.discountMax;
             delete newFilters.discountMin;
         } else if (key === "rapListMax") {
-            // Remove rap list max filter and reset min to range minimum
             delete newFilters.rapListMax;
             delete newFilters.rapListMin;
         } else if (key === "sizeRanges" && value) {
-            // Handle removal of individual carat ranges
             const [min, max] = value.split("-").map(Number);
             const currentRanges = newFilters.sizeRanges || [];
             const updatedRanges = currentRanges.filter(
@@ -104,7 +100,6 @@ export default function ClientPage() {
                 newFilters.sizeRanges = updatedRanges;
             }
         } else if (Array.isArray(newFilters[key]) && value) {
-            // Remove specific value from array
             const arrayFilter = newFilters[key] as string[];
             const updatedArray = arrayFilter.filter((item) => item !== value);
             if (updatedArray.length === 0) {
@@ -113,17 +108,13 @@ export default function ClientPage() {
                 newFilters[key] = updatedArray as any;
             }
         } else {
-            // Remove the entire filter
             delete newFilters[key];
         }
 
         setFilters(newFilters);
-
-        // Auto-search with updated filters
         searchDiamonds(newFilters, 1);
     };
 
-    // Handle clearing all filters
     const handleClearAllFilters = () => {
         setFilters({});
         setSearchTerm("");
@@ -159,7 +150,6 @@ export default function ClientPage() {
         );
     }
 
-    // Handler for compare button
     const handleCompare = () => {
         if (selected.length >= 2) {
             const ids = selected.map((d) => d._id || d).join(",");
@@ -170,42 +160,43 @@ export default function ClientPage() {
     return (
         <InventoryGuard>
             <UserStatusHandler>
-                <div className=" bg-white">
+                <div className="bg-white">
                     <Container className="max-w-[1536px] mx-auto">
-                        <div className="flex-col">
+                        {/* Desktop Layout - Hidden on Mobile */}
+                        <div className="hidden lg:flex lg:flex-col">
                             {/* Filter Sidebar */}
                             <ClientFilterSidebar
                                 filters={filters}
                                 onFiltersChange={handleFiltersChange}
                                 filterOptions={filterOptions}
-                                onSearch={handleSearch} // Make sure this accepts the filters parameter
+                                onSearch={handleSearch}
                                 onReset={handleReset}
                                 loading={loading}
                             />
 
                             {/* Main Content */}
-                            <div className="flex-1 px-6 py-2   ">
+                            <div className="flex-1 px-6 py-2">
                                 {/* Top Controls */}
-                                <div className="flex bg-[#F4F4F4] rounded-xl  flex-col lg:flex-row justify-start items-start flex-wrap gap-4 lg:items-center lg:justify-between mb-2">
+                                <div className="flex bg-[#F4F4F4] rounded-xl flex-col lg:flex-row justify-start items-start flex-wrap gap-4 lg:items-center lg:justify-between mb-2">
                                     <div className="flex flex-wrap grow items-center justify-between space-x-4">
                                         <Tabs
-                                            className="bg-gray-100 rounded-xl "
+                                            className="bg-gray-100 rounded-xl"
                                             value={view}
                                             onValueChange={(v) =>
                                                 setView(v as "table" | "grid")
                                             }
                                         >
-                                            <TabsList className="bg-gray-100 h-12 rounded-xl ">
+                                            <TabsList className="bg-gray-100 h-12 rounded-xl">
                                                 <TabsTrigger
                                                     value="table"
-                                                    className="flex items-center rounded-xl  space-x-2"
+                                                    className="flex items-center rounded-xl space-x-2"
                                                 >
                                                     <TableIcon className="w-4 h-4" />
                                                     <span>Table View</span>
                                                 </TabsTrigger>
                                                 <TabsTrigger
                                                     value="grid"
-                                                    className="flex rounded-xl  items-center space-x-2"
+                                                    className="flex rounded-xl items-center space-x-2"
                                                 >
                                                     <Grid3X3 className="w-4 h-4" />
                                                     <span>Grid View</span>
@@ -218,22 +209,19 @@ export default function ClientPage() {
                                                     placeholder="Search by Diamond ID"
                                                     value={searchTerm}
                                                     onChange={(e) =>
-                                                        setSearchTerm(
-                                                            e.target.value
-                                                        )
+                                                        setSearchTerm(e.target.value)
                                                     }
                                                     onKeyPress={(e) =>
-                                                        e.key === "Enter" &&
-                                                        handleSearch()
+                                                        e.key === "Enter" && handleSearch()
                                                     }
-                                                    className="w-auto border-gray-300 lg:min-w-100 rounded-full  h-10 lg:translate-x-10  z-9 "
+                                                    className="w-auto border-gray-300 lg:min-w-100 rounded-full h-10 lg:translate-x-10 z-9"
                                                 />
                                                 <Button
                                                     onClick={() => {
                                                         handleSearch();
                                                     }}
                                                     disabled={loading}
-                                                    className="rounded-full h-10 z-10 "
+                                                    className="rounded-full h-10 z-10"
                                                 >
                                                     Search
                                                 </Button>
@@ -241,12 +229,11 @@ export default function ClientPage() {
                                             <Button
                                                 variant="outline"
                                                 onClick={() => handleReset()}
-                                                className="border  border-black rounded-full text-sm px-6"
+                                                className="border border-black rounded-full text-sm px-6"
                                             >
                                                 <FunnelX className="w-4 h-4" />
                                                 Reset
                                             </Button>
-                                            {/* Compare Button */}
                                             <Button
                                                 onClick={handleCompare}
                                                 disabled={selected.length < 2}
@@ -256,17 +243,6 @@ export default function ClientPage() {
                                             </Button>
                                         </div>
                                     </div>
-
-                                    {/* <div className="flex items-center space-x-2 rounded-xl h-full  mr-1">
-                                        <Button
-                                            variant="outline"
-                                            onClick={exportData}
-                                            className="h-full rounded-xl "
-                                        >
-                                            <Download className="w-4 h-4 mr-2" />
-                                            Export Current View
-                                        </Button>
-                                    </div> */}
                                 </div>
 
                                 {/* Applied Filters */}
@@ -276,7 +252,7 @@ export default function ClientPage() {
                                     onClearAll={handleClearAllFilters}
                                 />
 
-                                {/* Diamond Display - Conditional based on view */}
+                                {/* Diamond Display */}
                                 {view === "table" ? (
                                     <ClientDiamondTable
                                         diamonds={diamonds}
@@ -298,6 +274,133 @@ export default function ClientPage() {
                                         onPageSizeChange={handlePageSizeChange}
                                     />
                                 )}
+                            </div>
+                        </div>
+
+                        {/* Mobile Layout - Visible only on Mobile */}
+                        <div className="lg:hidden flex flex-col h-screen">
+                            {/* Top Controls - Mobile - All in One Line */}
+                            <div className="px-3 py-2 bg-white border-b sticky top-0 z-20">
+                                <div className="flex items-center gap-2">
+                                    {/* View Tabs - Icons Only */}
+                                    <Tabs
+                                        value={view}
+                                        onValueChange={(v) =>
+                                            setView(v as "table" | "grid")
+                                        }
+                                    >
+                                        <TabsList className="bg-gray-100 h-9 rounded-lg p-1">
+                                            <TabsTrigger
+                                                value="table"
+                                                className="rounded-md px-3 h-7"
+                                            >
+                                                <TableIcon className="w-4 h-4" />
+                                            </TabsTrigger>
+                                            <TabsTrigger
+                                                value="grid"
+                                                className="rounded-md px-3 h-7"
+                                            >
+                                                <Grid3X3 className="w-4 h-4" />
+                                            </TabsTrigger>
+                                        </TabsList>
+                                    </Tabs>
+
+                                    {/* Search Input */}
+                                    <Input
+                                        placeholder="Diamond ID"
+                                        value={searchTerm}
+                                        onChange={(e) =>
+                                            setSearchTerm(e.target.value)
+                                        }
+                                        onKeyPress={(e) =>
+                                            e.key === "Enter" && handleSearch()
+                                        }
+                                        className="flex-1 border-gray-300 rounded-full h-9 text-sm min-w-0"
+                                    />
+
+                                    {/* Search Button */}
+                                    <Button
+                                        onClick={() => handleSearch()}
+                                        disabled={loading}
+                                        size="sm"
+                                        className="rounded-full h-9 px-4 whitespace-nowrap"
+                                    >
+                                        Search
+                                    </Button>
+
+                                    {/* Reset Button - Icon Only */}
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => handleReset()}
+                                        size="sm"
+                                        className="border border-gray-300 rounded-full h-9 w-9 p-0"
+                                        title="Reset"
+                                    >
+                                        <RotateCcw className="w-4 h-4" />
+                                    </Button>
+
+                                    {/* Compare Button - Icon Only */}
+                                    <Button
+                                        onClick={handleCompare}
+                                        disabled={selected.length < 2}
+                                        size="sm"
+                                        className="rounded-full h-9 w-9 p-0 bg-black text-white disabled:bg-gray-300"
+                                        title={`Compare (${selected.length})`}
+                                    >
+                                        <GitCompare className="w-4 h-4" />
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* Applied Filters - Mobile */}
+                            <div className="px-4 py-2">
+                                <AppliedFilters
+                                    filters={currentFilters}
+                                    onRemoveFilter={handleRemoveFilter}
+                                    onClearAll={handleClearAllFilters}
+                                />
+                            </div>
+
+                            {/* Two Column Layout - Mobile */}
+                            <div className="flex flex-1 overflow-hidden">
+                                {/* Left Column - Filter Sidebar */}
+                                <div className="w-1/3 border-r overflow-y-auto bg-gray-50">
+                                    <ClientFilterSidebar
+                                        filters={filters}
+                                        onFiltersChange={handleFiltersChange}
+                                        filterOptions={filterOptions}
+                                        onSearch={handleSearch}
+                                        onReset={handleReset}
+                                        loading={loading}
+                                    />
+                                </div>
+
+                                {/* Right Column - Diamond Display */}
+                                <div className="w-2/3 overflow-y-auto bg-white">
+                                    <div className="p-2">
+                                        {view === "table" ? (
+                                            <ClientDiamondTable
+                                                diamonds={diamonds}
+                                                loading={loading}
+                                                pagination={pagination}
+                                                onPageChange={handlePageChange}
+                                                onPageSizeChange={handlePageSizeChange}
+                                                onSortChange={handleSortChange}
+                                                currentSorting={currentSorting}
+                                                selected={selected}
+                                                setSelected={setSelected}
+                                            />
+                                        ) : (
+                                            <ClientDiamondGrid
+                                                diamonds={diamonds}
+                                                loading={loading}
+                                                pagination={pagination}
+                                                onPageChange={handlePageChange}
+                                                onPageSizeChange={handlePageSizeChange}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </Container>

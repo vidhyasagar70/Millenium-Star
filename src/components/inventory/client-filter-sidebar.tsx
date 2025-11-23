@@ -40,8 +40,29 @@ export function ClientFilterSidebar({
     // Mobile filter visibility state
     const [isFilterVisible, setIsFilterVisible] = useState(false);
     
+    // Individual section collapse states for mobile
+    const [expandedSections, setExpandedSections] = useState({
+        shape: true,
+        carat: true,
+        color: true,
+        clarity: true,
+        fluorescence: true,
+        cut: true,
+        polish: true,
+        symmetry: true,
+        laboratory: true,
+    });
+    
     // Debounce timer ref
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Toggle individual section
+    const toggleSection = (section: keyof typeof expandedSections) => {
+        setExpandedSections(prev => ({
+            ...prev,
+            [section]: !prev[section]
+        }));
+    };
 
     // Updated debounced search function - pass filters directly
     const debouncedSearch = useCallback(
@@ -171,8 +192,8 @@ export function ClientFilterSidebar({
                 </Button>
             </div>
 
-            {/* Filter Content - Hidden on mobile unless toggled */}
-            <div className={`${isFilterVisible ? 'block' : 'hidden'} lg:block`}>
+            {/* Desktop View - Original Layout (unchanged) */}
+            <div className="hidden lg:block">
                 <Container className="max-w-[1536px]">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6">
                         {/* Shape Filter */}
@@ -570,6 +591,436 @@ export function ClientFilterSidebar({
                         </div>
                     </div>
                 </Container>
+            </div>
+
+            {/* Mobile View - Accordion Layout */}
+            <div className={`${isFilterVisible ? 'block' : 'hidden'} lg:hidden px-4`}>
+                <div className="space-y-2">
+                    {/* Shape Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('shape')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <div className="flex items-center gap-2">
+                                <ShapeIcon className="w-4 h-4" />
+                                <span className="text-sm font-medium text-black">Shape</span>
+                            </div>
+                            {expandedSections.shape ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.shape && (
+                            <div className="p-3">
+                                <div className="grid grid-cols-3 gap-2">
+                                    {shape_options.slice(0, 12).map((shape) => (
+                                        <div key={shape.value}>
+                                            <Checkbox
+                                                id={`shape-mobile-${shape.value}`}
+                                                checked={(filters.shape || []).includes(shape.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("shape", shape.value, checked as boolean)
+                                                }
+                                                className="sr-only peer"
+                                            />
+                                            <label
+                                                htmlFor={`shape-mobile-${shape.value}`}
+                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded-md border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] p-3 ${
+                                                    (filters.shape || []).includes(shape.value)
+                                                        ? "bg-gray-200 border-black"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {getShapeImage(shape.label) ? (
+                                                    <img
+                                                        src={getShapeImage(shape.label)!}
+                                                        alt={shape.label}
+                                                        className="w-10 h-10 object-contain mb-1"
+                                                    />
+                                                ) : (
+                                                    <span className="text-xs">{shape.value}</span>
+                                                )}
+                                                <span className="text-xs text-gray-600 text-center">
+                                                    {shape.label}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Carat Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('carat')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <div className="flex items-center gap-2">
+                                <CaratIcon className="w-4 h-4" />
+                                <span className="text-sm font-medium text-black">Carat</span>
+                            </div>
+                            {expandedSections.carat ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.carat && (
+                            <div className="p-3 space-y-3">
+                                <div className="flex gap-2">
+                                    <Input
+                                        type="number"
+                                        placeholder="From"
+                                        step="0.01"
+                                        value={filters.sizeMin || ""}
+                                        onChange={(e) =>
+                                            updateFilter(
+                                                "sizeMin",
+                                                e.target.value ? parseFloat(e.target.value) : undefined
+                                            )
+                                        }
+                                        className="text-xs h-9 bg-white"
+                                    />
+                                    <Input
+                                        type="number"
+                                        placeholder="To"
+                                        step="0.01"
+                                        value={filters.sizeMax || ""}
+                                        onChange={(e) =>
+                                            updateFilter(
+                                                "sizeMax",
+                                                e.target.value ? parseFloat(e.target.value) : undefined
+                                            )
+                                        }
+                                        className="text-xs h-9 bg-white"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {[
+                                        { label: "0.18 - 0.22", min: 0.18, max: 0.22 },
+                                        { label: "0.23 - 0.29", min: 0.23, max: 0.29 },
+                                        { label: "0.30 - 0.39", min: 0.3, max: 0.39 },
+                                        { label: "0.40 - 0.49", min: 0.4, max: 0.49 },
+                                        { label: "0.50 - 0.69", min: 0.5, max: 0.69 },
+                                        { label: "0.70 - 0.89", min: 0.7, max: 0.89 },
+                                        { label: "0.90 - 0.99", min: 0.9, max: 0.99 },
+                                        { label: "1.00 - 1.49", min: 1.0, max: 1.49 },
+                                        { label: "1.50 - 1.99", min: 1.5, max: 1.99 },
+                                        { label: "2.00 - 2.99", min: 2.0, max: 2.99 },
+                                        { label: "3.00 - 3.99", min: 3.0, max: 3.99 },
+                                        { label: "4.00 - 4.99", min: 4.0, max: 4.99 },
+                                        { label: "5.00 - 9.99", min: 5.0, max: 9.99 },
+                                        { label: "10.00 +", min: 10.0, max: 10.99 },
+                                    ].map((range) => {
+                                        const isSelected = isRangeSelected(range.min, range.max);
+                                        return (
+                                            <button
+                                                key={range.label}
+                                                type="button"
+                                                onClick={() => toggleRangeSelection(range.min, range.max)}
+                                                className={`text-xs rounded-lg px-2 py-2 border cursor-pointer hover:bg-gray-100 hover:border-black transition-colors ${
+                                                    isSelected
+                                                        ? "bg-[#FFF3E7] border-[#FFE7D0] text-black"
+                                                        : "bg-white"
+                                                }`}
+                                            >
+                                                {range.label}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Color Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('color')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <div className="flex items-center gap-2">
+                                <Palette className="w-4 h-4" />
+                                <span className="text-sm font-medium text-black">Color</span>
+                            </div>
+                            {expandedSections.color ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.color && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {color_options.map((color) => (
+                                        <div key={color.value}>
+                                            <Checkbox
+                                                id={`color-mobile-${color.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.color || []).includes(color.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("color", color.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`color-mobile-${color.value}`}
+                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {color.value}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Clarity Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('clarity')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <div className="flex items-center gap-2">
+                                <SparkleIcon className="w-4 h-4" />
+                                <span className="text-sm font-medium text-black">Clarity</span>
+                            </div>
+                            {expandedSections.clarity ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.clarity && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {clarity_options.map((clarity) => (
+                                        <div key={clarity.value}>
+                                            <Checkbox
+                                                id={`clarity-mobile-${clarity.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.clarity || []).includes(clarity.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("clarity", clarity.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`clarity-mobile-${clarity.value}`}
+                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {clarity.value}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Fluorescence Intensity Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('fluorescence')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <span className="text-sm font-medium text-black">Fluorescence Intensity</span>
+                            {expandedSections.fluorescence ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.fluorescence && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {fluorescenceIntensity_options.map((fluo) => (
+                                        <div key={fluo.value}>
+                                            <Checkbox
+                                                id={`fluo-mobile-${fluo.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.fluorescenceIntensity || []).includes(fluo.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("fluorescenceIntensity", fluo.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`fluo-mobile-${fluo.value}`}
+                                                className="text-xs px-2 py-1 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {fluo.label}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Cut Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('cut')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <span className="text-sm font-medium text-black">Cut</span>
+                            {expandedSections.cut ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.cut && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {cut_options.slice(0, 4).map((cut) => (
+                                        <div key={cut.value}>
+                                            <Checkbox
+                                                id={`cut-mobile-${cut.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.cut || []).includes(cut.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("cut", cut.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`cut-mobile-${cut.value}`}
+                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {cut.value}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Polish Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('polish')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <span className="text-sm font-medium text-black">Polish</span>
+                            {expandedSections.polish ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.polish && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {polish_options.slice(0, 4).map((polish) => (
+                                        <div key={polish.value}>
+                                            <Checkbox
+                                                id={`polish-mobile-${polish.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.polish || []).includes(polish.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("polish", polish.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`polish-mobile-${polish.value}`}
+                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {polish.value}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Symmetry Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('symmetry')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <span className="text-sm font-medium text-black">Symmetry</span>
+                            {expandedSections.symmetry ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.symmetry && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {symmetry_options.slice(0, 4).map((symmetry) => (
+                                        <div key={symmetry.value}>
+                                            <Checkbox
+                                                id={`symmetry-mobile-${symmetry.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.symmetry || []).includes(symmetry.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("symmetry", symmetry.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`symmetry-mobile-${symmetry.value}`}
+                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {symmetry.value}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Laboratory Filter - Mobile */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                        <button
+                            onClick={() => toggleSection('laboratory')}
+                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
+                        >
+                            <span className="text-sm font-medium text-black">Laboratory</span>
+                            {expandedSections.laboratory ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {expandedSections.laboratory && (
+                            <div className="p-3">
+                                <div className="flex flex-wrap gap-2">
+                                    {[
+                                        { value: "GIA", label: "GIA" },
+                                        { value: "HRD", label: "HRD" },
+                                        { value: "IGI", label: "IGI" },
+                                        { value: "None", label: "Other" },
+                                    ].map((lab) => (
+                                        <div key={lab.value}>
+                                            <Checkbox
+                                                id={`lab-mobile-${lab.value}`}
+                                                className="sr-only peer"
+                                                checked={(filters.laboratory || []).includes(lab.value)}
+                                                onCheckedChange={(checked) =>
+                                                    updateArrayFilter("laboratory", lab.value, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`lab-mobile-${lab.value}`}
+                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                            >
+                                                {lab.label}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );
