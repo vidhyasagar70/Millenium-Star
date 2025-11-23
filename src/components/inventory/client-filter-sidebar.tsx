@@ -172,7 +172,7 @@ export function ClientFilterSidebar({
 
     return (
         <div className="w-full rounded-lg py-2 mb-1">
-            {/* Desktop View - Original Layout (unchanged) */}
+            {/* Desktop View - Original Layout */}
             <div className="hidden lg:block">
                 <Container className="max-w-[1536px]">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6">
@@ -573,15 +573,15 @@ export function ClientFilterSidebar({
                 </Container>
             </div>
 
-            {/* Mobile View - Accordion Layout with Filters Heading */}
-            <div className="lg:hidden px-4">
+            {/* Mobile View - New 2-Column Layout */}
+            <div className="lg:hidden pl-0 pr-2">
                 {/* Filters Heading */}
-                <div className="mb-4">
+                <div className="mb-4 pl-4">
                     <h2 className="text-lg font-semibold text-black">Filters</h2>
                 </div>
 
                 <div className="space-y-2">
-                    {/* Shape Filter - Mobile */}
+                    {/* Shape Filter - Mobile (2 columns) */}
                     <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('shape')}
@@ -591,63 +591,6 @@ export function ClientFilterSidebar({
                                 <ShapeIcon className="w-4 h-4" />
                                 <span className="text-sm font-medium text-black">Shape</span>
                             </div>
-                            {expandedSections.shape ? (
-                                <ChevronUp className="w-4 h-4" />
-                            ) : (
-                                <ChevronDown className="w-4 h-4" />
-                            )}
-                        </button>
-                        {expandedSections.shape && (
-                            <div className="p-3">
-                                <div className="grid grid-cols-3 gap-2">
-                                    {shape_options.slice(0, 12).map((shape) => (
-                                        <div key={shape.value}>
-                                            <Checkbox
-                                                id={`shape-mobile-${shape.value}`}
-                                                checked={(filters.shape || []).includes(shape.value)}
-                                                onCheckedChange={(checked) =>
-                                                    updateArrayFilter("shape", shape.value, checked as boolean)
-                                                }
-                                                className="sr-only peer"
-                                            />
-                                            <label
-                                                htmlFor={`shape-mobile-${shape.value}`}
-                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded-md border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] p-3 ${
-                                                    (filters.shape || []).includes(shape.value)
-                                                        ? "bg-gray-200 border-black"
-                                                        : ""
-                                                }`}
-                                            >
-                                                {getShapeImage(shape.label) ? (
-                                                    <img
-                                                        src={getShapeImage(shape.label)!}
-                                                        alt={shape.label}
-                                                        className="w-10 h-10 object-contain mb-1"
-                                                    />
-                                                ) : (
-                                                    <span className="text-xs">{shape.value}</span>
-                                                )}
-                                                <span className="text-xs text-gray-600 text-center">
-                                                    {shape.label}
-                                                </span>
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Carat Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
-                        <button
-                            onClick={() => toggleSection('carat')}
-                            className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
-                        >
-                            <div className="flex items-center gap-2">
-                                <CaratIcon className="w-4 h-4" />
-                                <span className="text-sm font-medium text-black">Carat</span>
-                            </div>
                             {expandedSections.carat ? (
                                 <ChevronUp className="w-4 h-4" />
                             ) : (
@@ -655,7 +598,7 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.carat && (
-                            <div className="p-3 space-y-3">
+                            <div className="p-2 space-y-2">
                                 <div className="flex gap-2">
                                     <Input
                                         type="number"
@@ -684,7 +627,7 @@ export function ClientFilterSidebar({
                                         className="text-xs h-9 bg-white"
                                     />
                                 </div>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-2 gap-1.5">
                                     {[
                                         { label: "0.18 - 0.22", min: 0.18, max: 0.22 },
                                         { label: "0.23 - 0.29", min: 0.23, max: 0.29 },
@@ -707,7 +650,7 @@ export function ClientFilterSidebar({
                                                 key={range.label}
                                                 type="button"
                                                 onClick={() => toggleRangeSelection(range.min, range.max)}
-                                                className={`text-xs rounded-lg px-2 py-2 border cursor-pointer hover:bg-gray-100 hover:border-black transition-colors ${
+                                                className={`text-[9px] leading-tight rounded-lg px-1.5 py-1.5 border cursor-pointer hover:bg-gray-100 hover:border-black transition-colors ${
                                                     isSelected
                                                         ? "bg-[#FFF3E7] border-[#FFE7D0] text-black"
                                                         : "bg-white"
@@ -739,8 +682,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.color && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {color_options.map((color) => (
                                         <div key={color.value}>
                                             <Checkbox
@@ -753,7 +696,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`color-mobile-${color.value}`}
-                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {color.value}
                                             </Label>
@@ -781,8 +724,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.clarity && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {clarity_options.map((clarity) => (
                                         <div key={clarity.value}>
                                             <Checkbox
@@ -795,7 +738,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`clarity-mobile-${clarity.value}`}
-                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {clarity.value}
                                             </Label>
@@ -820,8 +763,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.fluorescence && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {fluorescenceIntensity_options.map((fluo) => (
                                         <div key={fluo.value}>
                                             <Checkbox
@@ -834,7 +777,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`fluo-mobile-${fluo.value}`}
-                                                className="text-xs px-2 py-1 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {fluo.label}
                                             </Label>
@@ -859,8 +802,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.cut && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {cut_options.slice(0, 4).map((cut) => (
                                         <div key={cut.value}>
                                             <Checkbox
@@ -873,7 +816,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`cut-mobile-${cut.value}`}
-                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {cut.value}
                                             </Label>
@@ -898,8 +841,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.polish && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {polish_options.slice(0, 4).map((polish) => (
                                         <div key={polish.value}>
                                             <Checkbox
@@ -912,7 +855,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`polish-mobile-${polish.value}`}
-                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {polish.value}
                                             </Label>
@@ -937,8 +880,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.symmetry && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {symmetry_options.slice(0, 4).map((symmetry) => (
                                         <div key={symmetry.value}>
                                             <Checkbox
@@ -951,7 +894,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`symmetry-mobile-${symmetry.value}`}
-                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {symmetry.value}
                                             </Label>
@@ -976,8 +919,8 @@ export function ClientFilterSidebar({
                             )}
                         </button>
                         {expandedSections.laboratory && (
-                            <div className="p-3">
-                                <div className="flex flex-wrap gap-2">
+                            <div className="p-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {[
                                         { value: "GIA", label: "GIA" },
                                         { value: "HRD", label: "HRD" },
@@ -995,7 +938,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`lab-mobile-${lab.value}`}
-                                                className="text-xs px-3 py-2 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {lab.label}
                                             </Label>
