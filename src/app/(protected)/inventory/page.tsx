@@ -370,7 +370,7 @@ export default function ClientPage() {
                                 {/* Left Column - Filter Sidebar (Conditional) */}
 
                                 {mobileFiltersOpen && (
-                                    <div className="w-2/6 border-r overflow-y-auto bg-gray-50 max-h-full">
+                                    <div className="w-2/5 border-r overflow-y-auto bg-gray-50 max-h-full">
                                         <ClientFilterSidebar
                                             filters={filters}
                                             onFiltersChange={handleFiltersChange}
