@@ -383,7 +383,7 @@ export default function ClientPage() {
                                 )}
 
                                 {/* Right Column - Diamond Display */}
-                                <div className={`${mobileFiltersOpen ? 'w-full' : 'w-full'} flex-1 min-h-0 overflow-y-auto bg-white`}>
+                                <div className={`${mobileFiltersOpen ? 'w-full' : 'w-full'} flex-1 min-h-0 overflow-y-auto bg-white mt-1`}>
                                     <div className="p-0">
                                         {view === "table" ? (
                                             <div className="w-full overflow-x-auto max-w-full">
