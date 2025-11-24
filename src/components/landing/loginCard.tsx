@@ -259,13 +259,13 @@ export function LoginModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-md mx-auto bg-white rounded-lg shadow-xl border-0">
-                <div className="flex flex-col items-center space-y-6 p-6">
-                    <div className="text-center space-y-2">
-                        <DialogTitle className="text-3xl font-bold font-playfair tracking-wide text-gray-800">
+            <DialogContent className="sm:max-w-md w-[95vw] max-w-[450px] mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto">
+                <div className="flex flex-col items-center space-y-4 sm:space-y-6 p-4 sm:p-6">
+                    <div className="text-center space-y-1 sm:space-y-2">
+                        <DialogTitle className="text-2xl sm:text-3xl font-bold font-playfair tracking-wide text-gray-800">
                             MILLENNIUM&nbsp;STAR
                         </DialogTitle>
-                        <h2 className="text-2xl font-light font-playfair text-gray-700">
+                        <h2 className="text-xl sm:text-2xl font-light font-playfair text-gray-700">
                             Login
                         </h2>
                     </div>
@@ -275,13 +275,13 @@ export function LoginModal({
                         // Login Form
                         <form
                             onSubmit={handleSubmit}
-                            className="w-full space-y-4"
+                            className="w-full space-y-3 sm:space-y-4"
                         >
                             {/* Email Field */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5 sm:space-y-2">
                                 <Label
                                     htmlFor="email"
-                                    className="text-sm font-medium text-gray-700"
+                                    className="text-xs sm:text-sm font-medium text-gray-700"
                                 >
                                     Email address*
                                 </Label>
@@ -292,16 +292,16 @@ export function LoginModal({
                                     placeholder="Enter your email address"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-gray-300 focus:border-transparent"
+                                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-gray-300 focus:border-transparent"
                                     required
                                 />
                             </div>
 
                             {/* Password Field */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5 sm:space-y-2">
                                 <Label
                                     htmlFor="password"
-                                    className="text-sm font-medium text-gray-700"
+                                    className="text-xs sm:text-sm font-medium text-gray-700"
                                 >
                                     Password*
                                 </Label>
@@ -312,7 +312,7 @@ export function LoginModal({
                                     placeholder="Enter your password"
                                     value={formData.password}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-gray-300 focus:border-transparent"
+                                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-gray-300 focus:border-transparent"
                                     required
                                 />
                             </div>
@@ -322,7 +322,7 @@ export function LoginModal({
                                 <button
                                     type="button"
                                     onClick={handleForgotPasswordClick}
-                                    className="text-sm  cursor-pointer hover:underline transition-colors"
+                                    className="text-xs sm:text-sm cursor-pointer hover:underline transition-colors"
                                 >
                                     Forgot Password?
                                 </button>
@@ -330,7 +330,7 @@ export function LoginModal({
 
                             {/* Error Message */}
                             {error && (
-                                <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded">
+                                <div className="text-red-500 text-xs sm:text-sm text-center bg-red-50 p-2 rounded">
                                     {error}
                                 </div>
                             )}
@@ -339,16 +339,16 @@ export function LoginModal({
                             <Button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full bg-black hover:bg-black text-white py-3 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-black hover:bg-black text-white py-2.5 sm:py-3 text-sm sm:text-base rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? "Logging in..." : "Log in"}
                             </Button>
                         </form>
                     ) : forgotPasswordStep === "email" ? (
                         // Forgot Password: Email Step
-                        <div className="w-full space-y-4">
+                        <div className="w-full space-y-3 sm:space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                                     Enter your email address
                                 </label>
                                 <input
@@ -358,24 +358,24 @@ export function LoginModal({
                                         setForgotPasswordEmail(e.target.value)
                                     }
                                     placeholder="Enter your email address"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1  focus:border-transparent"
+                                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
                                     disabled={forgotPasswordLoading}
                                 />
                             </div>
                             {forgotPasswordError && (
-                                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                                <div className="bg-red-50 border border-red-200 rounded-md p-2.5 sm:p-3">
                                     <div className="flex">
-                                        <XCircle className="h-5 w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
-                                        <p className="text-sm text-red-700">
+                                        <XCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
+                                        <p className="text-xs sm:text-sm text-red-700">
                                             {forgotPasswordError}
                                         </p>
                                     </div>
                                 </div>
                             )}
-                            <div className="flex space-x-3 pt-4">
+                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-2 sm:pt-4">
                                 <button
                                     onClick={handleCloseForgotPassword}
-                                    className="flex-1 px-4 py-2 text-gray-700 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                                    className="w-full sm:flex-1 px-4 py-2 text-sm sm:text-base text-gray-700 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
                                     disabled={forgotPasswordLoading}
                                 >
                                     Cancel
@@ -386,7 +386,7 @@ export function LoginModal({
                                         forgotPasswordLoading ||
                                         !forgotPasswordEmail
                                     }
-                                    className="flex-1 px-4 py-2 bg-black cursor-pointer  text-white rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                                    className="w-full sm:flex-1 px-4 py-2 text-sm sm:text-base bg-black cursor-pointer text-white rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                                 >
                                     {forgotPasswordLoading ? (
                                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -399,9 +399,9 @@ export function LoginModal({
                         </div>
                     ) : forgotPasswordStep === "otp" ? (
                         // Forgot Password: OTP Step
-                        <div className="w-full space-y-4">
+                        <div className="w-full space-y-3 sm:space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                                     Enter OTP sent to {forgotPasswordEmail}
                                 </label>
                                 <input
@@ -412,24 +412,24 @@ export function LoginModal({
                                     }
                                     placeholder="Enter 4-digit OTP"
                                     maxLength={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
+                                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
                                     disabled={forgotPasswordLoading}
                                 />
                             </div>
                             {forgotPasswordError && (
-                                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                                <div className="bg-red-50 border border-red-200 rounded-md p-2.5 sm:p-3">
                                     <div className="flex">
-                                        <XCircle className="h-5 w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
-                                        <p className="text-sm text-red-700">
+                                        <XCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
+                                        <p className="text-xs sm:text-sm text-red-700">
                                             {forgotPasswordError}
                                         </p>
                                     </div>
                                 </div>
                             )}
-                            <div className="flex space-x-3 pt-4">
+                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-2 sm:pt-4">
                                 <button
                                     onClick={handleCloseForgotPassword}
-                                    className="flex-1 px-4 py-2 text-gray-700 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                                    className="w-full sm:flex-1 px-4 py-2 text-sm sm:text-base text-gray-700 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
                                     disabled={forgotPasswordLoading}
                                 >
                                     Cancel
@@ -440,7 +440,7 @@ export function LoginModal({
                                         forgotPasswordLoading ||
                                         !forgotPasswordOtp
                                     }
-                                    className="flex-1 px-4 py-2 bg-black text-white rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                                    className="w-full sm:flex-1 px-4 py-2 text-sm sm:text-base bg-black text-white rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                                 >
                                     {forgotPasswordLoading ? (
                                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -455,19 +455,19 @@ export function LoginModal({
                         // Forgot Password: New Password Step
                         forgotPasswordSuccess ? (
                             <div className="text-center py-4">
-                                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                                <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                                <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-green-500 mx-auto mb-3 sm:mb-4" />
+                                <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
                                     Password Reset Successfully!
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600">
                                     Your password has been reset successfully.
                                     You can now login with your new password.
                                 </p>
                             </div>
                         ) : (
-                            <div className="w-full space-y-4">
+                            <div className="w-full space-y-3 sm:space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                                         New Password
                                     </label>
                                     <input
@@ -477,7 +477,7 @@ export function LoginModal({
                                             setNewPassword(e.target.value)
                                         }
                                         placeholder="Enter new password"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
+                                        className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
                                         disabled={forgotPasswordLoading}
                                     />
                                     <p className="text-xs text-gray-500 mt-1">
@@ -486,7 +486,7 @@ export function LoginModal({
                                     </p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                                         Confirm New Password
                                     </label>
                                     <input
@@ -496,24 +496,24 @@ export function LoginModal({
                                             setConfirmPassword(e.target.value)
                                         }
                                         placeholder="Confirm new password"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
+                                        className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:border-transparent"
                                         disabled={forgotPasswordLoading}
                                     />
                                 </div>
                                 {forgotPasswordError && (
-                                    <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                                    <div className="bg-red-50 border border-red-200 rounded-md p-2.5 sm:p-3">
                                         <div className="flex">
-                                            <XCircle className="h-5 w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
-                                            <p className="text-sm text-red-700">
+                                            <XCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
+                                            <p className="text-xs sm:text-sm text-red-700">
                                                 {forgotPasswordError}
                                             </p>
                                         </div>
                                     </div>
                                 )}
-                                <div className="flex space-x-3 pt-4">
+                                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-2 sm:pt-4">
                                     <button
                                         onClick={handleCloseForgotPassword}
-                                        className="flex-1 px-4 py-2 text-gray-700 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                                        className="w-full sm:flex-1 px-4 py-2 text-sm sm:text-base text-gray-700 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
                                         disabled={forgotPasswordLoading}
                                     >
                                         Cancel
@@ -527,7 +527,7 @@ export function LoginModal({
                                             newPassword !== confirmPassword ||
                                             newPassword.length < 6
                                         }
-                                        className="flex-1 px-4 py-2 bg-black text-white rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                                        className="w-full sm:flex-1 px-4 py-2 text-sm sm:text-base bg-black text-white rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                                     >
                                         {forgotPasswordLoading ? (
                                             <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -543,7 +543,7 @@ export function LoginModal({
 
                     {/* Register Link */}
                     {forgotPasswordStep === "none" && (
-                        <div className="text-center">
+                        <div className="text-center text-sm sm:text-base">
                             <span className="text-gray-600">
                                 Don't have an account?{" "}
                             </span>
