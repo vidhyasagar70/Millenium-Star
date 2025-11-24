@@ -259,17 +259,19 @@ export default function ClientPage() {
 
                                 {/* Diamond Display */}
                                 {view === "table" ? (
-                                    <ClientDiamondTable
-                                        diamonds={diamonds}
-                                        loading={loading}
-                                        pagination={pagination}
-                                        onPageChange={handlePageChange}
-                                        onPageSizeChange={handlePageSizeChange}
-                                        onSortChange={handleSortChange}
-                                        currentSorting={currentSorting}
-                                        selected={selected}
-                                        setSelected={setSelected}
-                                    />
+                                    <div className="w-full overflow-x-auto max-w-full">
+                                        <ClientDiamondTable
+                                            diamonds={diamonds}
+                                            loading={loading}
+                                            pagination={pagination}
+                                            onPageChange={handlePageChange}
+                                            onPageSizeChange={handlePageSizeChange}
+                                            onSortChange={handleSortChange}
+                                            currentSorting={currentSorting}
+                                            selected={selected}
+                                            setSelected={setSelected}
+                                        />
+                                    </div>
                                 ) : (
                                     <ClientDiamondGrid
                                         diamonds={diamonds}
@@ -385,17 +387,19 @@ export default function ClientPage() {
                                 <div className={`${mobileFiltersOpen ? 'w-2/3' : 'w-full'} overflow-y-auto bg-white`}>
                                     <div className="p-2">
                                         {view === "table" ? (
-                                            <ClientDiamondTable
-                                                diamonds={diamonds}
-                                                loading={loading}
-                                                pagination={pagination}
-                                                onPageChange={handlePageChange}
-                                                onPageSizeChange={handlePageSizeChange}
-                                                onSortChange={handleSortChange}
-                                                currentSorting={currentSorting}
-                                                selected={selected}
-                                                setSelected={setSelected}
-                                            />
+                                            <div className="w-full overflow-x-auto max-w-full">
+                                                <ClientDiamondTable
+                                                    diamonds={diamonds}
+                                                    loading={loading}
+                                                    pagination={pagination}
+                                                    onPageChange={handlePageChange}
+                                                    onPageSizeChange={handlePageSizeChange}
+                                                    onSortChange={handleSortChange}
+                                                    currentSorting={currentSorting}
+                                                    selected={selected}
+                                                    setSelected={setSelected}
+                                                />
+                                            </div>
                                         ) : (
                                             <ClientDiamondGrid
                                                 diamonds={diamonds}
