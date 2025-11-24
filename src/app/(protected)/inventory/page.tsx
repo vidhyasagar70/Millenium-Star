@@ -284,10 +284,9 @@ export default function ClientPage() {
                             </div>
                         </div>
 
+
   {/* Mobile Layout - Visible only on Mobile */}
-  {/* Mobile Layout - Visible only on Mobile */}
-  {/* Mobile Layout - Visible only on Mobile */}
-<div className="lg:hidden flex flex-col h-screen">
+<div className="lg:hidden flex flex-col min-h-screen max-h-screen overflow-hidden">
     {/* Top Controls - Mobile */}
     <div className="px-2 py-2 bg-gray-100 border-b sticky top-0 z-20 rounded-lg">
         <div className="flex items-center gap-1.5 justify-between">
@@ -367,11 +366,11 @@ export default function ClientPage() {
                            
 
                            {/* Two Column Layout - Mobile */}
-                            <div className="flex flex-1 overflow-hidden">
+                            <div className="flex flex-1 min-h-0 overflow-hidden">
                                 {/* Left Column - Filter Sidebar (Conditional) */}
 
                                 {mobileFiltersOpen && (
-                                    <div className="w-2/3 border-r overflow-y-auto bg-gray-50">
+                                    <div className="w-2/3 border-r overflow-y-auto bg-gray-50 max-h-full">
                                         <ClientFilterSidebar
                                             filters={filters}
                                             onFiltersChange={handleFiltersChange}
@@ -384,7 +383,7 @@ export default function ClientPage() {
                                 )}
 
                                 {/* Right Column - Diamond Display */}
-                                <div className={`${mobileFiltersOpen ? 'w-full' : 'w-full'} overflow-y-auto bg-white`}>
+                                <div className={`${mobileFiltersOpen ? 'w-full' : 'w-full'} flex-1 min-h-0 overflow-y-auto bg-white`}>
                                     <div className="p-0">
                                         {view === "table" ? (
                                             <div className="w-full overflow-x-auto max-w-full">
