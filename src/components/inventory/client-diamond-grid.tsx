@@ -35,15 +35,15 @@ export function ClientDiamondGrid({
 
     if (loading) {
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {Array.from({ length: 10 }).map((_, index) => (
                     <Card key={index} className="animate-pulse">
-                        <CardContent className="p-4">
-                            <div className="aspect-square bg-gray-200 rounded-lg mb-3"></div>
-                            <div className="flex flex-col gap-2">
-                                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                                <div className="h-6 bg-gray-200 rounded w-full mt-2"></div>
+                        <CardContent className="p-2 sm:p-4">
+                            <div className="aspect-square bg-gray-200 rounded-lg mb-2"></div>
+                            <div className="flex flex-col gap-1.5">
+                                <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
+                                <div className="h-3 sm:h-4 bg-gray-200 rounded w-1/2"></div>
+                                <div className="h-4 sm:h-6 bg-gray-200 rounded w-full mt-1"></div>
                             </div>
                         </CardContent>
                     </Card>
@@ -76,7 +76,7 @@ export function ClientDiamondGrid({
     return (
         <div className="space-y-6">
             {/* Diamond Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {diamonds.map((diamond: any) => (
                     <Card
                         key={diamond._id}
@@ -85,9 +85,9 @@ export function ClientDiamondGrid({
                             router.push(`/${diamond.certificateNumber}`)
                         }
                     >
-                        <CardContent className="p-4">
+                        <CardContent className="p-2 sm:p-4">
                             {/* Image Placeholder */}
-                            <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                            <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-2 flex items-center justify-center">
                                 <DiamondImage
                                     certificateNumber={diamond._id}
                                     className="w-full aspect-square object-cover"
@@ -95,19 +95,18 @@ export function ClientDiamondGrid({
                             </div>
 
                             {/* Diamond Details */}
-                            <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-1.5 sm:gap-3">
                                 {/* Color and Clarity */}
-                                <div className="flex justify-between items-center">
-                                    <div className="text-sm font-medium text-gray-700">
-                                        Color:{" "}
+                                <div className="flex justify-between items-center text-xs sm:text-sm">
+                                    <div className="font-medium text-gray-700 truncate">
+                                        <span className="hidden sm:inline">Color: </span>
                                         <span className="font-bold">
                                             {diamond.color ||
                                                 diamond["Color"] ||
                                                 "-"}
                                         </span>
                                     </div>
-                                    <div className="text-sm font-medium text-gray-700">
-                                        {" "}
+                                    <div className="font-medium text-gray-700 truncate">
                                         <span className="font-bold">
                                             {diamond.shape ||
                                                 diamond["Shape"] ||
@@ -118,13 +117,13 @@ export function ClientDiamondGrid({
 
                                 {/* Price */}
                                 <div className="text-center">
-                                    <div className="text-lg font-bold text-gray-900">
+                                    <div className="text-sm sm:text-lg font-bold text-gray-900">
                                         {formatPrice(diamond.price || 0)}
                                     </div>
                                 </div>
 
                                 {/* Certificate Info */}
-                                <div className="text-xs text-gray-500 text-center pt-1">
+                                <div className="text-[10px] sm:text-xs text-gray-500 text-center truncate">
                                     ID: {diamond.certificateNumber}
                                 </div>
                             </div>

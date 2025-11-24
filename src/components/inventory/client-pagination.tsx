@@ -87,7 +87,7 @@ export function ClientPagination({
                     variant={currentPage === 1 ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(1)}
-                    className="w-8"
+                    className="w-8 h-8"
                 >
                     1
                 </Button>
@@ -95,7 +95,7 @@ export function ClientPagination({
 
             if (currentPage > 4) {
                 buttons.push(
-                    <span key="dots1" className="text-sm text-gray-500 px-2">
+                    <span key="dots1" className="text-sm text-gray-500 px-1 md:px-2">
                         ...
                     </span>
                 );
@@ -114,7 +114,7 @@ export function ClientPagination({
                     variant={currentPage === i ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(i)}
-                    className="w-8"
+                    className="w-8 h-8"
                 >
                     {i}
                 </Button>
@@ -125,7 +125,7 @@ export function ClientPagination({
         if (currentPage < totalPages - 2) {
             if (currentPage < totalPages - 3) {
                 buttons.push(
-                    <span key="dots2" className="text-sm text-gray-500 px-2">
+                    <span key="dots2" className="text-sm text-gray-500 px-1 md:px-2">
                         ...
                     </span>
                 );
@@ -137,7 +137,7 @@ export function ClientPagination({
                     variant={currentPage === totalPages ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(totalPages)}
-                    className="w-8"
+                    className="w-8 h-8"
                 >
                     {totalPages}
                 </Button>
@@ -148,22 +148,25 @@ export function ClientPagination({
     };
 
     return (
-        <div className="flex items-center justify-between px-2">
-            <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex flex-col gap-4 px-2 py-3 md:flex-row md:items-center md:justify-between">
+            {/* Records info - hidden on mobile, shown on desktop */}
+            <div className="hidden md:block flex-1 text-sm text-muted-foreground">
                 Showing {(currentPage - 1) * recordsPerPage + 1} to{" "}
                 {Math.min(currentPage * recordsPerPage, totalRecords)} of{" "}
                 {totalRecords.toLocaleString()} diamonds
             </div>
 
-            <div className="flex items-center space-x-6 lg:space-x-8">
+            {/* Main pagination controls */}
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:space-x-6 lg:space-x-8">
+                {/* Page size selector */}
                 {showPageSizeSelector && onPageSizeChange && (
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-between md:justify-start md:space-x-2">
                         <p className="text-sm font-medium">Rows per page</p>
                         <Select
                             value={`${recordsPerPage}`}
                             onValueChange={handlePageSizeChange}
                         >
-                            <SelectTrigger className="h-8 w-auto">
+                            <SelectTrigger className="h-8 w-[70px]">
                                 <SelectValue placeholder={recordsPerPage} />
                             </SelectTrigger>
                             <SelectContent side="top">
@@ -177,53 +180,58 @@ export function ClientPagination({
                     </div>
                 )}
 
-                <div className="flex w-[120px] items-center justify-center text-sm font-medium">
-                    Page {currentPage} of {totalPages.toLocaleString()}
-                </div>
-
-                <div className="flex items-center space-x-2">
-                    <Button
-                        variant="outline"
-                        className="hidden h-8 w-8 p-0 lg:flex"
-                        onClick={handleFirstPage}
-                        disabled={!hasPrevPage}
-                    >
-                        <span className="sr-only">Go to first page</span>
-                        <ChevronsLeft className="h-4 w-4" />
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className="h-8 w-8 p-0"
-                        onClick={handlePreviousPage}
-                        disabled={!hasPrevPage}
-                    >
-                        <span className="sr-only">Go to previous page</span>
-                        <ChevronLeft className="h-4 w-4" />
-                    </Button>
-
-                    {/* Page numbers */}
-                    <div className="flex items-center space-x-1">
-                        {renderPageNumbers()}
+                {/* Page info and navigation */}
+                <div className="flex items-center justify-between md:justify-start md:space-x-6">
+                    {/* Page indicator */}
+                    <div className="text-sm font-medium whitespace-nowrap">
+                        Page {currentPage} of {totalPages.toLocaleString()}
                     </div>
 
-                    <Button
-                        variant="outline"
-                        className="h-8 w-8 p-0"
-                        onClick={handleNextPage}
-                        disabled={!hasNextPage}
-                    >
-                        <span className="sr-only">Go to next page</span>
-                        <ChevronRight className="h-4 w-4" />
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className="hidden h-8 w-8 p-0 lg:flex"
-                        onClick={handleLastPage}
-                        disabled={!hasNextPage}
-                    >
-                        <span className="sr-only">Go to last page</span>
-                        <ChevronsRight className="h-4 w-4" />
-                    </Button>
+                    {/* Navigation buttons */}
+                    <div className="flex items-center space-x-1">
+                        <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={handleFirstPage}
+                            disabled={!hasPrevPage}
+                        >
+                            <span className="sr-only">Go to first page</span>
+                            <ChevronsLeft className="h-4 w-4" />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="h-8 w-8 p-0"
+                            onClick={handlePreviousPage}
+                            disabled={!hasPrevPage}
+                        >
+                            <span className="sr-only">Go to previous page</span>
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+
+                        {/* Page numbers - hide on small mobile */}
+                        <div className="hidden sm:flex items-center space-x-1">
+                            {renderPageNumbers()}
+                        </div>
+
+                        <Button
+                            variant="outline"
+                            className="h-8 w-8 p-0"
+                            onClick={handleNextPage}
+                            disabled={!hasNextPage}
+                        >
+                            <span className="sr-only">Go to next page</span>
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={handleLastPage}
+                            disabled={!hasNextPage}
+                        >
+                            <span className="sr-only">Go to last page</span>
+                            <ChevronsRight className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
