@@ -289,7 +289,7 @@ export default function ClientPage() {
   {/* Mobile Layout - Visible only on Mobile */}
 <div className="lg:hidden flex flex-col h-screen">
     {/* Top Controls - Mobile */}
-    <div className="px-2 py-2 bg-gray-100 border-b sticky top-0 z-20">
+    <div className="px-2 py-2 bg-gray-100 border-b sticky top-0 z-20 rounded-lg">
         <div className="flex items-center gap-1.5 justify-between">
             {/* Left Group - View Tabs */}
             <Tabs
