@@ -575,14 +575,11 @@ export function ClientFilterSidebar({
 
             {/* Mobile View - New 2-Column Layout */}
             <div className="lg:hidden pl-0 pr-2">
-                {/* Filters Heading */}
-                <div className="mb-4 pl-4">
-                    <h2 className="text-lg font-semibold text-black">Filters</h2>
-                </div>
+               
 
                 <div className="space-y-2">
                     {/* Shape Filter - Mobile (2 columns) */}
-                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('shape')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -612,7 +609,7 @@ export function ClientFilterSidebar({
                                             />
                                             <label
                                                 htmlFor={`shape-mobile-${shape.value}`}
-                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded-none border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] py-2 px-1 ${
+                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] py-2 px-1 aspect-square ${
                                                     (filters.shape || []).includes(shape.value)
                                                         ? "bg-gray-200 border-black"
                                                         : ""
@@ -622,7 +619,7 @@ export function ClientFilterSidebar({
                                                     <img
                                                         src={getShapeImage(shape.label)!}
                                                         alt={shape.label}
-                                                        className="w-12 h-12 object-contain mb-0.5"
+                                                        className="w-12 h-12 object-contain mb-0.5 aspect-square rounded-md"
                                                     />
                                                 ) : (
                                                     <span className="text-[10px]">{shape.value}</span>
