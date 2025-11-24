@@ -582,7 +582,7 @@ export function ClientFilterSidebar({
 
                 <div className="space-y-2">
                     {/* Shape Filter - Mobile (2 columns) */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('shape')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -612,7 +612,7 @@ export function ClientFilterSidebar({
                                             />
                                             <label
                                                 htmlFor={`shape-mobile-${shape.value}`}
-                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded-md border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] py-2 px-1 ${
+                                                className={`cursor-pointer bg-white justify-center transition-all flex flex-col rounded-none border border-gray-300 items-center hover:border-gray-400 hover:bg-gray-100 peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0] py-2 px-1 ${
                                                     (filters.shape || []).includes(shape.value)
                                                         ? "bg-gray-200 border-black"
                                                         : ""
@@ -639,7 +639,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Carat Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('carat')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -668,7 +668,7 @@ export function ClientFilterSidebar({
                                                 e.target.value ? parseFloat(e.target.value) : undefined
                                             )
                                         }
-                                        className="text-xs h-9 bg-white"
+                                        className="text-xs h-9 bg-white rounded-none"
                                     />
                                     <Input
                                         type="number"
@@ -681,7 +681,7 @@ export function ClientFilterSidebar({
                                                 e.target.value ? parseFloat(e.target.value) : undefined
                                             )
                                         }
-                                        className="text-xs h-9 bg-white"
+                                        className="text-xs h-9 bg-white rounded-none"
                                     />
                                 </div>
                                 <div className="grid grid-cols-2 gap-1.5">
@@ -707,7 +707,7 @@ export function ClientFilterSidebar({
                                                 key={range.label}
                                                 type="button"
                                                 onClick={() => toggleRangeSelection(range.min, range.max)}
-                                                className={`text-[9px] leading-tight rounded-lg px-1.5 py-1.5 border cursor-pointer hover:bg-gray-100 hover:border-black transition-colors ${
+                                                className={`text-[9px] leading-tight rounded-none px-1.5 py-1.5 border cursor-pointer hover:bg-gray-100 hover:border-black transition-colors ${
                                                     isSelected
                                                         ? "bg-[#FFF3E7] border-[#FFE7D0] text-black"
                                                         : "bg-white"
@@ -723,7 +723,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Color Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('color')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -753,7 +753,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`color-mobile-${color.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {color.value}
                                             </Label>
@@ -765,7 +765,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Clarity Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('clarity')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -795,7 +795,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`clarity-mobile-${clarity.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {clarity.value}
                                             </Label>
@@ -807,7 +807,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Fluorescence Intensity Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('fluorescence')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -834,7 +834,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`fluo-mobile-${fluo.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {fluo.label}
                                             </Label>
@@ -846,7 +846,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Cut Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('cut')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -873,7 +873,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`cut-mobile-${cut.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {cut.value}
                                             </Label>
@@ -885,7 +885,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Polish Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('polish')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -912,7 +912,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`polish-mobile-${polish.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {polish.value}
                                             </Label>
@@ -924,7 +924,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Symmetry Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('symmetry')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -951,7 +951,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`symmetry-mobile-${symmetry.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {symmetry.value}
                                             </Label>
@@ -963,7 +963,7 @@ export function ClientFilterSidebar({
                     </div>
 
                     {/* Laboratory Filter - Mobile */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="bg-white rounded-none border border-gray-300 overflow-hidden">
                         <button
                             onClick={() => toggleSection('laboratory')}
                             className="w-full flex items-center justify-between bg-[#F4F4F4] py-3 px-4"
@@ -995,7 +995,7 @@ export function ClientFilterSidebar({
                                             />
                                             <Label
                                                 htmlFor={`lab-mobile-${lab.value}`}
-                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
+                                                className="text-[10px] px-2 py-1.5 border bg-white border-gray-300 rounded-none cursor-pointer hover:bg-gray-100 hover:border-black transition-colors peer-data-[state=checked]:bg-[#FFF3E7] peer-data-[state=checked]:border-[#FFE7D0]"
                                             >
                                                 {lab.label}
                                             </Label>

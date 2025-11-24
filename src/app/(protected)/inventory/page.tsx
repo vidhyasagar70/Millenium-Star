@@ -248,11 +248,14 @@ export default function ClientPage() {
                                 </div>
 
                                 {/* Applied Filters */}
-                                <AppliedFilters
-                                    filters={currentFilters}
-                                    onRemoveFilter={handleRemoveFilter}
-                                    onClearAll={handleClearAllFilters}
-                                />
+                                <div className="hidden lg:block">
+    <AppliedFilters
+        filters={currentFilters}
+        onRemoveFilter={handleRemoveFilter}
+        onClearAll={handleClearAllFilters}
+    />
+</div>
+
 
                                 {/* Diamond Display */}
                                 {view === "table" ? (
@@ -280,102 +283,87 @@ export default function ClientPage() {
                         </div>
 
                         {/* Mobile Layout - Visible only on Mobile */}
-                        <div className="lg:hidden flex flex-col h-screen">
-                            {/* Top Controls - Mobile - All in One Line */}
-                            <div className="px-3 py-2 bg-white border-b sticky top-0 z-20">
-                                <div className="flex items-center gap-2">
-                                    {/* View Tabs - Icons Only */}
-                                    <Tabs
-                                        value={view}
-                                        onValueChange={(v) =>
-                                            setView(v as "table" | "grid")
-                                        }
-                                    >
-                                        <TabsList className="bg-gray-100 h-9 rounded-lg p-1">
-                                            <TabsTrigger
-                                                value="table"
-                                                className="rounded-md px-3 h-7"
-                                            >
-                                                <TableIcon className="w-4 h-4" />
-                                            </TabsTrigger>
-                                            <TabsTrigger
-                                                value="grid"
-                                                className="rounded-md px-3 h-7"
-                                            >
-                                                <Grid3X3 className="w-4 h-4" />
-                                            </TabsTrigger>
-                                        </TabsList>
-                                    </Tabs>
+  {/* Mobile Layout - Visible only on Mobile */}
+{/* Mobile Layout - Visible only on Mobile */}
+<div className="lg:hidden flex flex-col h-screen">
+    {/* Top Controls - Mobile */}
+    <div className="px-2 py-2 bg-gray-100 border-b sticky top-0 z-20">
+        <div className="flex items-center gap-1.5 justify-between">
+            {/* Left Group - View Tabs */}
+            <Tabs
+                value={view}
+                onValueChange={(v) =>
+                    setView(v as "table" | "grid")
+                }
+            >
+                <TabsList className="bg-white h-7 rounded-lg p-0.5">
+                    <TabsTrigger
+                        value="table"
+                        className="rounded-md px-2 h-6"
+                    >
+                        <TableIcon className="w-3 h-3" />
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="grid"
+                        className="rounded-md px-2 h-6"
+                    >
+                        <Grid3X3 className="w-3 h-3" />
+                    </TabsTrigger>
+                </TabsList>
+            </Tabs>
 
-                                    {/* Search Input */}
-                                    <Input
-                                        placeholder="Diamond ID"
-                                        value={searchTerm}
-                                        onChange={(e) =>
-                                            setSearchTerm(e.target.value)
-                                        }
-                                        onKeyPress={(e) =>
-                                            e.key === "Enter" && handleSearch()
-                                        }
-                                        className="flex-1 border-gray-300 rounded-full h-9 text-sm min-w-0"
-                                    />
+            {/* Center Group - Search with Button Inside */}
+            <div className="flex-1 max-w-md relative">
+                <Input
+                    placeholder="Diamond ID"
+                    value={searchTerm}
+                    onChange={(e) =>
+                        setSearchTerm(e.target.value)
+                    }
+                    onKeyPress={(e) =>
+                        e.key === "Enter" && handleSearch()
+                    }
+                    className="w-full bg-white border-gray-300 rounded-full h-7 text-xs pr-16 pl-3"
+                />
+                <Button
+                    onClick={() => handleSearch()}
+                    disabled={loading}
+                    size="sm"
+                    className="absolute right-0.5 top-1/2 -translate-y-1/2 rounded-full h-6 px-3 bg-black text-white text-xs"
+                >
+                    Search
+                </Button>
+            </div>
 
-                                    {/* Search Button */}
-                                    <Button
-                                        onClick={() => handleSearch()}
-                                        disabled={loading}
-                                        size="sm"
-                                        className="rounded-full h-9 px-4 whitespace-nowrap"
-                                    >
-                                        Search
-                                    </Button>
+            {/* Right Group - Action Buttons */}
+            <div className="flex items-center gap-1.5">
+                <Button
+                    variant="outline"
+                    onClick={() => handleReset()}
+                    size="sm"
+                    className="bg-white border border-gray-300 rounded-full h-7 px-2.5 flex items-center gap-1"
+                >
+                    <RotateCcw className="w-3 h-3" />
+                    <span className="text-xs">Reset</span>
+                </Button>
 
-                                    {/* Reset Button - Icon Only */}
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => handleReset()}
-                                        size="sm"
-                                        className="border border-gray-300 rounded-full h-9 w-9 p-0"
-                                        title="Reset"
-                                    >
-                                        <RotateCcw className="w-4 h-4" />
-                                    </Button>
+                <Button
+                    onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                    size="sm"
+                    className={`rounded-full h-7 px-2.5 flex items-center gap-1 ${
+                        mobileFiltersOpen 
+                            ? "bg-black text-white" 
+                            : "bg-white text-black border border-gray-300"
+                    }`}
+                >
+                    
+                    <span className="text-xs">Filters</span>
+                </Button>
+            </div>
+        </div>
+    </div>
 
-                                    {/* Filter Toggle Button - Icon Only */}
-                                    <Button
-                                        onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-                                        size="sm"
-                                        className={`rounded-full h-9 w-9 p-0 ${
-                                            mobileFiltersOpen 
-                                                ? "bg-black text-white" 
-                                                : "bg-gray-100 text-black border border-gray-300"
-                                        }`}
-                                        title="Toggle Filters"
-                                    >
-                                        <Filter className="w-4 h-4" />
-                                    </Button>
-
-                                    {/* Compare Button - Icon Only */}
-                                    <Button
-                                        onClick={handleCompare}
-                                        disabled={selected.length < 2}
-                                        size="sm"
-                                        className="rounded-full h-9 w-9 p-0 bg-black text-white disabled:bg-gray-300"
-                                        title={`Compare (${selected.length})`}
-                                    >
-                                        <GitCompare className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </div>
-
-                            {/* Applied Filters - Mobile */}
-                            <div className="px-4 py-2">
-                                <AppliedFilters
-                                    filters={currentFilters}
-                                    onRemoveFilter={handleRemoveFilter}
-                                    onClearAll={handleClearAllFilters}
-                                />
-                            </div>
+                           
 
                             {/* Two Column Layout - Mobile */}
                             <div className="flex flex-1 overflow-hidden">
