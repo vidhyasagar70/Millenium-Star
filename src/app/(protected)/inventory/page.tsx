@@ -284,9 +284,9 @@ export default function ClientPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Layout - Visible only on Mobile */}
   {/* Mobile Layout - Visible only on Mobile */}
-{/* Mobile Layout - Visible only on Mobile */}
+  {/* Mobile Layout - Visible only on Mobile */}
+  {/* Mobile Layout - Visible only on Mobile */}
 <div className="lg:hidden flex flex-col h-screen">
     {/* Top Controls - Mobile */}
     <div className="px-2 py-2 bg-gray-100 border-b sticky top-0 z-20">
@@ -314,7 +314,7 @@ export default function ClientPage() {
                 </TabsList>
             </Tabs>
 
-            {/* Center Group - Search with Button Inside */}
+    {/* Center Group - Search with Button Inside */}
             <div className="flex-1 max-w-md relative">
                 <Input
                     placeholder="Diamond ID"
@@ -325,15 +325,15 @@ export default function ClientPage() {
                     onKeyPress={(e) =>
                         e.key === "Enter" && handleSearch()
                     }
-                    className="w-full bg-white border-gray-300 rounded-full h-7 text-xs pr-16 pl-3"
+                    className="w-full bg-white border-gray-300 rounded-full h-7 text-xs pr-8 pl-3"
                 />
                 <Button
                     onClick={() => handleSearch()}
                     disabled={loading}
                     size="sm"
-                    className="absolute right-0.5 top-1/2 -translate-y-1/2 rounded-full h-6 px-3 bg-black text-white text-xs"
+                    className="absolute right-0.5 top-1/2 -translate-y-1/2 rounded-full h-6 px-2 bg-black text-white text-xs flex items-center justify-center"
                 >
-                    Search
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" /></svg>
                 </Button>
             </div>
 
@@ -345,8 +345,7 @@ export default function ClientPage() {
                     size="sm"
                     className="bg-white border border-gray-300 rounded-full h-7 px-2.5 flex items-center gap-1"
                 >
-                    <RotateCcw className="w-3 h-3" />
-                    <span className="text-xs">Reset</span>
+                    <RotateCcw className="w-4 h-4" />
                 </Button>
 
                 <Button
@@ -367,11 +366,12 @@ export default function ClientPage() {
 
                            
 
-                            {/* Two Column Layout - Mobile */}
+                           {/* Two Column Layout - Mobile */}
                             <div className="flex flex-1 overflow-hidden">
                                 {/* Left Column - Filter Sidebar (Conditional) */}
+
                                 {mobileFiltersOpen && (
-                                    <div className="w-1/3 border-r overflow-y-auto bg-gray-50">
+                                    <div className="w-2/3 border-r overflow-y-auto bg-gray-50">
                                         <ClientFilterSidebar
                                             filters={filters}
                                             onFiltersChange={handleFiltersChange}
@@ -384,8 +384,8 @@ export default function ClientPage() {
                                 )}
 
                                 {/* Right Column - Diamond Display */}
-                                <div className={`${mobileFiltersOpen ? 'w-2/3' : 'w-full'} overflow-y-auto bg-white`}>
-                                    <div className="p-2">
+                                <div className={`${mobileFiltersOpen ? 'w-full' : 'w-full'} overflow-y-auto bg-white`}>
+                                    <div className="p-0">
                                         {view === "table" ? (
                                             <div className="w-full overflow-x-auto max-w-full">
                                                 <ClientDiamondTable

@@ -125,18 +125,18 @@ if (diamonds.length === 0) {
 
     return (
         <div className="space-y-4 max-w-[1536px] mx-auto md:px-4">
-            <div className="rounded-lg border border-gray-200 bg-white overflow-x-auto md:overflow-scroll -mx-4 md:mx-0">
+            <div className="rounded-lg border border-gray-200 bg-white overflow-x-auto md:overflow-scroll mx-0">
                 <Table className="min-w-max [&_th]:px-0 [&_th]:md:px-3 [&_td]:px-0 [&_td]:md:px-3">
                     <TableHeader>
                         <TableRow className="bg-gray-200">
                             {/* Checkbox Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center w-8 sticky left-0 bg-gray-200 z-10 py-1 md:py-3">
-                                <div className="bg-white rounded p-0.5 md:p-1 flex justify-center items-center">
+                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center w-14 md:w-8 md:sticky md:left-0 bg-gray-200 z-10 py-1 md:py-3">
+                                <div className="bg-white rounded p-1 flex justify-center items-center">
                                     <Checkbox
                                         checked={allSelected}
                                         onCheckedChange={handleSelectAll}
                                         aria-label="Select all rows"
-                                        className="m-1 md:m-2 scale-100 md:scale-125"
+                                        className="m-1 md:m-2 scale-125"
                                     />
                                 </div>
                             </TableHead>
@@ -332,12 +332,12 @@ if (diamonds.length === 0) {
                                 className={`hover:bg-gray-50 text-center odd:bg-white even:bg-gray-100 `}
                             >
                                 {/* Checkbox Cell */}
-                                <TableCell className="text-center w-8 sticky left-0 bg-inherit z-10 py-1 md:py-3">
+                                <TableCell className="text-center w-14 md:w-8 md:sticky md:left-0 bg-white z-10 py-1 md:py-3">
                                     <Checkbox
                                         checked={selected.includes(diamond._id)}
                                         onCheckedChange={() => handleSelectRow(diamond._id)}
                                         aria-label={`Select row for ${diamond.certificateNumber}`}
-                                        className="m-0.5 md:m-2 scale-100 md:scale-125"
+                                        className="m-1 md:m-2 scale-125"
                                     />
                                 </TableCell>
                                 <TableCell className="text-[10px] md:text-sm flex gap-1 py-1 md:py-3">
