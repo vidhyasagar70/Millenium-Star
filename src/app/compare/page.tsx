@@ -166,8 +166,16 @@ function ComparePageContent() {
   return (
     <div className="min-h-screen bg-white py-6 px-4">
       <div className="max-w-[1600px] mx-auto">
-        {/* Header (removed Back to List button from here) */}
-        <div className="mb-6"></div>
+        {/* Back to List button above the table */}
+        <div className="mb-6 flex items-center">
+          <button
+            onClick={() => router.push(diamondTablePath)}
+            className="flex items-center gap-1 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200 transition-colors border border-black text-sm"
+          >
+            <ArrowLeft className="w-4 h-4 text-black" />
+            Back to List
+          </button>
+        </div>
 
         {/* Comparison Table */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -176,16 +184,13 @@ function ComparePageContent() {
               <thead>
                 <tr className="bg-white">
                   <th className="sticky left-0 z-20 bg-white text-black px-6 py-4 text-left font-semibold min-w-[180px] border border-black">
-                    <div className="flex flex-col items-start gap-1 justify-start" style={{ minHeight: '70px' }}>
-                      <button
-                        onClick={() => router.push(diamondTablePath)}
-                        className="flex items-center gap-1 px-2 py-1 bg-white text-black rounded-md hover:bg-gray-200 transition-colors border border-black mb-4 text-xs"
-                        style={{ fontSize: '0.75rem', lineHeight: '1rem', marginTop: '-36px' }}
-                      >
-                        <ArrowLeft className="w-3 h-3 text-black" />
-                        Back to List
-                      </button>
-                      <span>Stage</span>
+                    <div className="flex flex-col items-center justify-center" style={{ minHeight: '70px' }}>
+                      <img
+                        src="/assets/logo.png"
+                        alt="Logo"
+                        style={{ width: '80px', height: 'auto', marginBottom: '0.5rem' }}
+                      />
+                      <span className="font-playfair text-xs font-semibold whitespace-nowrap">MILLENNIUM&nbsp;STAR</span>
                     </div>
                   </th>
                   {diamonds.map((diamond, idx) => (
