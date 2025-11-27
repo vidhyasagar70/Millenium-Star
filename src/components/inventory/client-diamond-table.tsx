@@ -1,12 +1,7 @@
-"use client"
-import { Badge } from "../ui/badge";
-import { ClientPagination } from "./client-pagination";
-import { ClientTableColumnHeader } from "./client-table-column-header";
 // src/components/client/client-diamond-table.tsx
+"use client";
 
-
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import { ClientDiamond } from "@/types/client/diamond";
 import {
     Table,
@@ -16,40 +11,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { useRouter } from "next/navigation";
+import { ClientTableColumnHeader } from "./client-table-column-header";
+import { ClientPagination } from "./client-pagination";
+import { Badge } from "../ui/badge";
 import { Checkbox } from "../ui/checkbox";
-interface PaginationData {
-    currentPage: number;
-    totalPages: number;
-    totalRecords: number;
-    recordsPerPage: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-}
-
-interface ClientDiamondTableProps {
-    diamonds: ClientDiamond[];
-    loading: boolean;
-    pagination: PaginationData;
-    onPageChange: (page: number) => void;
-    onPageSizeChange?: (pageSize: number) => void;
-    onSortChange?: (sorting: { id: string; desc: boolean }[]) => void;
-    currentSorting?: { id: string; desc: boolean }[];
-    selected: string[];
-    setSelected: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-export function ClientDiamondTable(props: ClientDiamondTableProps) {
-    const {
-        diamonds,
-        loading,
-        pagination,
-        onPageChange,
-        onPageSizeChange,
-        onSortChange,
-        currentSorting = [],
-        selected,
-        setSelected,
-    } = props;
 
 // Helper function to get shape image path
 const getShapeImage = (shapeValue: string) => {
@@ -82,12 +48,42 @@ const getShapeImage = (shapeValue: string) => {
         : `/assets/diamondShapes/others.png`;
 };
 
+interface PaginationData {
+    currentPage: number;
+    totalPages: number;
+    totalRecords: number;
+    recordsPerPage: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+}
+
+interface ClientDiamondTableProps {
+    diamonds: ClientDiamond[];
+    loading: boolean;
+    pagination: PaginationData;
+    onPageChange: (page: number) => void;
+    onPageSizeChange?: (pageSize: number) => void;
+    onSortChange?: (sorting: { id: string; desc: boolean }[]) => void;
+    currentSorting?: { id: string; desc: boolean }[];
+    selected: string[];
+    setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export function ClientDiamondTable({
+    diamonds,
+    loading,
+    pagination,
+    onPageChange,
+    onPageSizeChange,
+    onSortChange,
+    currentSorting = [],
+    selected,
+    setSelected,
+}: ClientDiamondTableProps) {
     const router = useRouter();
 
-    // Checkbox state is now managed by parent
     const allIds = diamonds.map((d) => d._id);
     const allSelected = allIds.length > 0 && allIds.every((id) => selected.includes(id));
-    // const someSelected = selected.length > 0 && !allSelected;
 
     const handleSelectAll = () => {
         if (allSelected) {
@@ -103,45 +99,47 @@ const getShapeImage = (shapeValue: string) => {
         );
     };
 
-   if (loading) {
-    return (
-        <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-16 w-16 md:h-32 md:w-32 border-b-2 border-gray-900"></div>
-        </div>
-    );
-}
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-16 w-16 md:h-32 md:w-32 border-b-2 border-gray-900"></div>
+            </div>
+        );
+    }
 
-if (diamonds.length === 0) {
-    return (
-        <div className="flex items-center justify-center h-64 text-gray-500">
-            No diamonds found matching your criteria.
-        </div>
-    );
-}
+    if (diamonds.length === 0) {
+        return (
+            <div className="flex items-center justify-center h-64 text-gray-500">
+                No diamonds found matching your criteria.
+            </div>
+        );
+    }
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat("en-US").format(price);
     };
 
     return (
-        <div className="space-y-4 max-w-[1536px] mx-auto md:px-4">
-            <div className="rounded-lg border border-gray-200 bg-white overflow-x-auto md:overflow-scroll mx-0">
-                <Table className="min-w-max [&_th]:px-0 [&_th]:md:px-3 [&_td]:px-0 [&_td]:md:px-3">
+        <div className="space-y-4 max-w-[1536px] mx-auto">
+            <div className="rounded-lg border border-gray-200 bg-white overflow-x-auto">
+                <Table>
                     <TableHeader>
                         <TableRow className="bg-gray-200">
                             {/* Checkbox Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center w-14 md:w-8 md:sticky md:left-0 bg-gray-200 z-10 py-1 md:py-3">
-                                <div className="bg-white rounded p-1 flex justify-center items-center">
-                                    <Checkbox
-                                        checked={allSelected}
-                                        onCheckedChange={handleSelectAll}
-                                        aria-label="Select all rows"
-                                        className="m-1 md:m-2 scale-125"
-                                    />
+                            <TableHead className="text-xs font-medium text-gray-700 text-center w-10 md:w-12 sticky left-0 bg-gray-200 z-10">
+                                <div className="flex justify-center items-center">
+                                    <div className="bg-white rounded p-1">
+                                        <Checkbox
+                                            checked={allSelected}
+                                            onCheckedChange={handleSelectAll}
+                                            aria-label="Select all rows"
+                                            className="scale-110"
+                                        />
+                                    </div>
                                 </div>
                             </TableHead>
                             {/* Shape Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Shape"
                                     sortKey="shape"
@@ -149,8 +147,8 @@ if (diamonds.length === 0) {
                                     onSortChange={onSortChange}
                                 />
                             </TableHead>
-                            {/* CertficateNumber Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            {/* CertificateNumber Header */}
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Diamond Id."
                                     sortKey="certificateNumber"
@@ -159,7 +157,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Size Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Size (ct.)"
                                     sortKey="size"
@@ -168,7 +166,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Color Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium  text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium  text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Col."
                                     sortKey="color"
@@ -177,7 +175,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Clarity Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Clr."
                                     sortKey="clarity"
@@ -186,7 +184,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Cut Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Cut"
                                     sortKey="cut"
@@ -195,7 +193,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Symmetry Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Sym."
                                     sortKey="symmetry"
@@ -204,7 +202,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Polish Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Pol."
                                     sortKey="polish"
@@ -213,7 +211,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Fluorescence Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Fluo."
                                     sortKey="fluorescenceIntensity"
@@ -222,7 +220,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Laboratory Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Lab."
                                     sortKey="laboratory"
@@ -231,7 +229,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Table Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Table"
                                     sortKey="table"
@@ -240,7 +238,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Total Depth Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="T. Dep."
                                     sortKey="totalDepth"
@@ -249,7 +247,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* RapList Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Rap List"
                                     sortKey="rapList"
@@ -258,7 +256,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Discount Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Dis."
                                     sortKey="discount"
@@ -267,7 +265,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Price per Carat Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Pr./Ct."
                                     sortKey="pricePerCarat"
@@ -276,7 +274,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Price Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Price"
                                     sortKey="price"
@@ -285,7 +283,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Length Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Len."
                                     sortKey="length"
@@ -294,7 +292,7 @@ if (diamonds.length === 0) {
                                 />
                             </TableHead>
                             {/* Width Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Wid."
                                     sortKey="width"
@@ -302,8 +300,8 @@ if (diamonds.length === 0) {
                                     onSortChange={onSortChange}
                                 />
                             </TableHead>
-                            {/* Total depth Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            {/* Depth Header */}
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Dep."
                                     sortKey="depth"
@@ -311,11 +309,11 @@ if (diamonds.length === 0) {
                                     onSortChange={onSortChange}
                                 />
                             </TableHead>
-                            <TableHead className="text-[10px] md:text-sm font-semibold text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-sm font-semibold text-gray-700 text-center px-2">
                                 Ratio
                             </TableHead>
                             {/* Availability Header */}
-                            <TableHead className="text-[10px] md:text-xs font-medium text-gray-700 text-center py-1 md:py-3">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Avail. "
                                     sortKey="isAvailable"
@@ -329,41 +327,40 @@ if (diamonds.length === 0) {
                         {diamonds.map((diamond: ClientDiamond) => (
                             <TableRow
                                 key={diamond._id}
-                                className={`hover:bg-gray-50 text-center odd:bg-white even:bg-gray-100 `}
+                                className={`hover:bg-gray-50 text-center odd:bg-white even:bg-gray-100`}
                             >
                                 {/* Checkbox Cell */}
-                                <TableCell className="text-center w-14 md:w-8 md:sticky md:left-0 bg-white z-10 py-1 md:py-3">
+                                <TableCell className="text-center w-10 md:w-12 sticky left-0 z-10 odd:bg-white even:bg-gray-100">
                                     <Checkbox
                                         checked={selected.includes(diamond._id)}
                                         onCheckedChange={() => handleSelectRow(diamond._id)}
                                         aria-label={`Select row for ${diamond.certificateNumber}`}
-                                        className="m-1 md:m-2 scale-125"
+                                        className="scale-110"
                                     />
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm flex gap-1 py-1 md:py-3">
-                                    <div className="flex items-center justify-center gap-1 md:gap-2">
+                                <TableCell className="text-sm flex gap-1">
+                                    <div className="flex items-center justify-center gap-2">
                                         <img
                                             src={getShapeImage(
                                                 diamond.shape || "others"
                                             )}
                                             alt={diamond.shape || "Shape"}
-                                            className="w-4 h-4 md:w-6 md:h-6 object-contain m-0.5 md:m-1"
+                                            className="w-6 h-6 object-contain m-1"
                                             onError={(e) => {
-                                                // Fallback to others.png if image fails to load
                                                 (
                                                     e.target as HTMLImageElement
                                                 ).src =
                                                     "/assets/diamondShapes/others.png";
                                             }}
                                         />
-                                        <span className="text-[10px] md:text-xs">
+                                        <span className="text-xs">
                                             {diamond.shape?.split(" ")[0] ||
                                                 "-"}
                                         </span>
-                                    </div>{" "}
+                                    </div>
                                 </TableCell>
                                 <TableCell
-                                    className="text-[10px] md:text-sm font-mono cursor-pointer py-1 md:py-3"
+                                    className="text-sm font-mono cursor-pointer"
                                     onClick={() =>
                                         router.push(
                                             `/${diamond.certificateNumber}`
@@ -372,70 +369,68 @@ if (diamonds.length === 0) {
                                 >
                                     {diamond.certificateNumber || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm font-semibold py-1 md:py-3">
+                                <TableCell className="text-sm font-semibold">
                                     {diamond.size || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm  font-semibold py-1 md:py-3">
+                                <TableCell className="text-sm  font-semibold">
                                     {diamond.color || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.clarity || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.cut || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.symmetry || "-"}
                                 </TableCell>
-
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.polish || "-"}
                                 </TableCell>
-
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.fluorescenceIntensity || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.laboratory || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.table ? diamond.table : "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.totalDepth
                                         ? diamond.totalDepth
                                         : "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm font-semibold py-1 md:py-3">
+                                <TableCell className="text-sm font-semibold">
                                     {"$ " + formatPrice(diamond.rapList) || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm font-semibold py-1 md:py-3">
+                                <TableCell className="text-sm font-semibold">
                                     {formatPrice(diamond.discount) + "%" || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm font-semibold py-1 md:py-3">
+                                <TableCell className="text-sm font-semibold">
                                     {"$ " +
                                         formatPrice(diamond.pricePerCarat) ||
                                         "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm font-semibold py-1 md:py-3">
+                                <TableCell className="text-sm font-semibold">
                                     {"$ " + formatPrice(diamond.price) || "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.measurements?.length
                                         ? diamond.measurements.length
                                         : "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.measurements?.width
                                         ? diamond.measurements.width
                                         : "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm">
                                     {diamond.measurements?.depth
                                         ? diamond.measurements.depth
                                         : "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm py-1 md:py-3">
+                                <TableCell className="text-sm mr-2">
                                     {diamond.measurements.length &&
                                     diamond.measurements.width
                                         ? (
@@ -444,17 +439,17 @@ if (diamonds.length === 0) {
                                           ).toFixed(2)
                                         : "-"}
                                 </TableCell>
-                                <TableCell className="text-[10px] md:text-sm font-semibold py-1 md:py-2">
+                                <TableCell className="text-sm font-semibold py-2">
                                     {diamond.isAvailable ? (
                                         <Badge
                                             className={
                                                 diamond.isAvailable == "G"
-                                                    ? "bg-green-200 text-black text-[9px] md:text-xs px-1 md:px-2 py-0.5 md:py-1"
+                                                    ? "bg-green-200 text-black"
                                                     : diamond.isAvailable == "S"
-                                                    ? "bg-red-200 text-black text-[9px] md:text-xs px-1 md:px-2 py-0.5 md:py-1"
+                                                    ? "bg-red-200 text-black"
                                                     : diamond.isAvailable == "M"
-                                                    ? "bg-yellow-200 text-black text-[9px] md:text-xs px-1 md:px-2 py-0.5 md:py-1"
-                                                    : "bg-gray-200 text-black text-[9px] md:text-xs px-1 md:px-2 py-0.5 md:py-1"
+                                                    ? "bg-yellow-200 text-black"
+                                                    : "bg-gray-200 text-black"
                                             }
                                         >
                                             {diamond.isAvailable == "G"

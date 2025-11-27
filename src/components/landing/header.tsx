@@ -297,7 +297,7 @@ const Navbar = () => {
                         </button>
                     </div>
                 </Container>
-                <div className="hidden lg:block h-px bg-black mx-auto max-w-full"></div>
+                <div className="hidden lg:block h-px bg-black mx-auto w-[400px]"></div>
 
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (

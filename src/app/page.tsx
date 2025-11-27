@@ -43,10 +43,11 @@ const HomePage = () => {
             <ReactLenis root />
             {/* Hero Section */}
             <HeroSection />
-            {/* Reduce gap below HeroSection */}
-            <div className="h-2 md:h-4" />
+            
+            {/* Reduce gap below HeroSection on mobile only */}
+            <div className="h-2 md:h-0" />
 
-            {/* Grid Section - Desktop View */}
+            {/* Grid Section - Desktop View (original layout) */}
             <div className="hidden md:block">
                 <AnimatedContainer direction="up" delay={0.6}>
                     <GridSection gridData={gridCardsData1}>
@@ -111,8 +112,45 @@ const HomePage = () => {
             <AnimatedContainer direction="up" delay={0.6}>
                 <section className="flex flex-col lg:flex-row py-10">
                     <div className="flex flex-col lg:flex-row items-center justify-around w-full h-full">
-                        <div className="pl-4 pr-6 md:px-6 w-full">
-                            <div className="block lg:hidden px-4">
+                        {/* Desktop Content */}
+                        <div className="hidden lg:block px-6">
+                            <Title
+                                className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
+                            >
+                                Grow Your Business By Sourcing Efficiently
+                            </Title>
+                            <Description
+                                className={`mb-8 text-black max-w-md text-left lg:text-base md:text-base text-base font-maven`}
+                            >
+                                Serving hundreds of retailers, exporters and private-label jewellery 
+                                manufacturer with consistently graded stones.{" "}
+                                <span className="font-semibold">
+                                    Millennium Star
+                                </span>
+                            </Description>
+                            <div className="flex flex-col lg:flex-row gap-4">
+                                <Link href={"/inventory"}>
+                                    <Button
+                                        variant={"outline"}
+                                        className="cursor-pointer border-black rounded-full px-8 py-3 font-medium transition-colors"
+                                    >
+                                        EXPLORE MORE
+                                    </Button>
+                                </Link>
+                                <Link href={"/contact"}>
+                                    <Button
+                                        variant={"default"}
+                                        className="cursor-pointer border-black rounded-full px-8 py-3 font-medium transition-colors"
+                                    >
+                                        SCHEDULE A CALL
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Mobile Content */}
+                        <div className="block lg:hidden pl-4 pr-6 md:px-6 w-full">
+                            <div className="px-4">
                                 <Title
                                     className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
                                 >
@@ -146,41 +184,8 @@ const HomePage = () => {
                                     </Link>
                                 </div>
                             </div>
-                            <div className="hidden lg:block">
-                            <Title
-                                className={`mb-6 text-left max-w-md text-black font-semibold text-3xl md:text-4xl lg:text-5xl font-abhaya`}
-                            >
-                                Grow Your Business By Sourcing Efficiently
-                            </Title>
-                            <Description
-                                className={`mb-8 text-black max-w-md text-left lg:text-base md:text-base text-base font-maven`}
-                            >
-                                Serving hundreds of retailers, exporters and private-label jewellery 
-                                manufacturer with consistently graded stones.{" "}
-                                <span className="font-semibold">
-                                    Millennium Star
-                                </span>
-                            </Description>
-                            <div className="flex flex-row gap-4">
-                                <Link href={"/inventory"}>
-                                    <Button
-                                        variant={"outline"}
-                                        className="cursor-pointer border-black rounded-full px-8 py-3 font-medium transition-colors"
-                                    >
-                                        EXPLORE MORE
-                                    </Button>
-                                </Link>
-                                <Link href={"/contact"}>
-                                    <Button
-                                        variant={"default"}
-                                        className="cursor-pointer border-black rounded-full px-8 py-3 font-medium transition-colors"
-                                    >
-                                        SCHEDULE A CALL
-                                    </Button>
-                                </Link>
-                            </div>
-                            </div>
                         </div>
+
                         {/* Desktop Image */}
                         <div className="py-10 hidden lg:block">
                             <Image
@@ -192,6 +197,7 @@ const HomePage = () => {
                                 priority
                             />
                         </div>
+
                         {/* Mobile Image */}
                         <div className="py-10 block lg:hidden">
                             <div className="px-4">
@@ -268,15 +274,26 @@ const HomePage = () => {
             {/* Numbers Section */}
             <AnimatedContainer direction="up" delay={0.6}>
                 <section className="py-16 px-4 md:py-20 md:px-6 text-center">
-                    <Title className="text-black text-2xl font-semibold max-w-xs mx-auto md:text-3xl lg:text-4xl md:max-w-lg">
+                    {/* Mobile Title */}
+                    <Title className="block md:hidden text-black text-2xl font-semibold max-w-xs mx-auto">
                         Whether You are Retailer Or WholeSeller You can Rely On Millennium Star
                     </Title>
-                    <Description className="text-black text-xs mt-2 max-w-xs mx-auto md:text-sm md:mt-3 md:max-w-xl">
+                    {/* Desktop Title */}
+                    <Title className="hidden md:block text-black md:text-3xl lg:text-4xl font-semibold max-w-lg mx-auto">
+                        Whether You are Retailer Or WholeSeller You can Rely On Millennium Star
+                    </Title>
+
+                    {/* Mobile Description */}
+                    <Description className="block md:hidden text-black text-xs mt-2 max-w-xs mx-auto">
                         We help retailers, wholesalers and traders securely source the perfect diamond with complete ease
+                    </Description>
+                    {/* Desktop Description */}
+                    <Description className="hidden md:block text-black text-sm md:text-sm lg:text-sm mt-3 max-w-xl mx-auto">
+                        We helps retailers, wholesalers and traders securely source the perfect diamond with complete ease
                     </Description>
 
                     {/* Mobile Buttons */}
-                    <div className="flex flex-row justify-center gap-2 max-w-xs mx-auto my-5 md:hidden">
+                    <div className="flex md:hidden flex-row justify-center gap-2 max-w-xs mx-auto my-5">
                         <Link href={"/inventory"}>
                             <Button
                                 variant={"outline"}
@@ -296,7 +313,7 @@ const HomePage = () => {
                     </div>
 
                     {/* Desktop Buttons */}
-                    <div className="hidden md:flex flex-row justify-center gap-4 max-w-xl mx-auto my-7">
+                    <div className="hidden md:flex flex-col lg:flex-row justify-center gap-4 max-w-xl mx-auto my-7">
                         <Link href={"/inventory"}>
                             <Button
                                 variant={"outline"}
@@ -317,7 +334,7 @@ const HomePage = () => {
                 </section>
             </AnimatedContainer>
 
-            {/* <Testimonial />*/}
+            {/* <Testimonial /> */}
         </div>
     );
 };
