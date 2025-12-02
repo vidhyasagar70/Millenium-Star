@@ -284,7 +284,7 @@ export default function ClientPage() {
                                             <Button
                                                 onClick={handleAddToCart}
                                                 disabled={selected.length === 0 || isAddingToCart || loading}
-                                                className="rounded-full h-10 z-10 bg-black hover:bg-green-700 text-white px-6 disabled:opacity-50"
+                                                className="rounded-full h-10 z-10 bg-black  text-white px-6 disabled:opacity-50"
                                             >
                                                 <ShoppingCart className="w-4 h-4" />
                                                 {isAddingToCart ? "Adding..." : `Add to Cart${selected.length > 0 ? ` (${selected.length})` : ""}`}
@@ -404,7 +404,7 @@ export default function ClientPage() {
                     onClick={handleAddToCart}
                     disabled={selected.length === 0 || isAddingToCart || loading}
                     size="sm"
-                    className="bg-green-600 bg-black text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
+                    className="bg-black text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
                 >
                     <ShoppingCart className="w-4 h-4" />
                     {selected.length > 0 && <span className="text-xs">{selected.length}</span>}
