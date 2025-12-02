@@ -8,7 +8,7 @@ import { AppliedFilters } from "@/components/inventory/applied-filters";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ClientFilters } from "@/types/client/diamond";
+import { ClientFilters, ClientDiamond } from "@/types/client/diamond";
 import { useClientDiamonds } from "@/hooks/client-table/use-client-diamonds";
 import {
     Download,
@@ -19,11 +19,14 @@ import {
     RotateCcw,
     GitCompare,
     Filter,
+    ShoppingCart,
 } from "lucide-react";
 import { InventoryGuard } from "@/components/auth/routeGuard";
 import { UserStatusHandler } from "@/components/auth/statusGuard";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { clientDiamondAPI } from "@/services/client-api";
 import Navbar from "@/components/landing/header";
 import Rapaport from "@/components/rapaport/rapaport";
 import Container from "@/components/ui/container";
@@ -48,8 +51,9 @@ export default function ClientPage() {
     const [filters, setFilters] = useState<ClientFilters>({});
     const [searchTerm, setSearchTerm] = useState("");
     const [view, setView] = useState<"table" | "grid">("table");
-    const [selected, setSelected] = useState<any[]>([]);
+    const [selected, setSelected] = useState<ClientDiamond[]>([]);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
 
     const handleFiltersChange = (newFilters: ClientFilters) => {
         setFilters(newFilters);
@@ -154,8 +158,49 @@ export default function ClientPage() {
 
     const handleCompare = () => {
         if (selected.length >= 2) {
-            const ids = selected.map((d) => d._id || d).join(",");
+            const ids = selected.map((d) => d._id).join(",");
             router.push(`/compare?ids=${ids}`);
+        }
+    };
+
+    const handleAddToCart = async () => {
+        if (selected.length === 0) {
+            toast.error("Please select at least one diamond");
+            return;
+        }
+
+        try {
+            setIsAddingToCart(true);
+            let successCount = 0;
+            let failedCount = 0;
+            const errors: string[] = [];
+
+            // Add each diamond to cart one by one
+            for (const diamond of selected) {
+                try {
+                    await clientDiamondAPI.addToCart(diamond.certificateNumber);
+                    successCount++;
+                } catch (error: any) {
+                    failedCount++;
+                    errors.push(error.message);
+                }
+            }
+
+            // Show appropriate feedback
+            if (successCount > 0 && failedCount === 0) {
+                toast.success(`${successCount} diamond(s) added to cart successfully`);
+                setSelected([]); // Clear selection after successful add
+            } else if (successCount > 0 && failedCount > 0) {
+                toast.warning(`${successCount} diamond(s) added, ${failedCount} failed`);
+                setSelected([]); // Clear selection
+            } else {
+                toast.error(errors[0] || "Failed to add diamonds to cart");
+            }
+        } catch (error: any) {
+            console.error("Error adding to cart:", error);
+            toast.error(error.message || "Failed to add diamonds to cart");
+        } finally {
+            setIsAddingToCart(false);
         }
     };
 
@@ -235,6 +280,14 @@ export default function ClientPage() {
                                             >
                                                 <FunnelX className="w-4 h-4" />
                                                 Reset
+                                            </Button>
+                                            <Button
+                                                onClick={handleAddToCart}
+                                                disabled={selected.length === 0 || isAddingToCart || loading}
+                                                className="rounded-full h-10 z-10 bg-black hover:bg-green-700 text-white px-6 disabled:opacity-50"
+                                            >
+                                                <ShoppingCart className="w-4 h-4" />
+                                                {isAddingToCart ? "Adding..." : `Add to Cart${selected.length > 0 ? ` (${selected.length})` : ""}`}
                                             </Button>
                                             <Button
                                                 onClick={handleCompare}
@@ -345,6 +398,16 @@ export default function ClientPage() {
                     className="bg-white border border-gray-300 rounded-full h-7 px-2.5 flex items-center gap-1"
                 >
                     <RotateCcw className="w-4 h-4" />
+                </Button>
+
+                <Button
+                    onClick={handleAddToCart}
+                    disabled={selected.length === 0 || isAddingToCart || loading}
+                    size="sm"
+                    className="bg-green-600 bg-black text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
+                >
+                    <ShoppingCart className="w-4 h-4" />
+                    {selected.length > 0 && <span className="text-xs">{selected.length}</span>}
                 </Button>
 
                 <Button

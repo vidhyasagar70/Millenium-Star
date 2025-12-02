@@ -65,8 +65,8 @@ interface ClientDiamondTableProps {
     onPageSizeChange?: (pageSize: number) => void;
     onSortChange?: (sorting: { id: string; desc: boolean }[]) => void;
     currentSorting?: { id: string; desc: boolean }[];
-    selected: string[];
-    setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+    selected: ClientDiamond[];
+    setSelected: React.Dispatch<React.SetStateAction<ClientDiamond[]>>;
 }
 
 export function ClientDiamondTable({
@@ -82,21 +82,26 @@ export function ClientDiamondTable({
 }: ClientDiamondTableProps) {
     const router = useRouter();
 
-    const allIds = diamonds.map((d) => d._id);
-    const allSelected = allIds.length > 0 && allIds.every((id) => selected.includes(id));
+    const selectedIds = selected.map((d) => d._id);
+    const allSelected = diamonds.length > 0 && diamonds.every((d) => selectedIds.includes(d._id));
 
     const handleSelectAll = () => {
         if (allSelected) {
             setSelected([]);
         } else {
-            setSelected(allIds);
+            setSelected(diamonds);
         }
     };
 
-    const handleSelectRow = (id: string) => {
-        setSelected((prev) =>
-            prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-        );
+    const handleSelectRow = (diamond: ClientDiamond) => {
+        setSelected((prev) => {
+            const isSelected = prev.some((d) => d._id === diamond._id);
+            if (isSelected) {
+                return prev.filter((d) => d._id !== diamond._id);
+            } else {
+                return [...prev, diamond];
+            }
+        });
     };
 
     if (loading) {
@@ -332,8 +337,8 @@ export function ClientDiamondTable({
                                 {/* Checkbox Cell */}
                                 <TableCell className="text-center w-10 md:w-12 sticky left-0 z-10 odd:bg-white even:bg-gray-100">
                                     <Checkbox
-                                        checked={selected.includes(diamond._id)}
-                                        onCheckedChange={() => handleSelectRow(diamond._id)}
+                                        checked={selectedIds.includes(diamond._id)}
+                                        onCheckedChange={() => handleSelectRow(diamond)}
                                         aria-label={`Select row for ${diamond.certificateNumber}`}
                                         className="scale-110"
                                     />
