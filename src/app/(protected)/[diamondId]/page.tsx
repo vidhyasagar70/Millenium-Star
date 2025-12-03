@@ -22,10 +22,13 @@ import {
     Shield,
     Award,
     MapPin,
+    ShoppingCart,
+    Hand,
 } from "lucide-react";
 import axios from "axios";
 import DiamondCertificate from "@/components/media/DiamondCertificate ";
 import DiamondVideo from "@/components/media/DiamondVideo";
+import { clientDiamondAPI } from "@/services/client-api";
 
 interface Diamond {
     rapList: number;
@@ -92,6 +95,8 @@ export default function DiamondDetailPage() {
         url: string;
         type: string;
     } | null>(null);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
+    const [isAddingToHold, setIsAddingToHold] = useState(false);
 
     const { isAdmin } = useAuth();
 
@@ -272,6 +277,36 @@ export default function DiamondDetailPage() {
 
     const handleRequestQuote = () => {
         setIsQuoteModalOpen(true);
+    };
+
+    const handleAddToCart = async () => {
+        if (!diamond?.certificateNumber) return;
+
+        try {
+            setIsAddingToCart(true);
+            await clientDiamondAPI.addToCart(diamond.certificateNumber);
+            toast.success("Diamond added to cart successfully");
+        } catch (error: any) {
+            console.error("Error adding to cart:", error);
+            toast.error(error.message || "Failed to add diamond to cart");
+        } finally {
+            setIsAddingToCart(false);
+        }
+    };
+
+    const handleAddToHold = async () => {
+        if (!diamond?.certificateNumber) return;
+
+        try {
+            setIsAddingToHold(true);
+            await clientDiamondAPI.addToHold(diamond.certificateNumber);
+            toast.success("Diamond added to hold successfully");
+        } catch (error: any) {
+            console.error("Error adding to hold:", error);
+            toast.error(error.message || "Failed to add diamond to hold");
+        } finally {
+            setIsAddingToHold(false);
+        }
     };
 
     if (loading) {
@@ -525,6 +560,22 @@ export default function DiamondDetailPage() {
 
                             {/* Action Buttons */}
                             <div className="flex gap-3">
+                                <Button
+                                    className="flex-1 bg-gray-700 hover:bg-gray-900"
+                                    disabled={!diamond.isAvailable || isAddingToCart}
+                                    onClick={handleAddToCart}
+                                >
+                                    <ShoppingCart className="w-4 h-4 mr-2" />
+                                    {isAddingToCart ? "Adding..." : "Add to Cart"}
+                                </Button>
+                                <Button
+                                    className="flex-1 bg-gray-700 hover:bg-gray-900"
+                                    disabled={!diamond.isAvailable || isAddingToHold}
+                                    onClick={handleAddToHold}
+                                >
+                                    <Hand className="w-4 h-4 mr-2" />
+                                    {isAddingToHold ? "Holding..." : "Hold"}
+                                </Button>
                                 <Button
                                     className="flex-1 bg-gray-700 hover:bg-gray-900"
                                     disabled={!diamond.isAvailable}

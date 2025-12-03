@@ -20,6 +20,7 @@ import {
     GitCompare,
     Filter,
     ShoppingCart,
+    Hand,
 } from "lucide-react";
 import { InventoryGuard } from "@/components/auth/routeGuard";
 import { UserStatusHandler } from "@/components/auth/statusGuard";
@@ -54,6 +55,7 @@ export default function ClientPage() {
     const [selected, setSelected] = useState<ClientDiamond[]>([]);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
+    const [isAddingToHold, setIsAddingToHold] = useState(false);
 
     const handleFiltersChange = (newFilters: ClientFilters) => {
         setFilters(newFilters);
@@ -204,6 +206,47 @@ export default function ClientPage() {
         }
     };
 
+    const handleAddToHold = async () => {
+        if (selected.length === 0) {
+            toast.error("Please select at least one diamond");
+            return;
+        }
+
+        try {
+            setIsAddingToHold(true);
+            let successCount = 0;
+            let failedCount = 0;
+            const errors: string[] = [];
+
+            // Add each diamond to hold one by one
+            for (const diamond of selected) {
+                try {
+                    await clientDiamondAPI.addToHold(diamond.certificateNumber);
+                    successCount++;
+                } catch (error: any) {
+                    failedCount++;
+                    errors.push(error.message);
+                }
+            }
+
+            // Show appropriate feedback
+            if (successCount > 0 && failedCount === 0) {
+                toast.success(`${successCount} diamond(s) added to hold successfully`);
+                setSelected([]); // Clear selection after successful add
+            } else if (successCount > 0 && failedCount > 0) {
+                toast.warning(`${successCount} diamond(s) added to hold, ${failedCount} failed`);
+                setSelected([]); // Clear selection
+            } else {
+                toast.error(errors[0] || "Failed to add diamonds to hold");
+            }
+        } catch (error: any) {
+            console.error("Error adding to hold:", error);
+            toast.error(error.message || "Failed to add diamonds to hold");
+        } finally {
+            setIsAddingToHold(false);
+        }
+    };
+
     return (
         <InventoryGuard>
             <UserStatusHandler>
@@ -281,21 +324,34 @@ export default function ClientPage() {
                                                 <FunnelX className="w-4 h-4" />
                                                 Reset
                                             </Button>
-                                            <Button
-                                                onClick={handleAddToCart}
-                                                disabled={selected.length === 0 || isAddingToCart || loading}
-                                                className="rounded-full h-10 z-10 bg-black  text-white px-6 disabled:opacity-50"
-                                            >
-                                                <ShoppingCart className="w-4 h-4" />
-                                                {isAddingToCart ? "Adding..." : `Add to Cart${selected.length > 0 ? ` (${selected.length})` : ""}`}
-                                            </Button>
-                                            <Button
-                                                onClick={handleCompare}
-                                                disabled={selected.length < 2}
-                                                className="rounded-full h-10 z-10 bg-black text-white px-6 ml-2"
-                                            >
-                                                Compare
-                                            </Button>
+                                         <Button
+    onClick={handleAddToCart}
+    disabled={selected.length === 0 || isAddingToCart || loading}
+    variant="outline"
+    className="border border-black rounded-full text-sm px-6 disabled:opacity-50"
+>
+    <ShoppingCart className="w-4 h-4" />
+    {isAddingToCart ? "Adding..." : "Cart"}
+</Button>
+
+<Button
+    onClick={handleAddToHold}
+    disabled={selected.length === 0 || isAddingToHold || loading}
+    variant="outline"
+    className="border border-black rounded-full text-sm px-6 disabled:opacity-50"
+>
+    <Hand className="w-4 h-4" />
+    {isAddingToHold ? "Holding..." : "Hold"}
+</Button>
+                                           <Button
+    onClick={handleCompare}
+    disabled={selected.length < 2}
+    variant="outline"
+    className="border border-black rounded-full text-sm px-6"
+>
+    <GitCompare className="w-4 h-4" />
+    Compare
+</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -407,6 +463,16 @@ export default function ClientPage() {
                     className="bg-black text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
                 >
                     <ShoppingCart className="w-4 h-4" />
+                    {selected.length > 0 && <span className="text-xs">{selected.length}</span>}
+                </Button>
+
+                <Button
+                    onClick={handleAddToHold}
+                    disabled={selected.length === 0 || isAddingToHold || loading}
+                    size="sm"
+                    className="bg-gray-700 hover:bg-gray-900 text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
+                >
+                    <Hand className="w-4 h-4" />
                     {selected.length > 0 && <span className="text-xs">{selected.length}</span>}
                 </Button>
 

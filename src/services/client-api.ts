@@ -170,6 +170,28 @@ class ClientDiamondAPI {
             message: result.message || "Diamond added to cart successfully",
         };
     }
+
+    async addToHold(certificateNumber: string): Promise<{ success: boolean; message: string }> {
+        const response = await fetch(`${API_BASE_URL}/diamonds/hold/add`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ certificateNumber }),
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || result.message || "Failed to add diamond to hold");
+        }
+
+        return {
+            success: result.success,
+            message: result.message || "Diamond added to hold successfully",
+        };
+    }
 }
 
 export const clientDiamondAPI = new ClientDiamondAPI();
