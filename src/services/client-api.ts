@@ -1,4 +1,3 @@
-
 import {
     ClientDiamond,
     ClientFilters,
@@ -32,6 +31,60 @@ interface SearchResponse {
         hasNextPage: boolean;
         hasPrevPage: boolean;
     };
+}
+
+interface CartItem {
+    diamondId: string;
+    certificateNumber: string;
+    addedAt: string;
+    _id: string;
+}
+
+interface CartResponse {
+    success: boolean;
+    message: string;
+    data: {
+        cart: {
+            cart: {
+                _id: string;
+                userId: string;
+                items: Array<{
+                    diamondId: string;
+                    certificateNumber: string;
+                    addedAt: string;
+                    _id: string;
+                }>;
+                createdAt: string;
+                updatedAt: string;
+            };
+            user: {
+                _id: string;
+                username: string;
+                email: string;
+            };
+            items: Array<{
+                cartItem: {
+                    diamondId: string;
+                    certificateNumber: string;
+                    addedAt: string;
+                    _id: string;
+                };
+                diamond: ClientDiamond;
+            }>;
+        };
+        totalItems: number;
+    };
+}
+
+interface HoldItem {
+    _id: string;
+    certificateNumber: string;
+    userId: string;
+    status: string;
+    rejectionReason: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
 }
 
 class ClientDiamondAPI {
@@ -94,19 +147,76 @@ class ClientDiamondAPI {
 
     async getDiamondsByIds(ids: string[]): Promise<ClientDiamond[]> {
         if (!ids || ids.length === 0) return [];
-        const params = new URLSearchParams();
-        ids.forEach((id) => params.append("ids", id));
-        const response = await fetch(`${API_BASE_URL}/diamonds/by-ids?${params.toString()}`, {
-            credentials: "include",
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        
+        // Fetch diamonds one by one using search endpoint
+        const diamonds: ClientDiamond[] = [];
+        
+        for (const id of ids) {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/diamonds/search?searchTerm=${id}`,
+                    {
+                        credentials: "include",
+                    }
+                );
+                
+                if (!response.ok) {
+                    console.error(`Failed to fetch diamond with id: ${id}`);
+                    continue;
+                }
+                
+                const result: ApiResponse<ClientDiamond[]> = await response.json();
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    // Find the diamond with matching _id
+                    const diamond = result.data.find(d => d._id === id);
+                    if (diamond) {
+                        diamonds.push(diamond);
+                    }
+                }
+            } catch (error) {
+                console.error(`Error fetching diamond ${id}:`, error);
+            }
         }
-        const result: ApiResponse<ClientDiamond[]> = await response.json();
-        if (!result.success) {
-            throw new Error(result.message || "Failed to fetch diamonds by ids");
+        
+        return diamonds;
+    }
+
+    async getDiamondsByCertificateNumbers(certificateNumbers: string[]): Promise<ClientDiamond[]> {
+        if (!certificateNumbers || certificateNumbers.length === 0) return [];
+        
+        // Fetch diamonds one by one using search endpoint with certificate number
+        const diamonds: ClientDiamond[] = [];
+        
+        for (const certNumber of certificateNumbers) {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/diamonds/search?searchTerm=${certNumber}`,
+                    {
+                        credentials: "include",
+                    }
+                );
+                
+                if (!response.ok) {
+                    console.error(`Failed to fetch diamond with certificate: ${certNumber}`);
+                    continue;
+                }
+                
+                const result: ApiResponse<ClientDiamond[]> = await response.json();
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    // Find the diamond with matching certificate number
+                    const diamond = result.data.find(d => d.certificateNumber === certNumber);
+                    if (diamond) {
+                        diamonds.push(diamond);
+                    }
+                }
+            } catch (error) {
+                console.error(`Error fetching diamond with certificate ${certNumber}:`, error);
+            }
         }
-        return result.data;
+        
+        return diamonds;
     }
 
     async getFilterOptions(): Promise<FilterOptions> {
@@ -192,6 +302,87 @@ class ClientDiamondAPI {
             message: result.message || "Diamond added to hold successfully",
         };
     }
+
+    async getCart(): Promise<CartResponse> {
+        const response = await fetch(`${API_BASE_URL}/diamonds/cart`, {
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || "Failed to fetch cart");
+        }
+
+        return result.data;
+    }
+
+    async getHoldItems(): Promise<HoldItem[]> {
+        const response = await fetch(`${API_BASE_URL}/diamonds/hold`, {
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || "Failed to fetch hold items");
+        }
+
+        return result.data;
+    }
+
+    async removeFromCart(certificateNumber: string): Promise<{ success: boolean; message: string }> {
+        const response = await fetch(`${API_BASE_URL}/diamonds/cart/remove`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ certificateNumber }),
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || result.message || "Failed to remove diamond from cart");
+        }
+
+        return {
+            success: result.success,
+            message: result.message || "Diamond removed from cart successfully",
+        };
+    }
+
+    async removeFromHold(certificateNumber: string): Promise<{ success: boolean; message: string }> {
+        const response = await fetch(`${API_BASE_URL}/diamonds/hold/remove`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ certificateNumber }),
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || result.message || "Failed to remove diamond from hold");
+        }
+
+        return {
+            success: result.success,
+            message: result.message || "Diamond removed from hold successfully",
+        };
+    }
 }
 
 export const clientDiamondAPI = new ClientDiamondAPI();
+export type { CartItem, CartResponse, HoldItem };

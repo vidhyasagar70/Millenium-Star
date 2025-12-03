@@ -60,6 +60,7 @@ const Navbar = () => {
             label: "Inventory",
             onClick: () => accessInventoryClickHandler(),
         },
+        { href: "/yourcart", label: "Your Cart" },
         ...(user?.role !== "ADMIN"
             ? [
                   { href: "/diamond-knowledge", label: "Diamond Knowledge" },
