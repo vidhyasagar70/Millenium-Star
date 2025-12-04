@@ -60,11 +60,12 @@ const Navbar = () => {
             label: "Inventory",
             onClick: () => accessInventoryClickHandler(),
         },
-        { href: "/yourcart", label: "Your Cart" },
+        
         ...(user?.role !== "ADMIN"
             ? [
                   { href: "/diamond-knowledge", label: "Diamond Knowledge" },
                   { href: "/contact", label: "Contact us" },
+                  { href: "/yourcart", label: "Your Cart" },
               ]
             : []),
     ];
@@ -73,6 +74,7 @@ const Navbar = () => {
         { href: "/admin", label: "Admin Panel" },
         { href: "/admin/members", label: "Members" },
         { href: "/admin/quotations", label: "Offer Enquiry" },
+        { href:"/customerManagement", label: "Customer Management" }
     ];
 
     const navItems = isAuthenticated()

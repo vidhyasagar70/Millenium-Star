@@ -16,6 +16,9 @@ const Navbar = () => {
                     <a href="/admin/members-enquiry">
                         <Button variant="outline">Member Enquiry</Button>
                     </a>
+                    <a href="/customerManagement">
+                        <Button variant="outline">Customer Management</Button>
+                    </a>
                     <Button
                         onClick={logout}
                         variant="outline"
