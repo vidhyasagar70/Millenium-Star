@@ -27,7 +27,6 @@ import {
     EyeIcon,
 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import Container from "@/components/ui/container";
 import { toast } from "sonner";
 import { AdminGuard } from "@/components/auth/routeGuard";
 import {
@@ -287,7 +286,7 @@ const CustomerManagementContent = () => {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`,
                 {
-                    method: "POST",
+                    method: "PUT",
                     credentials: "include",
                 }
             );
@@ -390,14 +389,14 @@ const CustomerManagementContent = () => {
                     subtext="Registered users"
                 />
 
-                <StatsCard
+                {/* <StatsCard
                     icon={ShoppingCart}
                     iconColor="text-green-500"
                     iconBgColor="bg-green-400/20"
                     label="Items in Cart"
                     value={loading ? "..." : totalCarts}
                     subtext="Across all users"
-                />
+                /> */}
 
                 <StatsCard
                     icon={Hand}
@@ -794,9 +793,9 @@ const CustomerManagementContent = () => {
 const CustomerManagementPage = () => {
     return (
         <AdminGuard>
-            <Container className="min-h-screen py-8">
+            <div className="min-h-screen py-8 px-4">
                 <CustomerManagementContent />
-            </Container>
+            </div>
         </AdminGuard>
     );
 };
