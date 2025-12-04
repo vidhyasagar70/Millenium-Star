@@ -307,6 +307,42 @@ const CustomerManagementContent = () => {
         }
     };
 
+    // Handle quotation action (approve/reject)
+    const handleQuotationAction = async (
+        quotationId: string,
+        action: "approve" | "reject"
+    ) => {
+        setActionLoading(quotationId);
+        try {
+            const endpoint =
+                action === "approve"
+                    ? `/quotations/${quotationId}/approve`
+                    : `/quotations/${quotationId}/reject`;
+
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`,
+                {
+                    method: "POST",
+                    credentials: "include",
+                }
+            );
+            const data = await res.json();
+
+            if (res.ok) {
+                toast.success(
+                    `Enquiry ${action === "approve" ? "closed" : "rejected"} successfully`
+                );
+                await fetchAllData();
+            } else {
+                toast.error(data.message || `Failed to ${action} enquiry`);
+            }
+        } catch (err: any) {
+            toast.error("Action failed.");
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
     const formatDate = (dateString: string) =>
         new Date(dateString).toLocaleDateString("en-US", {
             year: "numeric",
@@ -718,6 +754,7 @@ const CustomerManagementContent = () => {
                                                                                 <TableHead className="text-xs px-4">Quote Price</TableHead>
                                                                                 <TableHead className="text-xs px-4">Status</TableHead>
                                                                                 <TableHead className="text-xs px-4">Submitted</TableHead>
+                                                                                <TableHead className="text-xs text-center px-4">Actions</TableHead>
                                                                             </TableRow>
                                                                         </TableHeader>
                                                                         <TableBody>
@@ -742,10 +779,26 @@ const CustomerManagementContent = () => {
                                                                                             {q.status === "PENDING" ? <Clock className="h-3 w-3" /> :
                                                                                              q.status === "APPROVED" ? <Check className="h-3 w-3" /> :
                                                                                              <X className="h-3 w-3" />}
-                                                                                            {q.status}
+                                                                                            {q.status === "PENDING" ? "Pending" : q.status === "APPROVED" ? "Closed" : "Rejected"}
                                                                                         </span>
                                                                                     </TableCell>
                                                                                     <TableCell className="text-sm px-4">{formatDate(q.submittedAt)}</TableCell>
+                                                                                    <TableCell className="text-center px-4">
+                                                                                        {q.status === "PENDING" && (
+                                                                                            <div className="flex items-center justify-center">
+                                                                                                <Button
+                                                                                                    size="sm"
+                                                                                                    variant="outline"
+                                                                                                    onClick={() => handleQuotationAction(q.quotationId, "approve")}
+                                                                                                    disabled={actionLoading === q.quotationId}
+                                                                                                    className="text-green-600 hover:text-green-700 hover:bg-green-50 border-green-200"
+                                                                                                >
+                                                                                                    <Check className="h-4 w-4 mr-1" />
+                                                                                                    {actionLoading === q.quotationId ? "..." : "Close"}
+                                                                                                </Button>
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </TableCell>
                                                                                 </TableRow>
                                                                             ))}
                                                                         </TableBody>

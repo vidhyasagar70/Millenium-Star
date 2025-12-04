@@ -67,6 +67,7 @@ interface ClientDiamondTableProps {
     currentSorting?: { id: string; desc: boolean }[];
     selected: ClientDiamond[];
     setSelected: React.Dispatch<React.SetStateAction<ClientDiamond[]>>;
+    isAuthenticated?: boolean;
 }
 
 export function ClientDiamondTable({
@@ -79,6 +80,7 @@ export function ClientDiamondTable({
     currentSorting = [],
     selected,
     setSelected,
+    isAuthenticated = false,
 }: ClientDiamondTableProps) {
     const router = useRouter();
 
@@ -407,18 +409,32 @@ export function ClientDiamondTable({
                                         : "-"}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
-                                    {"$ " + formatPrice(diamond.rapList) || "-"}
+                                    {isAuthenticated ? (
+                                        "$ " + formatPrice(diamond.rapList) || "-"
+                                    ) : (
+                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                    )}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
-                                    {formatPrice(diamond.discount) + "%" || "-"}
+                                    {isAuthenticated ? (
+                                        formatPrice(diamond.discount) + "%" || "-"
+                                    ) : (
+                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                    )}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
-                                    {"$ " +
-                                        formatPrice(diamond.pricePerCarat) ||
-                                        "-"}
+                                    {isAuthenticated ? (
+                                        "$ " + formatPrice(diamond.pricePerCarat) || "-"
+                                    ) : (
+                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                    )}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
-                                    {"$ " + formatPrice(diamond.price) || "-"}
+                                    {isAuthenticated ? (
+                                        "$ " + formatPrice(diamond.price) || "-"
+                                    ) : (
+                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                    )}
                                 </TableCell>
                                 <TableCell className="text-sm">
                                     {diamond.measurements?.length

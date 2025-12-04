@@ -318,7 +318,8 @@ class ClientDiamondAPI {
             throw new Error(result.message || "Failed to fetch cart");
         }
 
-        return result.data;
+          // Return the full result, not just result.data
+        return result;
     }
 
     async getHoldItems(): Promise<HoldItem[]> {

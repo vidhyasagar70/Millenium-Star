@@ -43,6 +43,12 @@ function CartAndHoldContent() {
     const [holdItems, setHoldItems] = useState<HoldItemWithDetails[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const [selectedCartItems, setSelectedCartItems] = useState<string[]>([]);
+    const [cartPage, setCartPage] = useState(1);
+    const [holdPage, setHoldPage] = useState(1);
+    const [cartPageSize, setCartPageSize] = useState(10);
+    const [holdPageSize, setHoldPageSize] = useState(10);
+    const [removing, setRemoving] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -72,21 +78,32 @@ function CartAndHoldContent() {
         try {
             const cartResponse: any = await clientDiamondAPI.getCart();
             
-            // Backend returns data.cart.items which contains cartItem and diamond objects
-            const items = cartResponse.data?.cart?.items || cartResponse.cart?.items || [];
+            console.log("Full Cart Response:", JSON.stringify(cartResponse, null, 2));
+            
+            // Backend returns data.items array with nested cartItem and diamond objects
+            const items = cartResponse?.data?.items || [];
+
+            console.log("Extracted items:", items);
+            console.log("Items length:", items.length);
 
             if (items.length > 0) {
                 // Map the nested structure to our expected format
-                const itemsWithDetails = items.map((item: any) => ({
-                    _id: item.cartItem?._id || item._id,
-                    diamondId: item.cartItem?.diamondId || item.diamondId,
-                    certificateNumber: item.cartItem?.certificateNumber || item.certificateNumber,
-                    addedAt: item.cartItem?.addedAt || item.addedAt,
-                    diamond: item.diamond
-                }));
+                const itemsWithDetails = items.map((item: any) => {
+                    console.log("Mapping item:", item);
+                    return {
+                        _id: item.cartItem._id,
+                        diamondId: item.cartItem.diamondId,
+                        certificateNumber: item.cartItem.certificateNumber,
+                        addedAt: item.cartItem.addedAt,
+                        diamond: item.diamond
+                    };
+                });
+
+                console.log("Final Mapped Cart Items:", itemsWithDetails);
 
                 setCartItems(itemsWithDetails);
             } else {
+                console.log("No items found in cart");
                 setCartItems([]);
             }
         } catch (error: any) {
@@ -136,7 +153,21 @@ function CartAndHoldContent() {
 
     const handleRemoveFromCart = async (certificateNumber: string) => {
         try {
-            await clientDiamondAPI.removeFromCart(certificateNumber);
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/diamonds/cart/${certificateNumber}`,
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to remove item from cart");
+            }
+
             toast.success("Item removed from cart");
             await fetchCartItems();
         } catch (error: any) {
@@ -144,6 +175,73 @@ function CartAndHoldContent() {
             toast.error(error.message || "Failed to remove item from cart");
         }
     };
+
+    const handleBulkRemoveFromCart = async () => {
+        if (selectedCartItems.length === 0) {
+            toast.error("Please select items to remove");
+            return;
+        }
+
+        try {
+            setRemoving(true);
+            let successCount = 0;
+            let failedCount = 0;
+
+            for (const certificateNumber of selectedCartItems) {
+                try {
+                    await handleRemoveFromCart(certificateNumber);
+                    successCount++;
+                } catch (error) {
+                    failedCount++;
+                }
+            }
+
+            if (successCount > 0) {
+                toast.success(`${successCount} item(s) removed from cart`);
+                setSelectedCartItems([]);
+            }
+            if (failedCount > 0) {
+                toast.error(`Failed to remove ${failedCount} item(s)`);
+            }
+        } catch (error: any) {
+            console.error("Error in bulk remove:", error);
+            toast.error("Failed to remove items");
+        } finally {
+            setRemoving(false);
+        }
+    };
+
+    const handleSelectAllCart = () => {
+        if (selectedCartItems.length === paginatedCartItems.length) {
+            setSelectedCartItems([]);
+        } else {
+            setSelectedCartItems(paginatedCartItems.map(item => item.certificateNumber));
+        }
+    };
+
+    const handleSelectCartItem = (certificateNumber: string) => {
+        setSelectedCartItems(prev => {
+            if (prev.includes(certificateNumber)) {
+                return prev.filter(cert => cert !== certificateNumber);
+            } else {
+                return [...prev, certificateNumber];
+            }
+        });
+    };
+
+    // Pagination logic
+    const paginatedCartItems = cartItems.slice(
+        (cartPage - 1) * cartPageSize,
+        cartPage * cartPageSize
+    );
+
+    const paginatedHoldItems = holdItems.slice(
+        (holdPage - 1) * holdPageSize,
+        holdPage * holdPageSize
+    );
+
+    const cartTotalPages = Math.ceil(cartItems.length / cartPageSize);
+    const holdTotalPages = Math.ceil(holdItems.length / holdPageSize);
 
     const handleRemoveFromHold = async (certificateNumber: string) => {
         try {
@@ -164,6 +262,13 @@ function CartAndHoldContent() {
     };
 
     const renderCartTable = () => {
+        console.log("renderCartTable called");
+        console.log("Loading:", loading);
+        console.log("Cart items:", cartItems);
+        console.log("Cart items length:", cartItems.length);
+        console.log("Paginated cart items:", paginatedCartItems);
+        console.log("Paginated cart items length:", paginatedCartItems.length);
+
         if (loading) {
             return (
                 <div className="space-y-3">
@@ -191,54 +296,144 @@ function CartAndHoldContent() {
         }
 
         return (
-            <div className="overflow-x-auto">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Certificate #</TableHead>
-                            <TableHead>Shape</TableHead>
-                            <TableHead>Carat</TableHead>
-                            <TableHead>Color</TableHead>
-                            <TableHead>Clarity</TableHead>
-                            <TableHead>Polish</TableHead>
-                            <TableHead>Price</TableHead>
-                            <TableHead>Added Date</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {cartItems.map((item) => (
-                            <TableRow key={item._id}>
-                                <TableCell className="font-medium">
-                                    {item.certificateNumber}
-                                </TableCell>
-                                <TableCell>{item.diamond?.shape || "-"}</TableCell>
-                                <TableCell>{item.diamond?.size ? `${item.diamond.size} ct` : "-"}</TableCell>
-                                <TableCell>{item.diamond?.color || "-"}</TableCell>
-                                <TableCell>{item.diamond?.clarity || "-"}</TableCell>
-                                <TableCell>{item.diamond?.polish || "-"}</TableCell>
-                                <TableCell>
-                                    {item.diamond?.price ? `${item.diamond.price.toLocaleString()}` : "-"}
-                                </TableCell>
-                                <TableCell>
-                                    {new Date(item.addedAt).toLocaleDateString()}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => handleRemoveFromCart(item.certificateNumber)}
-                                            className="h-8 w-8 p-0 border-black hover:bg-black hover:text-white"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
+            <div>
+                <div className="flex items-center justify-end mb-4">
+                    <Button
+                        onClick={handleBulkRemoveFromCart}
+                        disabled={selectedCartItems.length === 0 || removing}
+                        className="bg-black hover:bg-gray-800 text-white flex items-center gap-2"
+                        size="sm"
+                    >
+                        <Trash2 className="h-4 w-4" />
+                        Remove Selected
+                    </Button>
+                </div>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-12 text-center">
+                                    <div className="flex items-center justify-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedCartItems.length === paginatedCartItems.length && paginatedCartItems.length > 0}
+                                            onChange={handleSelectAllCart}
+                                            className="w-4 h-4 cursor-pointer"
+                                        />
                                     </div>
-                                </TableCell>
+                                </TableHead>
+                                <TableHead>Certificate #</TableHead>
+                                <TableHead>Location</TableHead>
+                                <TableHead>Lab</TableHead>
+                                <TableHead>Shape</TableHead>
+                                <TableHead>Carat</TableHead>
+                                <TableHead>Color</TableHead>
+                                <TableHead>Purity</TableHead>
+                                <TableHead>Cut</TableHead>
+                                <TableHead>Pol</TableHead>
+                                <TableHead>Rap.($)</TableHead>
+                                <TableHead>Length</TableHead>
+                                <TableHead>Width</TableHead>
+                                <TableHead>Depth</TableHead>
+                                <TableHead>$/Total</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedCartItems.map((item) => {
+                                console.log("Rendering row for item:", item);
+                                return (
+                                <TableRow key={item._id}>
+                                    <TableCell className="text-center">
+                                        <div className="flex items-center justify-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedCartItems.includes(item.certificateNumber)}
+                                                onChange={() => handleSelectCartItem(item.certificateNumber)}
+                                                className="w-4 h-4 cursor-pointer"
+                                            />
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="font-medium">
+                                        {item.certificateNumber || "-"}
+                                    </TableCell>
+                                    <TableCell>{item.diamond?.isAvailable || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.laboratory || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.shape || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.size ? item.diamond.size.toFixed(2) : "-"}</TableCell>
+                                    <TableCell>{item.diamond?.color || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.clarity || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.cut || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.polish || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.rapList ? `$${item.diamond.rapList.toLocaleString()}` : "-"}</TableCell>
+                                    <TableCell>{item.diamond?.measurements?.length ? item.diamond.measurements.length.toFixed(2) : "-"}</TableCell>
+                                    <TableCell>{item.diamond?.measurements?.width ? item.diamond.measurements.width.toFixed(2) : "-"}</TableCell>
+                                    <TableCell>{item.diamond?.measurements?.depth ? item.diamond.measurements.depth.toFixed(2) : "-"}</TableCell>
+                                    <TableCell className="font-semibold">{item.diamond?.price ? `$${item.diamond.price.toLocaleString()}` : "-"}</TableCell>
+                                </TableRow>
+                            )})}
+                        </TableBody>
+                    </Table>
+                </div>
+                {/* Cart Pagination */}
+                {cartItems.length > cartPageSize && (
+                    <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">Rows per page:</span>
+                            <select
+                                value={cartPageSize}
+                                onChange={(e) => {
+                                    setCartPageSize(Number(e.target.value));
+                                    setCartPage(1);
+                                }}
+                                className="border rounded px-2 py-1 text-sm"
+                            >
+                                <option value={10}>10</option>
+                                <option value={20}>20</option>
+                                <option value={30}>30</option>
+                                <option value={50}>50</option>
+                            </select>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">
+                                Page {cartPage} of {cartTotalPages}
+                            </span>
+                            <div className="flex gap-1">
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setCartPage(1)}
+                                    disabled={cartPage === 1}
+                                >
+                                    First
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setCartPage(prev => Math.max(1, prev - 1))}
+                                    disabled={cartPage === 1}
+                                >
+                                    Previous
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setCartPage(prev => Math.min(cartTotalPages, prev + 1))}
+                                    disabled={cartPage === cartTotalPages}
+                                >
+                                    Next
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setCartPage(cartTotalPages)}
+                                    disabled={cartPage === cartTotalPages}
+                                >
+                                    Last
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     };
@@ -271,75 +466,130 @@ function CartAndHoldContent() {
         }
 
         return (
-            <div className="overflow-x-auto">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Certificate #</TableHead>
-                            <TableHead>Shape</TableHead>
-                            <TableHead>Carat</TableHead>
-                            <TableHead>Color</TableHead>
-                            <TableHead>Clarity</TableHead>
-                            <TableHead>Cut</TableHead>
-                            <TableHead>Price</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Hold Date</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {holdItems.map((item) => (
-                            <TableRow key={item._id}>
-                                <TableCell className="font-medium">
-                                    {item.certificateNumber}
-                                </TableCell>
-                                <TableCell>{item.diamond?.shape || "-"}</TableCell>
-                                <TableCell>{item.diamond?.size || "-"} ct</TableCell>
-                                <TableCell>{item.diamond?.color || "-"}</TableCell>
-                                <TableCell>{item.diamond?.clarity || "-"}</TableCell>
-                                <TableCell>{item.diamond?.cut || "-"}</TableCell>
-                                <TableCell>
-                                    ${item.diamond?.price?.toLocaleString() || "-"}
-                                </TableCell>
-                                <TableCell>
-                                    <Badge
-                                        variant={
-                                            item.status === "pending"
-                                                ? "default"
-                                                : item.status === "approved"
-                                                ? "default"
-                                                : "secondary"
-                                        }
-                                        className={
-                                            item.status === "pending"
-                                                ? "bg-yellow-100 text-yellow-800"
-                                                : item.status === "approved"
-                                                ? "bg-green-100 text-green-800"
-                                                : "bg-red-100 text-red-800"
-                                        }
-                                    >
-                                        {item.status}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell>
-                                    {new Date(item.createdAt).toLocaleDateString()}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => handleRemoveFromHold(item.certificateNumber)}
-                                            className="h-8 w-8 p-0 border-black hover:bg-black hover:text-white"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
+            <div>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Certificate #</TableHead>
+                                <TableHead>Shape</TableHead>
+                                <TableHead>Carat</TableHead>
+                                <TableHead>Color</TableHead>
+                                <TableHead>Clarity</TableHead>
+                                <TableHead>Cut</TableHead>
+                                <TableHead>Polish</TableHead>
+                                <TableHead>Symmetry</TableHead>
+                                <TableHead>Lab</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Hold Date</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedHoldItems.map((item) => (
+                                <TableRow key={item._id}>
+                                    <TableCell className="font-medium">
+                                        {item.certificateNumber}
+                                    </TableCell>
+                                    <TableCell>{item.diamond?.shape || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.size || "-"} ct</TableCell>
+                                    <TableCell>{item.diamond?.color || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.clarity || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.cut || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.polish || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.symmetry || "-"}</TableCell>
+                                    <TableCell>{item.diamond?.laboratory || "-"}</TableCell>
+                                    <TableCell className="font-semibold">
+                                        ${item.diamond?.price?.toLocaleString() || "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge
+                                            variant={
+                                                item.status === "pending"
+                                                    ? "default"
+                                                    : item.status === "approved"
+                                                    ? "default"
+                                                    : "secondary"
+                                            }
+                                            className={
+                                                item.status === "pending"
+                                                    ? "bg-yellow-100 text-yellow-800"
+                                                    : item.status === "approved"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : "bg-red-100 text-red-800"
+                                            }
+                                        >
+                                            {item.status}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        {new Date(item.createdAt).toLocaleDateString()}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+                {/* Hold Pagination */}
+                {holdItems.length > holdPageSize && (
+                    <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">Rows per page:</span>
+                            <select
+                                value={holdPageSize}
+                                onChange={(e) => {
+                                    setHoldPageSize(Number(e.target.value));
+                                    setHoldPage(1);
+                                }}
+                                className="border rounded px-2 py-1 text-sm"
+                            >
+                                <option value={10}>10</option>
+                                <option value={20}>20</option>
+                                <option value={30}>30</option>
+                                <option value={50}>50</option>
+                            </select>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">
+                                Page {holdPage} of {holdTotalPages}
+                            </span>
+                            <div className="flex gap-1">
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setHoldPage(1)}
+                                    disabled={holdPage === 1}
+                                >
+                                    First
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setHoldPage(prev => Math.max(1, prev - 1))}
+                                    disabled={holdPage === 1}
+                                >
+                                    Previous
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setHoldPage(prev => Math.min(holdTotalPages, prev + 1))}
+                                    disabled={holdPage === holdTotalPages}
+                                >
+                                    Next
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setHoldPage(holdTotalPages)}
+                                    disabled={holdPage === holdTotalPages}
+                                >
+                                    Last
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     };
