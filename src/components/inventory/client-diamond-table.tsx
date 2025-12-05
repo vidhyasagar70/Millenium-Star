@@ -257,42 +257,50 @@ export function ClientDiamondTable({
                                     onSortChange={onSortChange}
                                 />
                             </TableHead>
-                            {/* RapList Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
-                                <ClientTableColumnHeader
-                                    title="Rap List"
-                                    sortKey="rapList"
-                                    currentSorting={currentSorting}
-                                    onSortChange={onSortChange}
-                                />
-                            </TableHead>
-                            {/* Discount Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
-                                <ClientTableColumnHeader
-                                    title="Dis."
-                                    sortKey="discount"
-                                    currentSorting={currentSorting}
-                                    onSortChange={onSortChange}
-                                />
-                            </TableHead>
-                            {/* Price per Carat Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
-                                <ClientTableColumnHeader
-                                    title="Pr./Ct."
-                                    sortKey="pricePerCarat"
-                                    currentSorting={currentSorting}
-                                    onSortChange={onSortChange}
-                                />
-                            </TableHead>
-                            {/* Price Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
-                                <ClientTableColumnHeader
-                                    title="Price"
-                                    sortKey="price"
-                                    currentSorting={currentSorting}
-                                    onSortChange={onSortChange}
-                                />
-                            </TableHead>
+                            {/* RapList Header - Only show if authenticated */}
+                            {isAuthenticated && (
+                                <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                    <ClientTableColumnHeader
+                                        title="Rap List"
+                                        sortKey="rapList"
+                                        currentSorting={currentSorting}
+                                        onSortChange={onSortChange}
+                                    />
+                                </TableHead>
+                            )}
+                            {/* Discount Header - Only show if authenticated */}
+                            {isAuthenticated && (
+                                <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                    <ClientTableColumnHeader
+                                        title="Dis."
+                                        sortKey="discount"
+                                        currentSorting={currentSorting}
+                                        onSortChange={onSortChange}
+                                    />
+                                </TableHead>
+                            )}
+                            {/* Price per Carat Header - Only show if authenticated */}
+                            {isAuthenticated && (
+                                <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                    <ClientTableColumnHeader
+                                        title="Pr./Ct."
+                                        sortKey="pricePerCarat"
+                                        currentSorting={currentSorting}
+                                        onSortChange={onSortChange}
+                                    />
+                                </TableHead>
+                            )}
+                            {/* Price Header - Only show if authenticated */}
+                            {isAuthenticated && (
+                                <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                    <ClientTableColumnHeader
+                                        title="Price"
+                                        sortKey="price"
+                                        currentSorting={currentSorting}
+                                        onSortChange={onSortChange}
+                                    />
+                                </TableHead>
+                            )}
                             {/* Length Header */}
                             <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
@@ -415,54 +423,30 @@ export function ClientDiamondTable({
                                         ? diamond.totalDepth
                                         : "-"}
                                 </TableCell>
-                                <TableCell className="text-sm font-semibold">
-                                    {isAuthenticated ? (
-                                        "$ " + formatPrice(diamond.rapList) || "-"
-                                    ) : (
-                                        <span 
-                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={onLoginClick}
-                                        >
-                                            Login
-                                        </span>
-                                    )}
-                                </TableCell>
-                                <TableCell className="text-sm font-semibold">
-                                    {isAuthenticated ? (
-                                        formatPrice(diamond.discount) + "%" || "-"
-                                    ) : (
-                                        <span 
-                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={onLoginClick}
-                                        >
-                                            Login
-                                        </span>
-                                    )}
-                                </TableCell>
-                                <TableCell className="text-sm font-semibold">
-                                    {isAuthenticated ? (
-                                        "$ " + formatPrice(diamond.pricePerCarat) || "-"
-                                    ) : (
-                                        <span 
-                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={onLoginClick}
-                                        >
-                                            Login
-                                        </span>
-                                    )}
-                                </TableCell>
-                                <TableCell className="text-sm font-semibold">
-                                    {isAuthenticated ? (
-                                        "$ " + formatPrice(diamond.price) || "-"
-                                    ) : (
-                                        <span 
-                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={onLoginClick}
-                                        >
-                                            Login 
-                                        </span>
-                                    )}
-                                </TableCell>
+                                {/* Rap List Cell - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <TableCell className="text-sm font-semibold">
+                                        {"$ " + formatPrice(diamond.rapList) || "-"}
+                                    </TableCell>
+                                )}
+                                {/* Discount Cell - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <TableCell className="text-sm font-semibold">
+                                        {formatPrice(diamond.discount) + "%" || "-"}
+                                    </TableCell>
+                                )}
+                                {/* Price per Carat Cell - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <TableCell className="text-sm font-semibold">
+                                        {"$ " + formatPrice(diamond.pricePerCarat) || "-"}
+                                    </TableCell>
+                                )}
+                                {/* Price Cell - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <TableCell className="text-sm font-semibold">
+                                        {"$ " + formatPrice(diamond.price) || "-"}
+                                    </TableCell>
+                                )}
                                 <TableCell className="text-sm">
                                     {diamond.measurements?.length
                                         ? diamond.measurements.length
