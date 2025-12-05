@@ -202,7 +202,33 @@ const CustomerManagementContent = () => {
             const quotationsData = await quotationsRes.json();
 
             if (usersData.success) {
-                setUsers(usersData.data || []);
+                let usersList = usersData.data || [];
+                
+                // Sort users by latest cart/hold addition - notification system
+                if (cartsData.success && holdsData.success) {
+                    const cartMap = new Map<string, UserCart>(cartsData.data.map((cart: UserCart) => [cart.userId, cart]));
+                    const holdMap = new Map<string, UserHold>(holdsData.data.map((hold: UserHold) => [hold.userId, hold]));
+                    
+                    usersList = usersList.sort((a: User, b: User) => {
+                        const aCart = cartMap.get(a._id);
+                        const bCart = cartMap.get(b._id);
+                        const aHold = holdMap.get(a._id);
+                        const bHold = holdMap.get(b._id);
+                        
+                        // Get latest timestamp for each user
+                        const aLatestCart = aCart?.cartItems?.[0]?.cartItem?.addedAt || '';
+                        const bLatestCart = bCart?.cartItems?.[0]?.cartItem?.addedAt || '';
+                        const aLatestHold = aHold?.holdItems?.[0]?.holdItem?.createdAt || '';
+                        const bLatestHold = bHold?.holdItems?.[0]?.holdItem?.createdAt || '';
+                        
+                        const aLatest = [aLatestCart, aLatestHold].filter(Boolean).sort().reverse()[0] || '';
+                        const bLatest = [bLatestCart, bLatestHold].filter(Boolean).sort().reverse()[0] || '';
+                        
+                        return bLatest.localeCompare(aLatest);
+                    });
+                }
+                
+                setUsers(usersList);
                 // Set pagination data
                 if (usersData.pagination) {
                     setPagination({
@@ -387,7 +413,7 @@ const CustomerManagementContent = () => {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-medium">Customer Management</h1>
+                <h1 className="text-3xl font-medium">Cart Management</h1>
                 <Button
                     onClick={fetchAllData}
                     variant="outline"
@@ -409,7 +435,7 @@ const CustomerManagementContent = () => {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator>{"/"}</BreadcrumbSeparator>
                     <BreadcrumbItem>
-                        <BreadcrumbPage>Customer Management</BreadcrumbPage>
+                        <BreadcrumbPage>Cart Management</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
@@ -456,44 +482,23 @@ const CustomerManagementContent = () => {
             {/* Users Table */}
             <div className="rounded-lg border bg-white shadow-sm relative">
                 <div className="overflow-x-auto">
-                    <Table className="w-full" style={{ minWidth: '1800px' }}>
+                    <Table className="w-full">
                     <TableHeader>
                         <TableRow className="bg-gray-50">
-                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '60px' }}>
-                                Sr
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '150px' }}>
-                                Name
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '130px' }}>
+                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '200px' }}>
                                 Username
                             </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '200px' }}>
+                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '250px' }}>
                                 Email
                             </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '130px' }}>
-                                Phone
-                            </TableHead>
                             <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '150px' }}>
-                                Company
+                                Phone Number
                             </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '140px' }}>
-                                Business Type
+                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '120px' }}>
+                                Total Cart
                             </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '120px' }}>
-                                VAT Number
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '180px' }}>
-                                Address
-                            </TableHead>
-                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '100px' }}>
-                                Cart Items
-                            </TableHead>
-                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '100px' }}>
-                                Hold Items
-                            </TableHead>
-                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '80px' }}>
-                                View
+                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '120px' }}>
+                                Total Hold
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -502,7 +507,7 @@ const CustomerManagementContent = () => {
                         {users.length === 0 ? (
                             <TableRow>
                                 <TableCell
-                                    colSpan={12}
+                                    colSpan={5}
                                     className="text-center py-12 text-gray-500"
                                 >
                                     <User className="mx-auto h-8 w-8 text-gray-300" />
@@ -516,80 +521,44 @@ const CustomerManagementContent = () => {
                                 const holdItems = getUserHolds(user._id);
                                 const quotations = getUserQuotations(user._id);
                                 const serialNumber = (currentPage - 1) * pageSize + index + 1;
+                                const fullName = user.customerData 
+                                    ? `${user.customerData.firstName || ''} ${user.customerData.lastName || ''}`.trim()
+                                    : user.username;
+                                const phoneNumber = user.customerData
+                                    ? `${user.customerData.countryCode || ''} ${user.customerData.phoneNumber || ''}`.trim()
+                                    : '-';
 
                                 return (
                                     <React.Fragment key={user._id}>
-                                        <TableRow className="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <TableCell className="text-center text-sm font-medium px-4">
-                                                {serialNumber}
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                {user.customerData
-                                                    ? `${user.customerData.firstName || ""} ${user.customerData.lastName || ""}`.trim() || "-"
-                                                    : "-"}
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                {user.username}
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                {user.email}
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                {user.customerData?.countryCode && user.customerData?.phoneNumber
-                                                    ? `${user.customerData.countryCode} ${user.customerData.phoneNumber}`
-                                                    : "-"}
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                <div className="truncate" title={user.customerData?.companyName || "-"}>
-                                                    {user.customerData?.companyName || "-"}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                <div className="truncate" title={user.customerData?.businessType || "-"}>
-                                                    {user.customerData?.businessType || "-"}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                {user.customerData?.vatNumber || "-"}
-                                            </TableCell>
-                                            <TableCell className="text-sm px-4">
-                                                <div className="truncate" title={
-                                                    user.customerData?.address
-                                                        ? [
-                                                            user.customerData.address.city,
-                                                            user.customerData.address.state,
-                                                            user.customerData.address.country
-                                                        ].filter(Boolean).join(", ") || "-"
-                                                        : "-"
-                                                }>
-                                                    {user.customerData?.address
-                                                        ? [
-                                                            user.customerData.address.city,
-                                                            user.customerData.address.state,
-                                                            user.customerData.address.country
-                                                        ].filter(Boolean).join(", ") || "-"
-                                                        : "-"}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-center font-semibold px-4">
-                                                {cartItems.length}
-                                            </TableCell>
-                                            <TableCell className="text-center font-semibold px-4">
-                                                {holdItems.length}
-                                            </TableCell>
-                                            <TableCell className="text-center px-4">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => toggleRow(user._id)}
-                                                    className="h-8 w-8 p-0"
-                                                >
+                                        <TableRow 
+                                            className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => toggleRow(user._id)}
+                                        >
+                                            <TableCell className="text-left text-sm px-4">
+                                                <div className="flex items-center gap-2">
                                                     {isExpanded ? (
-                                                        <ChevronUp className="h-4 w-4" />
+                                                        <ChevronUp className="h-4 w-4 text-gray-500" />
                                                     ) : (
-                                                        <ChevronDown className="h-4 w-4" />
+                                                        <ChevronDown className="h-4 w-4 text-gray-500" />
                                                     )}
-                                                </Button>
+                                                    <span className="font-medium">{user.username || '-'}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-left text-sm px-4">
+                                                {user.email || '-'}
+                                            </TableCell>
+                                            <TableCell className="text-left text-sm px-4">
+                                                {phoneNumber}
+                                            </TableCell>
+                                            <TableCell className="text-center text-sm font-semibold px-4">
+                                                <span className={cartItems.length > 0 ? "text-green-600" : "text-gray-400"}>
+                                                    {cartItems.length}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="text-center text-sm font-semibold px-4">
+                                                <span className={holdItems.length > 0 ? "text-orange-600" : "text-gray-400"}>
+                                                    {holdItems.length}
+                                                </span>
                                             </TableCell>
                                         </TableRow>
 
@@ -597,7 +566,7 @@ const CustomerManagementContent = () => {
                                         {isExpanded && (
                                             <TableRow>
                                                 <TableCell
-                                                    colSpan={12}
+                                                    colSpan={5}
                                                     className="bg-gray-50 p-6"
                                                 >
                                                     <div className="space-y-6">
@@ -737,7 +706,7 @@ const CustomerManagementContent = () => {
                                                             )}
                                                         </div>
 {/* Enquiries */}
-                                                        <div>
+                                                        {/* <div>
                                                             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                                                                 <FileText className="h-5 w-5 text-purple-600" />
                                                                 Enquiries ({quotations.length})
@@ -805,7 +774,7 @@ const CustomerManagementContent = () => {
                                                                     </Table>
                                                                 </div>
                                                             )}
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </TableCell>
                                             </TableRow>
@@ -837,6 +806,7 @@ const CustomerManagementContent = () => {
                     onPageSizeChange={handlePageSizeChange}
                     pageSizeOptions={[10, 20, 30, 50]}
                     showPageSizeSelector={true}
+                    recordLabel="customers"
                 />
             )}
         </div>

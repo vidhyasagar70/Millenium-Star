@@ -5,9 +5,15 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { LoginModal } from "./loginCard";
 import { RegistrationModal } from "./registrationCard";
-import { Menu, X, User, LogOut, Settings, Power } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, Power, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import * as Motion from "motion/react";
 
@@ -65,22 +71,26 @@ const Navbar = () => {
             ? [
                   { href: "/diamond-knowledge", label: "Diamond Knowledge" },
                   { href: "/contact", label: "Contact us" },
-                  { href: "/yourcart", label: "Your Cart" },
               ]
             : []),
     ];
 
-    const adminNavItems = [
-        { href: "/admin", label: "Admin Panel" },
+    // Add Your Cart only for authenticated non-admin users
+    const userNavItems = isAuthenticated() && user?.role !== "ADMIN"
+        ? [...baseNavItems, { href: "/yourcart", label: "Your Cart" }]
+        : baseNavItems;
+
+    const adminDropdownItems = [
+        { href: "/admin", label: "Admin Inventory" },
         { href: "/admin/members", label: "Members" },
+        { href: "/customerManagement", label: "Cart Management" },
         { href: "/admin/quotations", label: "Offer Enquiry" },
-        { href:"/customerManagement", label: "Customer Management" }
     ];
 
     const navItems = isAuthenticated()
         ? user?.role === "ADMIN"
-            ? [...baseNavItems, ...adminNavItems]
-            : baseNavItems
+            ? [...baseNavItems] // Admin uses dropdown, not flat items
+            : userNavItems
         : baseNavItems;
 
     const handleLoginClick = () => {
@@ -179,7 +189,7 @@ const Navbar = () => {
                 <Container className="flex max-w-[1500px] items-center justify-between py-4">
                     {/* Desktop Navigation */}
                     <div className="hidden lg:flex flex-1 justify-start">
-                        <ul className="hidden lg:flex flex-wrap list-none gap-x-4 gap-y-3 font-sans font-light text-sm">
+                        <ul className="hidden lg:flex flex-wrap list-none gap-x-4 gap-y-3 font-sans font-light text-sm items-center">
                             {navItems.map((item) => (
                                 <li key={item.href}>
                                     <Link
@@ -194,6 +204,41 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                             ))}
+                            {/* Admin Panel Dropdown */}
+                            {isAuthenticated() && user?.role === "ADMIN" && (
+                                <li>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button
+                                                className={`transition-colors duration-200 flex items-center gap-1 ${
+                                                    pathname.startsWith("/admin") || pathname === "/customerManagement"
+                                                        ? "bg-black rounded-xl px-2 py-1 pb-1.5 text-white font-semibold"
+                                                        : "text-black hover:text-black"
+                                                }`}
+                                            >
+                                                Admin Panel
+                                                <ChevronDown className="h-3 w-3" />
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="start" className="w-56">
+                                            {adminDropdownItems.map((item) => (
+                                                <DropdownMenuItem key={item.href} asChild>
+                                                    <Link
+                                                        href={item.href}
+                                                        className={`cursor-pointer ${
+                                                            pathname === item.href
+                                                                ? "bg-gray-100 font-semibold"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        {item.label}
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </li>
+                            )}
                         </ul>
                     </div>
 
@@ -329,6 +374,32 @@ const Navbar = () => {
                                         </Link>
                                     </li>
                                 ))}
+                                
+                                {/* Mobile Admin Panel Dropdown */}
+                                {isAuthenticated() && user?.role === "ADMIN" && (
+                                    <li>
+                                        <div className="font-medium text-xs text-gray-500 px-3 py-2 uppercase">
+                                            Admin Panel
+                                        </div>
+                                        <ul className="space-y-1 ml-2">
+                                            {adminDropdownItems.map((item) => (
+                                                <li key={item.href}>
+                                                    <Link
+                                                        href={item.href}
+                                                        className={`block py-2 px-3 rounded-md transition-colors duration-200 ${
+                                                            pathname === item.href
+                                                                ? "bg-black text-white font-medium"
+                                                                : "text-black hover:bg-gray-100"
+                                                        }`}
+                                                        onClick={closeMobileMenu}
+                                                    >
+                                                        {item.label}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                )}
                             </ul>
 
                             {/* Mobile Auth/Profile Actions */}

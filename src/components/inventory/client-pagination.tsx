@@ -30,6 +30,7 @@ interface ClientPaginationProps {
     onPageSizeChange?: (pageSize: number) => void;
     pageSizeOptions?: number[];
     showPageSizeSelector?: boolean;
+    recordLabel?: string; // Add custom label prop
 }
 
 export function ClientPagination({
@@ -38,6 +39,7 @@ export function ClientPagination({
     onPageSizeChange,
     pageSizeOptions = [10, 20, 30, 50, 100],
     showPageSizeSelector = true,
+    recordLabel = "diamonds", // Default to "diamonds"
 }: ClientPaginationProps) {
     const {
         currentPage,
@@ -153,7 +155,7 @@ export function ClientPagination({
             <div className="hidden md:block flex-1 text-sm text-muted-foreground">
                 Showing {(currentPage - 1) * recordsPerPage + 1} to{" "}
                 {Math.min(currentPage * recordsPerPage, totalRecords)} of{" "}
-                {totalRecords.toLocaleString()} diamonds
+                {totalRecords.toLocaleString()} {recordLabel}
             </div>
 
             {/* Main pagination controls */}

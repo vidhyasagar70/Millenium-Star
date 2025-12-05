@@ -336,29 +336,33 @@ export default function ClientPage() {
                     <FunnelX className="w-4 h-4" />
                     Reset
                   </Button>
-                  <Button
-                    onClick={handleAddToCart}
-                    disabled={
-                      selected.length === 0 || isAddingToCart || loading
-                    }
-                    variant="outline"
-                    className="border border-black rounded-full text-sm px-6 disabled:opacity-50"
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                    {isAddingToCart ? "Adding..." : "Cart"}
-                  </Button>
+                  {user && (
+                    <>
+                      <Button
+                        onClick={handleAddToCart}
+                        disabled={
+                          selected.length === 0 || isAddingToCart || loading
+                        }
+                        variant="outline"
+                        className="border border-black rounded-full text-sm px-6 disabled:opacity-50"
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        {isAddingToCart ? "Adding..." : "Cart"}
+                      </Button>
 
-                  <Button
-                    onClick={handleAddToHold}
-                    disabled={
-                      selected.length === 0 || isAddingToHold || loading
-                    }
-                    variant="outline"
-                    className="border border-black rounded-full text-sm px-6 disabled:opacity-50"
-                  >
-                    <Hand className="w-4 h-4" />
-                    {isAddingToHold ? "Holding..." : "Hold"}
-                  </Button>
+                      <Button
+                        onClick={handleAddToHold}
+                        disabled={
+                          selected.length === 0 || isAddingToHold || loading
+                        }
+                        variant="outline"
+                        className="border border-black rounded-full text-sm px-6 disabled:opacity-50"
+                      >
+                        <Hand className="w-4 h-4" />
+                        {isAddingToHold ? "Holding..." : "Hold"}
+                      </Button>
+                    </>
+                  )}
                   <Button
                     onClick={handleCompare}
                     disabled={selected.length < 2}
@@ -472,29 +476,33 @@ export default function ClientPage() {
                   <RotateCcw className="w-4 h-4" />
                 </Button>
 
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={selected.length === 0 || isAddingToCart || loading}
-                  size="sm"
-                  className="bg-black text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  {selected.length > 0 && (
-                    <span className="text-xs">{selected.length}</span>
-                  )}
-                </Button>
+                {user && (
+                  <>
+                    <Button
+                      onClick={handleAddToCart}
+                      disabled={selected.length === 0 || isAddingToCart || loading}
+                      size="sm"
+                      className="bg-black text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      {selected.length > 0 && (
+                        <span className="text-xs">{selected.length}</span>
+                      )}
+                    </Button>
 
-                <Button
-                  onClick={handleAddToHold}
-                  disabled={selected.length === 0 || isAddingToHold || loading}
-                  size="sm"
-                  className="bg-gray-700 hover:bg-gray-900 text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
-                >
-                  <Hand className="w-4 h-4" />
-                  {selected.length > 0 && (
-                    <span className="text-xs">{selected.length}</span>
-                  )}
-                </Button>
+                    <Button
+                      onClick={handleAddToHold}
+                      disabled={selected.length === 0 || isAddingToHold || loading}
+                      size="sm"
+                      className="bg-gray-700 hover:bg-gray-900 text-white rounded-full h-7 px-2.5 flex items-center gap-1 disabled:opacity-50"
+                    >
+                      <Hand className="w-4 h-4" />
+                      {selected.length > 0 && (
+                        <span className="text-xs">{selected.length}</span>
+                      )}
+                    </Button>
+                  </>
+                )}
 
                 <Button
                   onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}

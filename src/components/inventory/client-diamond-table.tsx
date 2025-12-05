@@ -154,15 +154,17 @@ export function ClientDiamondTable({
                                     onSortChange={onSortChange}
                                 />
                             </TableHead>
-                            {/* CertificateNumber Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
-                                <ClientTableColumnHeader
-                                    title="Diamond Id."
-                                    sortKey="certificateNumber"
-                                    currentSorting={currentSorting}
-                                    onSortChange={onSortChange}
-                                />
-                            </TableHead>
+                            {/* CertificateNumber Header - Only show if authenticated */}
+                            {isAuthenticated && (
+                                <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                    <ClientTableColumnHeader
+                                        title="Diamond Id."
+                                        sortKey="certificateNumber"
+                                        currentSorting={currentSorting}
+                                        onSortChange={onSortChange}
+                                    />
+                                </TableHead>
+                            )}
                             {/* Size Header */}
                             <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
@@ -366,16 +368,19 @@ export function ClientDiamondTable({
                                         </span>
                                     </div>
                                 </TableCell>
-                                <TableCell
-                                    className="text-sm font-mono cursor-pointer"
-                                    onClick={() =>
-                                        router.push(
-                                            `/${diamond.certificateNumber}`
-                                        )
-                                    }
-                                >
-                                    {diamond.certificateNumber || "-"}
-                                </TableCell>
+                                {/* Diamond ID Cell - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <TableCell
+                                        className="text-sm font-mono cursor-pointer"
+                                        onClick={() =>
+                                            router.push(
+                                                `/${diamond.certificateNumber}`
+                                            )
+                                        }
+                                    >
+                                        {diamond.certificateNumber || "-"}
+                                    </TableCell>
+                                )}
                                 <TableCell className="text-sm font-semibold">
                                     {diamond.size || "-"}
                                 </TableCell>
@@ -412,28 +417,48 @@ export function ClientDiamondTable({
                                     {isAuthenticated ? (
                                         "$ " + formatPrice(diamond.rapList) || "-"
                                     ) : (
-                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                        <span 
+                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
+                                            onClick={() => router.push("/")}
+                                        >
+                                            Login
+                                        </span>
                                     )}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
                                     {isAuthenticated ? (
                                         formatPrice(diamond.discount) + "%" || "-"
                                     ) : (
-                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                        <span 
+                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
+                                            onClick={() => router.push("/")}
+                                        >
+                                            Login
+                                        </span>
                                     )}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
                                     {isAuthenticated ? (
                                         "$ " + formatPrice(diamond.pricePerCarat) || "-"
                                     ) : (
-                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                        <span 
+                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
+                                            onClick={() => router.push("/")}
+                                        >
+                                            Login
+                                        </span>
                                     )}
                                 </TableCell>
                                 <TableCell className="text-sm font-semibold">
                                     {isAuthenticated ? (
                                         "$ " + formatPrice(diamond.price) || "-"
                                     ) : (
-                                        <span className="text-xs text-gray-500 italic">Login to view</span>
+                                        <span 
+                                            className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
+                                            onClick={() => router.push("/")}
+                                        >
+                                            Login 
+                                        </span>
                                     )}
                                 </TableCell>
                                 <TableCell className="text-sm">
