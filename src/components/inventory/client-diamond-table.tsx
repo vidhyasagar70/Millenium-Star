@@ -68,6 +68,7 @@ interface ClientDiamondTableProps {
     selected: ClientDiamond[];
     setSelected: React.Dispatch<React.SetStateAction<ClientDiamond[]>>;
     isAuthenticated?: boolean;
+    onLoginClick?: () => void;
 }
 
 export function ClientDiamondTable({
@@ -81,6 +82,7 @@ export function ClientDiamondTable({
     selected,
     setSelected,
     isAuthenticated = false,
+    onLoginClick = () => {},
 }: ClientDiamondTableProps) {
     const router = useRouter();
 
@@ -419,7 +421,7 @@ export function ClientDiamondTable({
                                     ) : (
                                         <span 
                                             className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={() => router.push("/")}
+                                            onClick={onLoginClick}
                                         >
                                             Login
                                         </span>
@@ -431,7 +433,7 @@ export function ClientDiamondTable({
                                     ) : (
                                         <span 
                                             className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={() => router.push("/")}
+                                            onClick={onLoginClick}
                                         >
                                             Login
                                         </span>
@@ -443,7 +445,7 @@ export function ClientDiamondTable({
                                     ) : (
                                         <span 
                                             className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={() => router.push("/")}
+                                            onClick={onLoginClick}
                                         >
                                             Login
                                         </span>
@@ -455,7 +457,7 @@ export function ClientDiamondTable({
                                     ) : (
                                         <span 
                                             className="text-xs text-blue-600 underline cursor-pointer hover:text-blue-800"
-                                            onClick={() => router.push("/")}
+                                            onClick={onLoginClick}
                                         >
                                             Login 
                                         </span>

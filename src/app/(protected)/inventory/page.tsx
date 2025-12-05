@@ -29,6 +29,8 @@ import { clientDiamondAPI } from "@/services/client-api";
 import Navbar from "@/components/landing/header";
 import Rapaport from "@/components/rapaport/rapaport";
 import Container from "@/components/ui/container";
+import { LoginModal } from "@/components/landing/loginCard";
+import { RegistrationModal } from "@/components/landing/registrationCard";
 
 export default function ClientPage() {
   const { user } = useAuth();
@@ -54,6 +56,25 @@ export default function ClientPage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isAddingToHold, setIsAddingToHold] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const handleCloseLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const handleOpenRegistrationFromLogin = () => {
+    setIsLoginModalOpen(false);
+    setIsRegistrationModalOpen(true);
+  };
+
+  const handleCloseRegistrationModal = () => {
+    setIsRegistrationModalOpen(false);
+  };
 
   const handleFiltersChange = (newFilters: ClientFilters) => {
     setFilters(newFilters);
@@ -399,6 +420,7 @@ export default function ClientPage() {
                   selected={selected}
                   setSelected={setSelected}
                   isAuthenticated={!!user}
+                  onLoginClick={handleLoginClick}
                 />
               </div>
             ) : (
@@ -556,6 +578,7 @@ export default function ClientPage() {
                       selected={selected}
                       setSelected={setSelected}
                       isAuthenticated={!!user}
+                      onLoginClick={handleLoginClick}
                     />
                   </div>
                 ) : (
@@ -572,6 +595,17 @@ export default function ClientPage() {
           </div>
         </div>
       </Container>
+
+      {/* Login/Registration Modals */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={handleCloseLoginModal}
+        onOpenRegistration={handleOpenRegistrationFromLogin}
+      />
+      <RegistrationModal
+        isOpen={isRegistrationModalOpen}
+        onClose={handleCloseRegistrationModal}
+      />
     </div>
   );
 }

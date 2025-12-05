@@ -87,6 +87,10 @@ const Navbar = () => {
         { href: "/admin/quotations", label: "Offer Enquiry" },
     ];
 
+    // Find the current admin menu item based on pathname
+    const currentAdminItem = adminDropdownItems.find(item => pathname === item.href);
+    const adminDropdownLabel = currentAdminItem ? currentAdminItem.label : "Admin Panel";
+
     const navItems = isAuthenticated()
         ? user?.role === "ADMIN"
             ? [...baseNavItems] // Admin uses dropdown, not flat items
@@ -216,7 +220,7 @@ const Navbar = () => {
                                                         : "text-black hover:text-black"
                                                 }`}
                                             >
-                                                Admin Panel
+                                                {adminDropdownLabel}
                                                 <ChevronDown className="h-3 w-3" />
                                             </button>
                                         </DropdownMenuTrigger>
