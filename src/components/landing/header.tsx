@@ -59,21 +59,16 @@ const Navbar = () => {
     };
 
     const baseNavItems = [
-        { href: "/", label: "Home" },
-        { href: "/about", label: "About us" },
-        {
-            href: "/inventory",
-            label: "Inventory",
-            onClick: () => accessInventoryClickHandler(),
-        },
-        
-        ...(user?.role !== "ADMIN"
-            ? [
-                  { href: "/diamond-knowledge", label: "Diamond Knowledge" },
-                  { href: "/contact", label: "Contact us" },
-              ]
-            : []),
-    ];
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About us" },
+    {
+        href: "/inventory",
+        label: "Inventory",
+        onClick: () => accessInventoryClickHandler(),
+    },
+    { href: "/diamond-knowledge", label: "Diamond Knowledge" },
+    { href: "/contact", label: "Contact us" },
+];
 
     // Add Your Cart only for authenticated non-admin users
     const userNavItems = isAuthenticated() && user?.role !== "ADMIN"
