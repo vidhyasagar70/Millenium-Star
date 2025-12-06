@@ -1040,7 +1040,10 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-md min-w-lg mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto">
+            <DialogContent 
+                className="sm:max-w-md min-w-lg mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto"
+                onInteractOutside={(e) => e.preventDefault()}
+            >
                 <div className="flex flex-col items-center space-y-6 p-6">
                     {/* Header */}
                     <div className="text-center space-y-2">

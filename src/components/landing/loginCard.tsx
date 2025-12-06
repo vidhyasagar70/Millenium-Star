@@ -259,7 +259,10 @@ export function LoginModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-md w-[95vw] max-w-[450px] mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto">
+            <DialogContent 
+                className="sm:max-w-md w-[95vw] max-w-[450px] mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto"
+                onInteractOutside={(e) => e.preventDefault()}
+            >
                 <div className="flex flex-col items-center space-y-4 sm:space-y-6 p-4 sm:p-6">
                     <div className="text-center space-y-1 sm:space-y-2">
                         <DialogTitle className="text-2xl sm:text-3xl font-bold font-playfair tracking-wide text-gray-800">
