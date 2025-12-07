@@ -500,15 +500,15 @@ export function ClientDiamondTable({
                                 </TableCell>
                                 {/* Location Cell */}
                                 <TableCell className="text-sm">
-                                    {diamond.loc || "-"}
+                                    {diamond.loc || "N/A"}
                                 </TableCell>
                                 {/* Country of Origin Cell */}
                                 <TableCell className="text-sm">
-                                    {diamond.cop || "-"}
+                                    {diamond.cop || "N/A"}
                                 </TableCell>
                                 {/* Eye Clean Cell */}
                                 <TableCell className="text-sm">
-                                    {diamond.eyeClean || "-"}
+                                    {diamond.eyeClean || "N/A"}
                                 </TableCell>
                                 {/* Availability Cell */}
                                 <TableCell className="text-sm font-semibold py-2">
