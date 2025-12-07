@@ -332,14 +332,14 @@ export function ClientDiamondTable({
                                 Ratio
                             </TableHead>
                             {/* Location Header */}
-                            {/* <TableHead className="text-xs font-medium text-gray-700 text-center">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Loc."
                                     sortKey="loc"
                                     currentSorting={currentSorting}
                                     onSortChange={onSortChange}
                                 />
-                            </TableHead> */}
+                            </TableHead>
                             {/* Cop Header */}
                             {/* <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
@@ -350,14 +350,14 @@ export function ClientDiamondTable({
                                 />
                             </TableHead> */}
                             {/* Eye Clean Header */}
-                            {/* <TableHead className="text-xs font-medium text-gray-700 text-center">
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Eye Clean"
                                     sortKey="eyeClean"
                                     currentSorting={currentSorting}
                                     onSortChange={onSortChange}
                                 />
-                            </TableHead> */}
+                            </TableHead>
                             {/* Availability Header */}
                             <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
@@ -499,17 +499,17 @@ export function ClientDiamondTable({
                                         : "-"}
                                 </TableCell>
                                 {/* Location Cell */}
-                                {/* <TableCell className="text-sm">
+                                <TableCell className="text-sm">
                                     {diamond.loc || "N/A"}
-                                </TableCell> */}
+                                </TableCell>
                                 {/* Cop of Origin Cell */}
                                 {/* <TableCell className="text-sm">
                                     {diamond.cop || "N/A"}
                                 </TableCell> */}
                                 {/* Eye Clean Cell */}
-                                {/* <TableCell className="text-sm">
+                                <TableCell className="text-sm">
                                     {diamond.eyeClean || "N/A"}
-                                </TableCell> */}
+                                </TableCell>
                                 {/* Availability Cell */}
                                 <TableCell className="text-sm font-semibold py-2">
                                     {diamond.isAvailable ? (

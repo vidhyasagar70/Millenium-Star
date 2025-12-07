@@ -595,24 +595,30 @@ const CustomerManagementContent = () => {
                                                                             </TableRow>
                                                                         </TableHeader>
                                                                         <TableBody>
-                                                                            {cartItems.map((item) => (
+                                                                            {cartItems.map((item) => {
+                                                                                // Skip if diamond data is missing
+                                                                                if (!item.diamond) {
+                                                                                    return null;
+                                                                                }
+                                                                                return (
                                                                                 <TableRow key={item.cartItem._id}>
                                                                                     <TableCell className="text-sm flex items-center gap-2 px-4">
-                                                                                        {item.diamond.certificateNumber}
+                                                                                        {item.diamond.certificateNumber || '-'}
                                                                                         <EyeIcon
                                                                                             size={15}
                                                                                             className="cursor-pointer"
                                                                                             onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
                                                                                         />
                                                                                     </TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.shape}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.size}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.color}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.clarity}</TableCell>
-                                                                                    <TableCell className="text-sm font-semibold px-4">${item.diamond.price.toLocaleString()}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.shape || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.size || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.color || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.clarity || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm font-semibold px-4">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
                                                                                     <TableCell className="text-sm px-4">{formatDate(item.cartItem.addedAt)}</TableCell>
                                                                                 </TableRow>
-                                                                            ))}
+                                                                                );
+                                                                            })}
                                                                         </TableBody>
                                                                     </Table>
                                                                 </div>
@@ -644,21 +650,26 @@ const CustomerManagementContent = () => {
                                                                             </TableRow>
                                                                         </TableHeader>
                                                                         <TableBody>
-                                                                            {holdItems.map((item) => (
+                                                                            {holdItems.map((item) => {
+                                                                                // Skip if diamond data is missing
+                                                                                if (!item.diamond) {
+                                                                                    return null;
+                                                                                }
+                                                                                return (
                                                                                 <TableRow key={item.holdItem._id}>
                                                                                     <TableCell className="text-sm flex items-center gap-2 px-4">
-                                                                                        {item.diamond.certificateNumber}
+                                                                                        {item.diamond.certificateNumber || '-'}
                                                                                         <EyeIcon
                                                                                             size={15}
                                                                                             className="cursor-pointer"
                                                                                             onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
                                                                                         />
                                                                                     </TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.shape}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.size}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.color}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.clarity}</TableCell>
-                                                                                    <TableCell className="text-sm font-semibold px-4">${item.diamond.price.toLocaleString()}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.shape || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.size || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.color || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm px-4">{item.diamond.clarity || '-'}</TableCell>
+                                                                                    <TableCell className="text-sm font-semibold px-4">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
                                                                                     <TableCell className="px-4">
                                                                                         <span className={`inline-flex items-center gap-2 px-2 py-0.5 text-xs rounded ${
                                                                                             item.holdItem.status === "pending" ? "text-orange-600 bg-orange-50" :
@@ -699,7 +710,8 @@ const CustomerManagementContent = () => {
                                                                                         )}
                                                                                     </TableCell>
                                                                                 </TableRow>
-                                                                            ))}
+                                                                                );
+                                                                            })}
                                                                         </TableBody>
                                                                     </Table>
                                                                 </div>
