@@ -332,32 +332,32 @@ export function ClientDiamondTable({
                                 Ratio
                             </TableHead>
                             {/* Location Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
+                            {/* <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Loc."
                                     sortKey="loc"
                                     currentSorting={currentSorting}
                                     onSortChange={onSortChange}
                                 />
-                            </TableHead>
-                            {/* Country of Origin Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
+                            </TableHead> */}
+                            {/* Cop Header */}
+                            {/* <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Cop."
                                     sortKey="cop"
                                     currentSorting={currentSorting}
                                     onSortChange={onSortChange}
                                 />
-                            </TableHead>
+                            </TableHead> */}
                             {/* Eye Clean Header */}
-                            <TableHead className="text-xs font-medium text-gray-700 text-center">
+                            {/* <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
                                     title="Eye Clean"
                                     sortKey="eyeClean"
                                     currentSorting={currentSorting}
                                     onSortChange={onSortChange}
                                 />
-                            </TableHead>
+                            </TableHead> */}
                             {/* Availability Header */}
                             <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
