@@ -85,10 +85,14 @@ export function ClientDiamondGrid({
                 {diamonds.map((diamond: any) => (
                     <Card
                         key={diamond._id}
-                        className="hover:shadow-lg cursor-pointer transition-all duration-200 border h-full border-gray-200"
-                        onClick={() =>
-                            router.push(`/${diamond.certificateNumber}`)
-                        }
+                        className={`hover:shadow-lg transition-all duration-200 border h-full border-gray-200 ${
+                            isAuthenticated ? 'cursor-pointer' : 'cursor-default'
+                        }`}
+                        onClick={() => {
+                            if (isAuthenticated) {
+                                router.push(`/${diamond.certificateNumber}`);
+                            }
+                        }}
                     >
                         <CardContent className="p-2 sm:p-4">
                             {/* Image Placeholder */}
