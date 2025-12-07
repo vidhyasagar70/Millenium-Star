@@ -390,7 +390,7 @@ export const diamondColumns: ColumnDef<DiamondType>[] = [
     {
         accessorKey: "cop",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Country" />
+            <DataTableColumnHeader column={column} title="Cop" />
         ),
         cell: ({ row }) => (
             <div className="w-[80px]">

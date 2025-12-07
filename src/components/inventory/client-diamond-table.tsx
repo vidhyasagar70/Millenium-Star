@@ -502,7 +502,7 @@ export function ClientDiamondTable({
                                 <TableCell className="text-sm">
                                     {diamond.loc || "N/A"}
                                 </TableCell>
-                                {/* Country of Origin Cell */}
+                                {/* Cop of Origin Cell */}
                                 <TableCell className="text-sm">
                                     {diamond.cop || "N/A"}
                                 </TableCell>
