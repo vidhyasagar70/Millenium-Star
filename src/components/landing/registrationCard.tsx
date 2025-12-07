@@ -65,20 +65,44 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
             const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
             const scrollY = window.scrollY;
             
-            // Lock body scroll
+            // Lock body and html scroll
+            document.documentElement.style.overflow = 'hidden';
+            document.documentElement.style.position = 'fixed';
+            document.documentElement.style.width = '100%';
+            document.documentElement.style.top = `-${scrollY}px`;
+            
+            document.body.style.overflow = 'hidden';
             document.body.style.position = 'fixed';
             document.body.style.top = `-${scrollY}px`;
             document.body.style.width = '100%';
-            document.body.style.overflow = 'hidden';
             document.body.style.paddingRight = `${scrollBarWidth}px`;
             
+            // Prevent wheel and touch events on body
+            const preventScroll = (e: WheelEvent | TouchEvent) => {
+                if (!(e.target as HTMLElement).closest('[data-modal-content]')) {
+                    e.preventDefault();
+                }
+            };
+            
+            document.body.addEventListener('wheel', preventScroll, { passive: false });
+            document.body.addEventListener('touchmove', preventScroll, { passive: false });
+            
             return () => {
-                // Restore body scroll
+
+                document.documentElement.style.overflow = '';
+                document.documentElement.style.position = '';
+                document.documentElement.style.width = '';
+                document.documentElement.style.top = '';
+                
+                document.body.style.overflow = '';
                 document.body.style.position = '';
                 document.body.style.top = '';
                 document.body.style.width = '';
-                document.body.style.overflow = '';
                 document.body.style.paddingRight = '';
+   
+                document.body.removeEventListener('wheel', preventScroll);
+                document.body.removeEventListener('touchmove', preventScroll);
+                
                 window.scrollTo(0, scrollY);
             };
         }
@@ -1089,7 +1113,14 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                 </div>
 
                 {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-4">
+                <div 
+                    className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+                    data-modal-content
+                    style={{
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#d1d5db #f3f4f6'
+                    }}
+                >
                     {/* Step Content */}
                     {currentStep === 1 && renderRegisterStep()}
                     {currentStep === 2 && renderOtpStep()}
