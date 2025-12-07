@@ -499,17 +499,17 @@ export function ClientDiamondTable({
                                         : "-"}
                                 </TableCell>
                                 {/* Location Cell */}
-                                <TableCell className="text-sm">
+                                {/* <TableCell className="text-sm">
                                     {diamond.loc || "N/A"}
-                                </TableCell>
+                                </TableCell> */}
                                 {/* Cop of Origin Cell */}
-                                <TableCell className="text-sm">
+                                {/* <TableCell className="text-sm">
                                     {diamond.cop || "N/A"}
-                                </TableCell>
+                                </TableCell> */}
                                 {/* Eye Clean Cell */}
-                                <TableCell className="text-sm">
+                                {/* <TableCell className="text-sm">
                                     {diamond.eyeClean || "N/A"}
-                                </TableCell>
+                                </TableCell> */}
                                 {/* Availability Cell */}
                                 <TableCell className="text-sm font-semibold py-2">
                                     {diamond.isAvailable ? (
