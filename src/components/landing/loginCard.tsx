@@ -6,6 +6,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,31 @@ export function LoginModal({
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
+
+    // Prevent background scroll when modal is open
+    React.useEffect(() => {
+        if (isOpen) {
+            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+            const scrollY = window.scrollY;
+            
+            // Lock body scroll
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = `${scrollBarWidth}px`;
+            
+            return () => {
+                // Restore body scroll
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                window.scrollTo(0, scrollY);
+            };
+        }
+    }, [isOpen]);
 
     // Forgot Password states
     const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
@@ -258,10 +284,11 @@ export function LoginModal({
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleClose}>
+        <Dialog open={isOpen} onOpenChange={handleClose} modal>
             <DialogContent 
                 className="sm:max-w-md w-[95vw] max-w-[450px] mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto"
                 onInteractOutside={(e) => e.preventDefault()}
+                onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <div className="flex flex-col items-center space-y-4 sm:space-y-6 p-4 sm:p-6">
                     <div className="text-center space-y-1 sm:space-y-2">

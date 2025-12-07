@@ -373,6 +373,45 @@ export const diamondColumns: ColumnDef<DiamondType>[] = [
         ),
     },
 
+    // Location Column
+    {
+        accessorKey: "loc",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Location" />
+        ),
+        cell: ({ row }) => (
+            <div className="w-[80px]">
+                {row.original.loc || "-"}
+            </div>
+        ),
+    },
+
+    // Country of Origin/Purchase Column
+    {
+        accessorKey: "cop",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Country" />
+        ),
+        cell: ({ row }) => (
+            <div className="w-[80px]">
+                {row.original.cop || "-"}
+            </div>
+        ),
+    },
+
+    // Eye Clean Column
+    {
+        accessorKey: "eyeClean",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Eye Clean" />
+        ),
+        cell: ({ row }) => (
+            <div className="w-[80px]">
+                {row.original.eyeClean || "-"}
+            </div>
+        ),
+    },
+
     // Availability Column
     {
         accessorKey: "isAvailable", // Change from "Availabilty" to "isAvailable"

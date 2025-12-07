@@ -78,6 +78,9 @@ interface DiamondFormData {
     isAvailable: string;
     noBgm?: string; // Additional field for comments
     fromTab?: string; // Additional field
+    loc?: string; 
+    cop?: string; 
+    eyeClean?: string; 
 
     fancyColor: string;
     fancyColorOvertone: string;
@@ -113,6 +116,9 @@ const initialFormData: DiamondFormData = {
     isAvailable: "G",
     noBgm: "no",
     fromTab: "",
+    loc: "",
+    cop: "",
+    eyeClean: "",
     fancyColor: "X",
     fancyColorOvertone: "Other",
     fancyColorIntensity: "N",
@@ -285,6 +291,9 @@ export function AddDiamondModal({
                 isAvailable: formData.isAvailable,
                 ...(formData.noBgm && { noBgm: formData.noBgm }),
                 ...(formData.fromTab && { fromTab: formData.fromTab.trim() }),
+                ...(formData.loc && { loc: formData.loc.trim() }),
+                ...(formData.cop && { cop: formData.cop.trim() }),
+                ...(formData.eyeClean && { eyeClean: formData.eyeClean.trim() }),
             };
 
             console.log("📤 Sending API data:", apiData);
@@ -1260,6 +1269,44 @@ export function AddDiamondModal({
                                         ))}
                                     </SelectContent>
                                 </Select>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="loc">Location</Label>
+                                    <Input
+                                        id="loc"
+                                        value={formData.loc || ""}
+                                        onChange={(e) =>
+                                            handleInputChange("loc", e.target.value)
+                                        }
+                                        placeholder="Enter location"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="cop">Cop</Label>
+                                    <Input
+                                        id="cop"
+                                        value={formData.cop || ""}
+                                        onChange={(e) =>
+                                            handleInputChange("cop", e.target.value)
+                                        }
+                                        placeholder="Enter country"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="eyeClean">Eye Clean</Label>
+                                    <Input
+                                        id="eyeClean"
+                                        value={formData.eyeClean || ""}
+                                        onChange={(e) =>
+                                            handleInputChange("eyeClean", e.target.value)
+                                        }
+                                        placeholder="Yes/No"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

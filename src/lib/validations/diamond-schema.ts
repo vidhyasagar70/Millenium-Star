@@ -229,6 +229,12 @@ export const diamondSchema = z.object({
 
     isAvailable: z.enum(["G", "S", "M", "NA"]).optional().default("G"),
 
+    loc: z.string().optional(),
+
+    cop: z.string().optional(),
+
+    eyeClean: z.string().optional(),
+
     imageUrls: z.array(z.string()).optional().default([]),
 
     videoUrls: z.array(z.string()).optional().default([]),

@@ -331,6 +331,33 @@ export function ClientDiamondTable({
                             <TableHead className="text-sm font-semibold text-gray-700 text-center px-2">
                                 Ratio
                             </TableHead>
+                            {/* Location Header */}
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                <ClientTableColumnHeader
+                                    title="Loc."
+                                    sortKey="loc"
+                                    currentSorting={currentSorting}
+                                    onSortChange={onSortChange}
+                                />
+                            </TableHead>
+                            {/* Country of Origin Header */}
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                <ClientTableColumnHeader
+                                    title="Cop."
+                                    sortKey="cop"
+                                    currentSorting={currentSorting}
+                                    onSortChange={onSortChange}
+                                />
+                            </TableHead>
+                            {/* Eye Clean Header */}
+                            <TableHead className="text-xs font-medium text-gray-700 text-center">
+                                <ClientTableColumnHeader
+                                    title="Eye Clean"
+                                    sortKey="eyeClean"
+                                    currentSorting={currentSorting}
+                                    onSortChange={onSortChange}
+                                />
+                            </TableHead>
                             {/* Availability Header */}
                             <TableHead className="text-xs font-medium text-gray-700 text-center">
                                 <ClientTableColumnHeader
@@ -471,6 +498,19 @@ export function ClientDiamondTable({
                                           ).toFixed(2)
                                         : "-"}
                                 </TableCell>
+                                {/* Location Cell */}
+                                <TableCell className="text-sm">
+                                    {diamond.loc || "-"}
+                                </TableCell>
+                                {/* Country of Origin Cell */}
+                                <TableCell className="text-sm">
+                                    {diamond.cop || "-"}
+                                </TableCell>
+                                {/* Eye Clean Cell */}
+                                <TableCell className="text-sm">
+                                    {diamond.eyeClean || "-"}
+                                </TableCell>
+                                {/* Availability Cell */}
                                 <TableCell className="text-sm font-semibold py-2">
                                     {diamond.isAvailable ? (
                                         <Badge

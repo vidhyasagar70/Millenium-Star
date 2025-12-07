@@ -30,6 +30,9 @@ export interface ClientDiamond {
     isAvailable: string;
     lab?: string;
     shape?: string;
+    loc?: string;
+    cop?: string;
+    eyeClean?: string;
     createdAt: string;
     updatedAt: string;
 }

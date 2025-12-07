@@ -6,6 +6,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,6 +58,31 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
     const [isRegistrationComplete, setIsRegistrationComplete] = useState(false);
     const [submittedUserData, setSubmittedUserData] = useState<any>(null); // Store user data after submission
     const router = useRouter();
+
+    // Prevent background scroll when modal is open
+    React.useEffect(() => {
+        if (isOpen) {
+            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+            const scrollY = window.scrollY;
+            
+            // Lock body scroll
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = `${scrollBarWidth}px`;
+            
+            return () => {
+                // Restore body scroll
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                window.scrollTo(0, scrollY);
+            };
+        }
+    }, [isOpen]);
 
     // Form data states
     const [registerData, setRegisterData] = useState<RegisterData>({
@@ -1039,27 +1065,31 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleClose}>
+        <Dialog open={isOpen} onOpenChange={handleClose} modal>
             <DialogContent 
-                className="sm:max-w-md min-w-lg mx-auto bg-white rounded-lg shadow-xl border-0 max-h-[90vh] overflow-y-auto"
+                className="sm:max-w-md min-w-lg mx-auto bg-white rounded-lg shadow-xl border-0 h-[90vh] flex flex-col p-0"
                 onInteractOutside={(e) => e.preventDefault()}
+                onOpenAutoFocus={(e) => e.preventDefault()}
             >
-                <div className="flex flex-col items-center space-y-6 p-6">
-                    {/* Header */}
+                {/* Fixed Header */}
+                <div className="flex-shrink-0 border-b bg-white px-6 py-4">
                     <div className="text-center space-y-2">
                         <DialogTitle className="text-3xl font-bold font-playfair tracking-wide text-gray-800">
                             MILLENNIUM&nbsp;STAR
                         </DialogTitle>
-                        <h2 className="text-2xl font-light font-playfair text-gray-700">
+                        <DialogDescription className="text-2xl font-light font-playfair text-gray-700">
                             {getStepTitle()}
-                        </h2>
+                        </DialogDescription>
                         {currentStep < 4 && (
                             <div className="text-sm text-gray-500">
                                 Step {currentStep} of 3
                             </div>
                         )}
                     </div>
+                </div>
 
+                {/* Scrollable Content Area */}
+                <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-4">
                     {/* Step Content */}
                     {currentStep === 1 && renderRegisterStep()}
                     {currentStep === 2 && renderOtpStep()}
@@ -1068,14 +1098,15 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
 
                     {/* Error Message */}
                     {error && currentStep < 4 && (
-                        <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded w-full">
+                        <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded w-full mt-4">
                             {error}
                         </div>
                     )}
+                </div>
 
-                    {/* Navigation Buttons */}
-                    <div className="w-full space-y-3">
-                        {currentStep === 4 ? (
+                {/* Fixed Footer */}
+                <div className="flex-shrink-0 border-t bg-white px-6 py-4">
+                    <div className="space-y-3">{currentStep === 4 ? (
                             /* Success step buttons */
                             <div className="space-y-3">
                                 <Button
@@ -1126,23 +1157,23 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                                 Back
                             </Button>
                         )}
-                    </div>
 
-                    {/* Login Link - only show on non-success steps */}
-                    {currentStep < 4 && (
-                        <div className="text-center">
-                            <span className="text-gray-600">
-                                Already have an account?{" "}
-                            </span>
-                            <Link
-                                href="#"
-                                className="text-gray-800 font-medium hover:underline"
-                                onClick={handleClose}
-                            >
-                                Log in
-                            </Link>
-                        </div>
-                    )}
+                        {/* Login Link - only show on non-success steps */}
+                        {currentStep < 4 && (
+                            <div className="text-center pt-2">
+                                <span className="text-gray-600">
+                                    Already have an account?{" "}
+                                </span>
+                                <Link
+                                    href="#"
+                                    className="text-gray-800 font-medium hover:underline"
+                                    onClick={handleClose}
+                                >
+                                    Log in
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>
