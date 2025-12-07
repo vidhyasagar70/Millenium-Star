@@ -425,12 +425,14 @@ export default function ClientPage() {
               </div>
             ) : (
               <ClientDiamondGrid
-                diamonds={diamonds}
-                loading={loading}
-                pagination={pagination}
-                onPageChange={handlePageChange}
-                onPageSizeChange={handlePageSizeChange}
-              />
+  diamonds={diamonds}
+  loading={loading}
+  pagination={pagination}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
+  isAuthenticated={!!user}  
+  onLoginClick={handleLoginClick}    
+/>
             )}
           </div>
         </div>
@@ -583,12 +585,14 @@ export default function ClientPage() {
                   </div>
                 ) : (
                   <ClientDiamondGrid
-                    diamonds={diamonds}
-                    loading={loading}
-                    pagination={pagination}
-                    onPageChange={handlePageChange}
-                    onPageSizeChange={handlePageSizeChange}
-                  />
+  diamonds={diamonds}
+  loading={loading}
+  pagination={pagination}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
+  isAuthenticated={!!user}  
+  onLoginClick={handleLoginClick}    
+/>
                 )}
               </div>
             </div>

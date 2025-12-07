@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { DiamondImage } from "../diamond-image";
 import { ClientPagination } from "./client-pagination";
 
+
 interface PaginationData {
     currentPage: number;
     totalPages: number;
@@ -22,6 +23,8 @@ interface ClientDiamondGridProps {
     pagination: PaginationData;
     onPageChange: (page: number) => void;
     onPageSizeChange?: (pageSize: number) => void;
+    isAuthenticated?: boolean;
+    onLoginClick?: () => void;
 }
 
 export function ClientDiamondGrid({
@@ -30,6 +33,8 @@ export function ClientDiamondGrid({
     pagination,
     onPageChange,
     onPageSizeChange,
+    isAuthenticated = false,
+    onLoginClick = () => {},
 }: ClientDiamondGridProps) {
     const router = useRouter();
 
@@ -80,7 +85,7 @@ export function ClientDiamondGrid({
                 {diamonds.map((diamond: any) => (
                     <Card
                         key={diamond._id}
-                        className="hover:shadow-lg cursor-pointer transition-all  duration-200 border h-full border-gray-200"
+                        className="hover:shadow-lg cursor-pointer transition-all duration-200 border h-full border-gray-200"
                         onClick={() =>
                             router.push(`/${diamond.certificateNumber}`)
                         }
@@ -96,7 +101,7 @@ export function ClientDiamondGrid({
 
                             {/* Diamond Details */}
                             <div className="flex flex-col gap-1.5 sm:gap-3">
-                                {/* Color and Clarity */}
+                                {/* Color and Shape */}
                                 <div className="flex justify-between items-center text-xs sm:text-sm">
                                     <div className="font-medium text-gray-700 truncate">
                                         <span className="hidden sm:inline">Color: </span>
@@ -115,17 +120,21 @@ export function ClientDiamondGrid({
                                     </div>
                                 </div>
 
-                                {/* Price */}
-                                <div className="text-center">
-                                    <div className="text-sm sm:text-lg font-bold text-gray-900">
-                                        {formatPrice(diamond.price || 0)}
+                                {/* Price - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <div className="text-center">
+                                        <div className="text-sm sm:text-lg font-bold text-gray-900">
+                                            {formatPrice(diamond.price || 0)}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
-                                {/* Certificate Info */}
-                                <div className="text-[10px] sm:text-xs text-gray-500 text-center truncate">
-                                    ID: {diamond.certificateNumber}
-                                </div>
+                                {/* Certificate Info - Only show if authenticated */}
+                                {isAuthenticated && (
+                                    <div className="text-[10px] sm:text-xs text-gray-500 text-center truncate">
+                                        ID: {diamond.certificateNumber}
+                                    </div>
+                                )}
                             </div>
                         </CardContent>
                     </Card>
