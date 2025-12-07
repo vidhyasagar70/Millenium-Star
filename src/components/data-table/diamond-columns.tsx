@@ -381,7 +381,7 @@ export const diamondColumns: ColumnDef<DiamondType>[] = [
         ),
         cell: ({ row }) => (
             <div className="w-[80px]">
-                {row.original.loc || "-"}
+                {row.original.loc || "N/A"}
             </div>
         ),
     },
@@ -394,7 +394,7 @@ export const diamondColumns: ColumnDef<DiamondType>[] = [
         ),
         cell: ({ row }) => (
             <div className="w-[80px]">
-                {row.original.cop || "-"}
+                {row.original.cop || "N/A"}
             </div>
         ),
     },
@@ -407,7 +407,7 @@ export const diamondColumns: ColumnDef<DiamondType>[] = [
         ),
         cell: ({ row }) => (
             <div className="w-[80px]">
-                {row.original.eyeClean || "-"}
+                {row.original.eyeClean || "N/A"}
             </div>
         ),
     },
