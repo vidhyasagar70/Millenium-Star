@@ -153,6 +153,7 @@ const CustomerManagementContent = () => {
     const [actionLoading, setActionLoading] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
     const [pagination, setPagination] = useState<PaginationData>({
         currentPage: 1,
         totalPages: 1,
@@ -187,11 +188,11 @@ const CustomerManagementContent = () => {
             );
             const cartsData = await cartsRes.json();
 
-            // Fetch all holds
-            const holdsRes = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/diamonds/hold/admin/all`,
-                { credentials: "include" }
-            );
+            // Fetch holds with status filter
+            const holdsUrl = statusFilter === 'all' 
+                ? `${process.env.NEXT_PUBLIC_BASE_URL}/diamonds/hold/admin/all`
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/diamonds/hold/admin/all?status=${statusFilter}`;
+            const holdsRes = await fetch(holdsUrl, { credentials: "include" });
             const holdsData = await holdsRes.json();
 
             // Fetch all quotations
@@ -251,7 +252,7 @@ const CustomerManagementContent = () => {
         } finally {
             setLoading(false);
         }
-    }, [isAdmin, currentPage, pageSize]);
+    }, [isAdmin, currentPage, pageSize, statusFilter]);
 
     useEffect(() => {
         if (!authLoading) {
@@ -409,15 +410,30 @@ const CustomerManagementContent = () => {
                 .length,
         0
     );
+    const approvedHolds = allHolds.reduce(
+        (sum, hold) =>
+            sum +
+            hold.holdItems.filter((item) => item.holdItem.status === "approved")
+                .length,
+        0
+    );
+    const rejectedHolds = allHolds.reduce(
+        (sum, hold) =>
+            sum +
+            hold.holdItems.filter((item) => item.holdItem.status === "rejected")
+                .length,
+        0
+    );
 
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-medium">Cart Management</h1>
+                <h1 className="text-3xl font-semibold text-gray-900">Cart Management</h1>
                 <Button
                     onClick={fetchAllData}
                     variant="outline"
                     disabled={loading}
+                    className="border-gray-300"
                 >
                     <RefreshCw
                         className={`mr-2 h-4 w-4 ${
@@ -441,64 +457,121 @@ const CustomerManagementContent = () => {
             </Breadcrumb>
 
             {/* Stats Cards */}
-            <div className="flex items-center justify-start gap-5 my-10">
-                <StatsCard
-                    icon={User}
-                    iconColor="text-blue-500"
-                    iconBgColor="bg-blue-400/20"
-                    label="Total Customers"
-                    value={loading ? "..." : totalUsers}
-                    subtext="Registered users"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 my-6">
+                <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                            <Clock className="h-5 w-5 text-gray-700" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-600">Total Enquiries</span>
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900">{loading ? "..." : totalHolds}</div>
+                    <div className="text-xs text-gray-500 mt-1">All customer queries received</div>
+                </div>
 
-                {/* <StatsCard
-                    icon={ShoppingCart}
-                    iconColor="text-green-500"
-                    iconBgColor="bg-green-400/20"
-                    label="Items in Cart"
-                    value={loading ? "..." : totalCarts}
-                    subtext="Across all users"
-                /> */}
+                <div 
+                    className={`bg-white rounded-lg border-2 p-5 shadow-sm cursor-pointer transition-all ${
+                        statusFilter === 'pending' ? 'border-orange-400 bg-orange-50' : 'border-gray-200 hover:border-orange-300'
+                    }`}
+                    onClick={() => setStatusFilter('pending')}
+                >
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                            <Clock className="h-5 w-5 text-orange-600" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-600">Pending</span>
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900">{loading ? "..." : pendingHolds}</div>
+                    <div className="text-xs text-gray-500 mt-1">Waiting for further action</div>
+                </div>
 
-                <StatsCard
-                    icon={Hand}
-                    iconColor="text-orange-500"
-                    iconBgColor="bg-orange-400/20"
-                    label="Pending Holds"
-                    value={loading ? "..." : pendingHolds}
-                    subtext="Awaiting approval"
-                />
+                <div 
+                    className={`bg-white rounded-lg border-2 p-5 shadow-sm cursor-pointer transition-all ${
+                        statusFilter === 'approved' ? 'border-green-400 bg-green-50' : 'border-gray-200 hover:border-green-300'
+                    }`}
+                    onClick={() => setStatusFilter('approved')}
+                >
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-600">Approved</span>
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900">{loading ? "..." : approvedHolds}</div>
+                    <div className="text-xs text-gray-500 mt-1">All checks completed successfully</div>
+                </div>
 
-                <StatsCard
-                    icon={FileText}
-                    iconColor="text-purple-500"
-                    iconBgColor="bg-purple-400/20"
-                    label="Total Holds"
-                    value={loading ? "..." : totalHolds}
-                    subtext="All hold requests"
-                />
+                <div 
+                    className={`bg-white rounded-lg border-2 p-5 shadow-sm cursor-pointer transition-all ${
+                        statusFilter === 'rejected' ? 'border-red-400 bg-red-50' : 'border-gray-200 hover:border-red-300'
+                    }`}
+                    onClick={() => setStatusFilter('rejected')}
+                >
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                            <X className="h-5 w-5 text-red-600" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-600">Rejected</span>
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900">{loading ? "..." : rejectedHolds}</div>
+                    <div className="text-xs text-gray-500 mt-1">Request declined after review</div>
+                </div>
             </div>
 
+            {/* Show All Button */}
+            {statusFilter !== 'all' && (
+                <div className="flex justify-center">
+                    <Button
+                        onClick={() => setStatusFilter('all')}
+                        variant="outline"
+                        className="border-gray-300"
+                    >
+                        Show All Enquiries
+                    </Button>
+                </div>
+            )}
+
             {/* Users Table */}
-            <div className="rounded-lg border bg-white shadow-sm relative">
+            <div className="rounded-xl border border-gray-200 bg-white shadow-sm relative overflow-hidden">
                 <div className="overflow-x-auto">
                     <Table className="w-full">
                     <TableHeader>
-                        <TableRow className="bg-gray-50">
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '200px' }}>
+                        <TableRow className="bg-gray-100 border-b border-gray-200">
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '40px' }}>
+                                Sr
+                            </TableHead>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '140px' }}>
+                                Name
+                            </TableHead>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '120px' }}>
                                 Username
                             </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '250px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '180px' }}>
                                 Email
                             </TableHead>
-                            <TableHead className="text-xs text-left font-medium text-gray-700 px-4" style={{ width: '150px' }}>
-                                Phone Number
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '120px' }}>
+                                Phone
                             </TableHead>
-                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '120px' }}>
-                                Total Cart
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '120px' }}>
+                                Company
                             </TableHead>
-                            <TableHead className="text-xs text-center font-medium text-gray-700 px-4" style={{ width: '120px' }}>
-                                Total Hold
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '110px' }}>
+                                Business Type
+                            </TableHead>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '100px' }}>
+                                VAT Number
+                            </TableHead>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '150px' }}>
+                                Address
+                            </TableHead>
+                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-4 py-3" style={{ width: '70px' }}>
+                                Cart
+                            </TableHead>
+                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-4 py-3" style={{ width: '70px' }}>
+                                Hold
+                            </TableHead>
+                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-4 py-3" style={{ width: '70px' }}>
+                                View
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -507,7 +580,7 @@ const CustomerManagementContent = () => {
                         {users.length === 0 ? (
                             <TableRow>
                                 <TableCell
-                                    colSpan={5}
+                                    colSpan={12}
                                     className="text-center py-12 text-gray-500"
                                 >
                                     <User className="mx-auto h-8 w-8 text-gray-300" />
@@ -527,38 +600,64 @@ const CustomerManagementContent = () => {
                                 const phoneNumber = user.customerData
                                     ? `${user.customerData.countryCode || ''} ${user.customerData.phoneNumber || ''}`.trim()
                                     : '-';
+                                const company = user.customerData?.companyName || 'cts';
+                                const businessType = user.customerData?.businessType || 'Other';
+                                const vatNumber = user.customerData?.vatNumber || '23423232';
+                                const address = user.customerData?.address
+                                    ? `${user.customerData.address.street || ''}, ${user.customerData.address.city || ''}, ${user.customerData.address.state || ''}`.trim()
+                                    : 'avenue anciens...';
 
                                 return (
                                     <React.Fragment key={user._id}>
                                         <TableRow 
-                                            className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 cursor-pointer"
-                                            onClick={() => toggleRow(user._id)}
+                                            className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                                         >
-                                            <TableCell className="text-left text-sm px-4">
-                                                <div className="flex items-center gap-2">
-                                                    {isExpanded ? (
-                                                        <ChevronUp className="h-4 w-4 text-gray-500" />
-                                                    ) : (
-                                                        <ChevronDown className="h-4 w-4 text-gray-500" />
-                                                    )}
-                                                    <span className="font-medium">{user.username || '-'}</span>
-                                                </div>
+                                            <TableCell className="text-sm text-gray-900 px-4 py-3">
+                                                {serialNumber}
                                             </TableCell>
-                                            <TableCell className="text-left text-sm px-4">
+                                            <TableCell className="text-sm text-gray-900 px-4 py-3">
+                                                {fullName || user.username || '-'}
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                                {user.username || '-'}
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
                                                 {user.email || '-'}
                                             </TableCell>
-                                            <TableCell className="text-left text-sm px-4">
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
                                                 {phoneNumber}
                                             </TableCell>
-                                            <TableCell className="text-center text-sm font-semibold px-4">
-                                                <span className={cartItems.length > 0 ? "text-green-600" : "text-gray-400"}>
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                                {company}
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                                {businessType}
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                                {vatNumber}
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                                <span className="truncate block max-w-[130px]" title={address}>
+                                                    {address}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-4 py-3">
+                                                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700">
                                                     {cartItems.length}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="text-center text-sm font-semibold px-4">
-                                                <span className={holdItems.length > 0 ? "text-orange-600" : "text-gray-400"}>
+                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-4 py-3">
+                                                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-orange-100 text-orange-700">
                                                     {holdItems.length}
                                                 </span>
+                                            </TableCell>
+                                            <TableCell className="text-center px-4 py-3">
+                                                <ChevronDown 
+                                                    className={`h-5 w-5 text-gray-500 cursor-pointer mx-auto transition-transform ${
+                                                        isExpanded ? 'transform rotate-180' : ''
+                                                    }`}
+                                                    onClick={() => toggleRow(user._id)}
+                                                />
                                             </TableCell>
                                         </TableRow>
 
@@ -566,8 +665,8 @@ const CustomerManagementContent = () => {
                                         {isExpanded && (
                                             <TableRow>
                                                 <TableCell
-                                                    colSpan={5}
-                                                    className="bg-gray-50 p-6"
+                                                    colSpan={12}
+                                                    className="bg-gray-50 p-8"
                                                 >
                                                     <div className="space-y-6">
                                                         {/* Cart Items */}
@@ -582,45 +681,47 @@ const CustomerManagementContent = () => {
                                                                 </p>
                                                             ) : (
                                                                 <div className="rounded-lg border bg-white overflow-hidden">
-                                                                    <Table>
-                                                                        <TableHeader>
-                                                                            <TableRow className="bg-gray-100">
-                                                                                <TableHead className="text-xs px-4">Certificate No.</TableHead>
-                                                                                <TableHead className="text-xs px-4">Shape</TableHead>
-                                                                                <TableHead className="text-xs px-4">Size (ct)</TableHead>
-                                                                                <TableHead className="text-xs px-4">Color</TableHead>
-                                                                                <TableHead className="text-xs px-4">Clarity</TableHead>
-                                                                                <TableHead className="text-xs px-4">Price</TableHead>
-                                                                                <TableHead className="text-xs px-4">Added At</TableHead>
-                                                                            </TableRow>
-                                                                        </TableHeader>
-                                                                        <TableBody>
-                                                                            {cartItems.map((item) => {
-                                                                                // Skip if diamond data is missing
-                                                                                if (!item.diamond) {
-                                                                                    return null;
-                                                                                }
-                                                                                return (
-                                                                                <TableRow key={item.cartItem._id}>
-                                                                                    <TableCell className="text-sm flex items-center gap-2 px-4">
-                                                                                        {item.diamond.certificateNumber || '-'}
-                                                                                        <EyeIcon
-                                                                                            size={15}
-                                                                                            className="cursor-pointer"
-                                                                                            onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
-                                                                                        />
-                                                                                    </TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.shape || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.size || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.color || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.clarity || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm font-semibold px-4">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{formatDate(item.cartItem.addedAt)}</TableCell>
+                                                                    <div className="overflow-x-auto">
+                                                                        <Table>
+                                                                            <TableHeader>
+                                                                                <TableRow className="bg-gray-100">
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Certificate No.</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Shape</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Size (ct)</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Color</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Clarity</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Price</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Added At</TableHead>
                                                                                 </TableRow>
-                                                                                );
-                                                                            })}
-                                                                        </TableBody>
-                                                                    </Table>
+                                                                            </TableHeader>
+                                                                            <TableBody>
+                                                                                {cartItems.map((item) => {
+                                                                                    // Skip if diamond data is missing
+                                                                                    if (!item.diamond) {
+                                                                                        return null;
+                                                                                    }
+                                                                                    return (
+                                                                                    <TableRow key={item.cartItem._id} className="hover:bg-gray-50">
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">
+                                                                                            <span 
+                                                                                                className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+                                                                                                onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
+                                                                                            >
+                                                                                                {item.diamond.certificateNumber || '-'}
+                                                                                            </span>
+                                                                                        </TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.shape || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.size || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.color || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.clarity || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle font-semibold px-4 py-3">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{formatDate(item.cartItem.addedAt)}</TableCell>
+                                                                                    </TableRow>
+                                                                                    );
+                                                                                })}
+                                                                            </TableBody>
+                                                                        </Table>
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </div>
@@ -635,42 +736,43 @@ const CustomerManagementContent = () => {
                                                                 <p className="text-sm text-gray-500">No items on hold</p>
                                                             ) : (
                                                                 <div className="rounded-lg border bg-white overflow-hidden">
-                                                                    <Table>
-                                                                        <TableHeader>
-                                                                            <TableRow className="bg-gray-100">
-                                                                                <TableHead className="text-xs px-4">Certificate No.</TableHead>
-                                                                                <TableHead className="text-xs px-4">Shape</TableHead>
-                                                                                <TableHead className="text-xs px-4">Size (ct)</TableHead>
-                                                                                <TableHead className="text-xs px-4">Color</TableHead>
-                                                                                <TableHead className="text-xs px-4">Clarity</TableHead>
-                                                                                <TableHead className="text-xs px-4">Price</TableHead>
-                                                                                <TableHead className="text-xs px-4">Status</TableHead>
-                                                                                <TableHead className="text-xs px-4">Created At</TableHead>
-                                                                                <TableHead className="text-xs text-center px-4">Actions</TableHead>
-                                                                            </TableRow>
-                                                                        </TableHeader>
-                                                                        <TableBody>
-                                                                            {holdItems.map((item) => {
-                                                                                // Skip if diamond data is missing
-                                                                                if (!item.diamond) {
-                                                                                    return null;
-                                                                                }
-                                                                                return (
-                                                                                <TableRow key={item.holdItem._id}>
-                                                                                    <TableCell className="text-sm flex items-center gap-2 px-4">
-                                                                                        {item.diamond.certificateNumber || '-'}
-                                                                                        <EyeIcon
-                                                                                            size={15}
-                                                                                            className="cursor-pointer"
-                                                                                            onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
-                                                                                        />
-                                                                                    </TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.shape || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.size || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.color || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm px-4">{item.diamond.clarity || '-'}</TableCell>
-                                                                                    <TableCell className="text-sm font-semibold px-4">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
-                                                                                    <TableCell className="px-4">
+                                                                    <div className="overflow-x-auto">
+                                                                        <Table>
+                                                                            <TableHeader>
+                                                                                <TableRow className="bg-gray-100">
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Certificate No.</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Shape</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Size (ct)</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Color</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Clarity</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Price</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Status</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-left px-4 py-2">Created At</TableHead>
+                                                                                    <TableHead className="text-xs font-semibold text-center px-4 py-2">Actions</TableHead>
+                                                                                </TableRow>
+                                                                            </TableHeader>
+                                                                            <TableBody>
+                                                                                {holdItems.map((item) => {
+                                                                                    // Skip if diamond data is missing
+                                                                                    if (!item.diamond) {
+                                                                                        return null;
+                                                                                    }
+                                                                                    return (
+                                                                                    <TableRow key={item.holdItem._id} className="hover:bg-gray-50">
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">
+                                                                                            <span 
+                                                                                                className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+                                                                                                onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
+                                                                                            >
+                                                                                                {item.diamond.certificateNumber || '-'}
+                                                                                            </span>
+                                                                                        </TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.shape || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.size || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.color || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle px-4 py-3">{item.diamond.clarity || '-'}</TableCell>
+                                                                                        <TableCell className="text-sm text-left align-middle font-semibold px-4 py-3">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
+                                                                                        <TableCell className="text-left align-middle px-4 py-3">
                                                                                         <span className={`inline-flex items-center gap-2 px-2 py-0.5 text-xs rounded ${
                                                                                             item.holdItem.status === "pending" ? "text-orange-600 bg-orange-50" :
                                                                                             item.holdItem.status === "approved" ? "text-green-700 bg-green-50" :
@@ -682,8 +784,8 @@ const CustomerManagementContent = () => {
                                                                                             {item.holdItem.status.toUpperCase()}
                                                                                         </span>
                                                                                     </TableCell>
-                                                                                    <TableCell className="text-sm px-4">{formatDate(item.holdItem.createdAt)}</TableCell>
-                                                                                    <TableCell className="text-center px-4">
+                                                                                    <TableCell className="text-sm text-left align-middle px-4 py-3">{formatDate(item.holdItem.createdAt)}</TableCell>
+                                                                                    <TableCell className="text-center align-middle px-4 py-3">
                                                                                         {item.holdItem.status === "pending" && (
                                                                                             <div className="flex items-center justify-center space-x-2">
                                                                                                 <Button
@@ -714,6 +816,7 @@ const CustomerManagementContent = () => {
                                                                             })}
                                                                         </TableBody>
                                                                     </Table>
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </div>

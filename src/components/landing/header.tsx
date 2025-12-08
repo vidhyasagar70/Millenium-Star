@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { LoginModal } from "./loginCard";
 import { RegistrationModal } from "./registrationCard";
-import { Menu, X, User, LogOut, Settings, Power, ChevronDown } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, Power, ChevronDown, ShoppingCart, Hand, FileText } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
@@ -70,10 +70,11 @@ const Navbar = () => {
     { href: "/contact", label: "Contact us" },
 ];
 
-    // Add Your Cart only for authenticated non-admin users
-    const userNavItems = isAuthenticated() && user?.role !== "ADMIN"
-        ? [...baseNavItems, { href: "/yourcart", label: "Your Cart" }]
-        : baseNavItems;
+    const userPanelItems = [
+        { href: "/my-cart", label: "Your Cart", icon: ShoppingCart },
+        { href: "/my-hold", label: "My Hold", icon: Hand },
+        { href: "/my-quotations", label: "My Quotations", icon: FileText },
+    ];
 
     const adminDropdownItems = [
         { href: "/admin", label: "Admin Inventory" },
@@ -82,11 +83,7 @@ const Navbar = () => {
         { href: "/admin/quotations", label: "Offer Enquiry" },
     ];
 
-    const navItems = isAuthenticated()
-        ? user?.role === "ADMIN"
-            ? [...baseNavItems] // Admin uses dropdown, not flat items
-            : userNavItems
-        : baseNavItems;
+    const navItems = baseNavItems;
 
     const handleLoginClick = () => {
         setIsLoginModalOpen(true);
@@ -199,6 +196,45 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                             ))}
+                            {/* User Panel Dropdown - for authenticated non-admin users */}
+                            {isAuthenticated() && user?.role !== "ADMIN" && (
+                                <li>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button
+                                                className={`transition-colors duration-200 flex items-center gap-1 ${
+                                                    pathname.startsWith("/my-cart") || pathname.startsWith("/my-hold") || pathname.startsWith("/my-quotations")
+                                                        ? "bg-black rounded-xl px-2 py-1 pb-1.5 text-white font-semibold"
+                                                        : "text-black hover:text-black"
+                                                }`}
+                                            >
+                                                User Panel
+                                                <ChevronDown className="h-3 w-3" />
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="start" className="w-56">
+                                            {userPanelItems.map((item) => {
+                                                const Icon = item.icon;
+                                                return (
+                                                    <DropdownMenuItem key={item.href} asChild>
+                                                        <Link
+                                                            href={item.href}
+                                                            className={`cursor-pointer flex items-center gap-2 ${
+                                                                pathname === item.href
+                                                                    ? "bg-gray-100 font-semibold"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            <Icon className="h-4 w-4" />
+                                                            {item.label}
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                );
+                                            })}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </li>
+                            )}
                             {/* Admin Panel Dropdown */}
                             {isAuthenticated() && user?.role === "ADMIN" && (
                                 <li>
@@ -369,6 +405,36 @@ const Navbar = () => {
                                         </Link>
                                     </li>
                                 ))}
+                                
+                                {/* Mobile User Panel Section */}
+                                {isAuthenticated() && user?.role !== "ADMIN" && (
+                                    <li>
+                                        <div className="font-medium text-xs text-gray-500 px-3 py-2 uppercase">
+                                            User Panel
+                                        </div>
+                                        <ul className="space-y-1 ml-2">
+                                            {userPanelItems.map((item) => {
+                                                const Icon = item.icon;
+                                                return (
+                                                    <li key={item.href}>
+                                                        <Link
+                                                            href={item.href}
+                                                            className={`block py-2 px-3 rounded-md transition-colors duration-200 flex items-center gap-2 ${
+                                                                pathname === item.href
+                                                                    ? "bg-black text-white font-medium"
+                                                                    : "text-black hover:bg-gray-100"
+                                                            }`}
+                                                            onClick={closeMobileMenu}
+                                                        >
+                                                            <Icon className="h-4 w-4" />
+                                                            {item.label}
+                                                        </Link>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </li>
+                                )}
                                 
                                 {/* Mobile Admin Panel Dropdown */}
                                 {isAuthenticated() && user?.role === "ADMIN" && (
