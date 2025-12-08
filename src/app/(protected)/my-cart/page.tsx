@@ -252,39 +252,96 @@ const MyCartPage = () => {
                                 </Button>
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                               
-                                <div className="overflow-x-auto">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="bg-gray-100">
-                                                <TableHead className="text-xs font-semibold text-center w-[60px]">
-                                                    <div className="flex items-center justify-center">
-                                                        <Checkbox
-                                                            checked={selectedItems.length === cartItems.length && cartItems.length > 0}
-                                                            onCheckedChange={handleSelectAll}
-                                                            className="border-gray-400 data-[state=checked]:bg-black data-[state=checked]:border-black"
-                                                        />
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[140px]">Certificate No.</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[100px]">Shape</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[100px]">Size (ct)</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[80px]">Color</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[80px]">Clarity</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[110px]">Price/Ct</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[120px]">Total Price</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[120px]">Added At</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {cartItems.map((item) => {
-                                                if (!item.diamond) return null;
-                                                const isSelected = selectedItems.includes(item.diamond.certificateNumber);
-                                                return (
-                                                    <TableRow key={item.cartItem._id} className="hover:bg-gray-50">
-                                                        <TableCell className="text-center py-4">
-                                                            <div className="flex items-center justify-center">
+                            <>
+                                {/* Desktop View */}
+                                <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="bg-gray-100">
+                                                    <TableHead className="text-xs font-semibold text-center w-[60px]">
+                                                        <div className="flex items-center justify-center">
+                                                            <Checkbox
+                                                                checked={selectedItems.length === cartItems.length && cartItems.length > 0}
+                                                                onCheckedChange={handleSelectAll}
+                                                                className="border-gray-400 data-[state=checked]:bg-black data-[state=checked]:border-black"
+                                                            />
+                                                        </div>
+                                                    </TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[140px]">Certificate No.</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[100px]">Shape</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[100px]">Size (ct)</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[80px]">Color</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[80px]">Clarity</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[110px]">Price/Ct</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[120px]">Total Price</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[120px]">Added At</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {cartItems.map((item) => {
+                                                    if (!item.diamond) return null;
+                                                    const isSelected = selectedItems.includes(item.diamond.certificateNumber);
+                                                    return (
+                                                        <TableRow key={item.cartItem._id} className="hover:bg-gray-50">
+                                                            <TableCell className="text-center py-4">
+                                                                <div className="flex items-center justify-center">
+                                                                    <Checkbox
+                                                                        checked={isSelected}
+                                                                        onCheckedChange={(checked) => 
+                                                                            handleSelectItem(item.diamond.certificateNumber, checked as boolean)
+                                                                        }
+                                                                        className="border-gray-400 data-[state=checked]:bg-black data-[state=checked]:border-black"
+                                                                    />
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="text-sm text-center py-4">
+                                                                <span 
+                                                                    className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+                                                                    onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
+                                                                >
+                                                                    {item.diamond.certificateNumber || '-'}
+                                                                </span>
+                                                            </TableCell>
+                                                            <TableCell className="text-sm text-center py-4">{item.diamond.shape || '-'}</TableCell>
+                                                            <TableCell className="text-sm text-center py-4">{item.diamond.size || '-'}</TableCell>
+                                                            <TableCell className="text-sm text-center py-4">{item.diamond.color || '-'}</TableCell>
+                                                            <TableCell className="text-sm text-center py-4">{item.diamond.clarity || '-'}</TableCell>
+                                                            <TableCell className="text-sm text-center py-4">${item.diamond.pricePerCarat?.toLocaleString() || '0'}</TableCell>
+                                                            <TableCell className="text-sm font-semibold text-center py-4">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
+                                                            <TableCell className="text-sm text-center py-4">{formatDate(item.cartItem.addedAt)}</TableCell>
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </div>
+
+                                {/* Mobile View */}
+                                <div className="md:hidden bg-white rounded-lg shadow-sm overflow-hidden">
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full">
+                                            <thead>
+                                                <tr className="bg-gray-100">
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Select</th>
+                                                    <th className="text-xs font-semibold text-left px-3 py-2">Certificate</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Shape</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Size</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Color</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Clarity</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">$/Ct</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Total</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {cartItems.map((item) => {
+                                                    if (!item.diamond) return null;
+                                                    const isSelected = selectedItems.includes(item.diamond.certificateNumber);
+                                                    return (
+                                                        <tr key={item.cartItem._id} className="border-b border-gray-100 hover:bg-gray-50">
+                                                            <td className="text-center px-2 py-3">
                                                                 <Checkbox
                                                                     checked={isSelected}
                                                                     onCheckedChange={(checked) => 
@@ -292,30 +349,30 @@ const MyCartPage = () => {
                                                                     }
                                                                     className="border-gray-400 data-[state=checked]:bg-black data-[state=checked]:border-black"
                                                                 />
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell className="text-sm text-center py-4">
-                                                            <span 
-                                                                className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
-                                                                onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
-                                                            >
-                                                                {item.diamond.certificateNumber || '-'}
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell className="text-sm text-center py-4">{item.diamond.shape || '-'}</TableCell>
-                                                        <TableCell className="text-sm text-center py-4">{item.diamond.size || '-'}</TableCell>
-                                                        <TableCell className="text-sm text-center py-4">{item.diamond.color || '-'}</TableCell>
-                                                        <TableCell className="text-sm text-center py-4">{item.diamond.clarity || '-'}</TableCell>
-                                                        <TableCell className="text-sm text-center py-4">${item.diamond.pricePerCarat?.toLocaleString() || '0'}</TableCell>
-                                                        <TableCell className="text-sm font-semibold text-center py-4">${item.diamond.price?.toLocaleString() || '0'}</TableCell>
-                                                        <TableCell className="text-sm text-center py-4">{formatDate(item.cartItem.addedAt)}</TableCell>
-                                                    </TableRow>
-                                                );
-                                            })}
-                                        </TableBody>
-                                    </Table>
+                                                            </td>
+                                                            <td className="text-xs px-3 py-3">
+                                                                <span 
+                                                                    className="text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+                                                                    onClick={() => router.push(`/${item.diamond.certificateNumber}`)}
+                                                                >
+                                                                    {item.diamond.certificateNumber}
+                                                                </span>
+                                                            </td>
+                                                            <td className="text-xs text-center px-2 py-3">{item.diamond.shape}</td>
+                                                            <td className="text-xs text-center px-2 py-3">{item.diamond.size}</td>
+                                                            <td className="text-xs text-center px-2 py-3">{item.diamond.color}</td>
+                                                            <td className="text-xs text-center px-2 py-3">{item.diamond.clarity}</td>
+                                                            <td className="text-xs text-center px-2 py-3">${item.diamond.pricePerCarat?.toLocaleString()}</td>
+                                                            <td className="text-xs font-semibold text-center px-2 py-3">${item.diamond.price?.toLocaleString()}</td>
+                                                            <td className="text-xs text-center px-2 py-3 whitespace-nowrap">{formatDate(item.cartItem.addedAt)}</td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            </>
                         )}
 
                         {/* Pagination */}

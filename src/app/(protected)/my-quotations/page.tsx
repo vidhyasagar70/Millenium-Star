@@ -197,46 +197,87 @@ const MyQuotationsPage = () => {
                                 </p>
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                                
-                                <div className="overflow-x-auto">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="bg-gray-100">
-                                                <TableHead className="text-xs font-semibold text-center min-w-[140px]">Quotation ID</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[100px]">Carat</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[100px]">Pieces</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[120px]">Quote Price</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[120px]">Status</TableHead>
-                                                <TableHead className="text-xs font-semibold text-center min-w-[120px]">Submitted At</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {quotations.map((quotation) => (
-                                                <TableRow key={quotation.quotationId} className="hover:bg-gray-50">
-                                                    <TableCell className="text-sm text-center py-4 font-mono">
-                                                        {quotation.quotationId.slice(-8).toUpperCase()}
-                                                    </TableCell>
-                                                    <TableCell className="text-sm text-center py-4">{quotation.carat}</TableCell>
-                                                    <TableCell className="text-sm text-center py-4">{quotation.noOfPieces}</TableCell>
-                                                    <TableCell className="text-sm font-semibold text-center py-4">
-                                                        ${quotation.quotePrice?.toLocaleString() || '0'}
-                                                    </TableCell>
-                                                    <TableCell className="text-center py-4">
-                                                        <div className="flex items-center justify-center">
-                                                            <span className={`inline-flex items-center gap-2 px-2 py-1 text-xs rounded border ${getStatusColor(quotation.status)}`}>
+                            <>
+                                {/* Desktop View */}
+                                <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="bg-gray-100">
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[140px]">Quotation ID</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[100px]">Carat</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[100px]">Pieces</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[120px]">Quote Price</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[120px]">Status</TableHead>
+                                                    <TableHead className="text-xs font-semibold text-center min-w-[120px]">Submitted At</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {quotations.map((quotation) => (
+                                                    <TableRow key={quotation.quotationId} className="hover:bg-gray-50">
+                                                        <TableCell className="text-sm text-center py-4 font-mono">
+                                                            {quotation.quotationId.slice(-8).toUpperCase()}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-center py-4">{quotation.carat}</TableCell>
+                                                        <TableCell className="text-sm text-center py-4">{quotation.noOfPieces}</TableCell>
+                                                        <TableCell className="text-sm font-semibold text-center py-4">
+                                                            ${quotation.quotePrice?.toLocaleString() || '0'}
+                                                        </TableCell>
+                                                        <TableCell className="text-center py-4">
+                                                            <div className="flex items-center justify-center">
+                                                                <span className={`inline-flex items-center gap-2 px-2 py-1 text-xs rounded border ${getStatusColor(quotation.status)}`}>
+                                                                    {getStatusIcon(quotation.status)}
+                                                                    {quotation.status.toUpperCase()}
+                                                                </span>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-center py-4">{formatDate(quotation.submittedAt)}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </div>
+
+                                {/* Mobile View */}
+                                <div className="md:hidden bg-white rounded-lg shadow-sm overflow-hidden">
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full">
+                                            <thead>
+                                                <tr className="bg-gray-100">
+                                                    <th className="text-xs font-semibold text-left px-3 py-2">Quote ID</th>
+                                                    <th className="text-xs font-semibold text-center px-3 py-2">Carat</th>
+                                                    <th className="text-xs font-semibold text-center px-3 py-2">Pieces</th>
+                                                    <th className="text-xs font-semibold text-center px-3 py-2">Price</th>
+                                                    <th className="text-xs font-semibold text-center px-3 py-2">Status</th>
+                                                    <th className="text-xs font-semibold text-center px-3 py-2">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {quotations.map((quotation) => (
+                                                    <tr key={quotation.quotationId} className="border-b border-gray-100 hover:bg-gray-50">
+                                                        <td className="text-xs px-3 py-3 font-mono">
+                                                            {quotation.quotationId.slice(-8).toUpperCase()}
+                                                        </td>
+                                                        <td className="text-xs text-center px-3 py-3">{quotation.carat}</td>
+                                                        <td className="text-xs text-center px-3 py-3">{quotation.noOfPieces}</td>
+                                                        <td className="text-xs font-semibold text-center px-3 py-3">
+                                                            ${quotation.quotePrice?.toLocaleString() || '0'}
+                                                        </td>
+                                                        <td className="text-center px-3 py-3">
+                                                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded border ${getStatusColor(quotation.status)}`}>
                                                                 {getStatusIcon(quotation.status)}
                                                                 {quotation.status.toUpperCase()}
                                                             </span>
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell className="text-sm text-center py-4">{formatDate(quotation.submittedAt)}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
+                                                        </td>
+                                                        <td className="text-xs text-center px-3 py-3 whitespace-nowrap">{formatDate(quotation.submittedAt)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            </>
                         )}
 
                         {/* Pagination */}
