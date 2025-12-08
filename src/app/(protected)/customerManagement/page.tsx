@@ -534,59 +534,59 @@ const CustomerManagementContent = () => {
             {/* Users Table */}
             <div className="rounded-xl border border-gray-200 bg-white shadow-sm relative overflow-hidden">
                 <div className="overflow-x-auto">
-                    <Table className="w-full">
-                    <TableHeader>
-                        <TableRow className="bg-gray-100 border-b border-gray-200">
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '40px' }}>
+                    <table className="w-full table-fixed border-collapse">
+                    <thead>
+                        <tr className="bg-gray-100 border-b border-gray-200">
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '3%' }}>
                                 Sr
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '140px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '10%' }}>
                                 Name
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '120px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '9%' }}>
                                 Username
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '180px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '15%' }}>
                                 Email
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '120px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '10%' }}>
                                 Phone
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '120px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '10%' }}>
                                 Company
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '110px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '9%' }}>
                                 Business Type
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '100px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '8%' }}>
                                 VAT Number
-                            </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '150px' }}>
+                            </th>
+                            <th className="text-xs text-left font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '12%' }}>
                                 Address
-                            </TableHead>
-                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-3 py-2" style={{ width: '70px' }}>
+                            </th>
+                            <th className="text-xs text-center font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '5%' }}>
                                 Cart
-                            </TableHead>
-                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-3 py-2" style={{ width: '70px' }}>
+                            </th>
+                            <th className="text-xs text-center font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '5%' }}>
                                 Hold
-                            </TableHead>
-                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-3 py-2" style={{ width: '70px' }}>
+                            </th>
+                            <th className="text-xs text-center font-semibold text-gray-700 px-3 py-2 align-middle" style={{ width: '4%' }}>
                                 View
-                            </TableHead>
-                        </TableRow>
-                    </TableHeader>
+                            </th>
+                        </tr>
+                    </thead>
 
-                    <TableBody>
+                    <tbody>
                         {users.length === 0 ? (
-                            <TableRow>
-                                <TableCell
+                            <tr>
+                                <td
                                     colSpan={12}
                                     className="text-center py-12 text-gray-500"
                                 >
                                     <User className="mx-auto h-8 w-8 text-gray-300" />
                                     <span>No customers found.</span>
-                                </TableCell>
-                            </TableRow>
+                                </td>
+                            </tr>
                         ) : (
                             users.map((user, index) => {
                                 const isExpanded = expandedRows.has(user._id);
@@ -609,62 +609,62 @@ const CustomerManagementContent = () => {
 
                                 return (
                                     <React.Fragment key={user._id}>
-                                        <TableRow 
+                                        <tr 
                                             className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                                         >
-                                            <TableCell className="text-sm text-gray-900 px-3 py-2">
+                                            <td className="text-sm text-gray-900 px-3 py-2 align-middle" style={{ width: '3%' }}>
                                                 {serialNumber}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-900 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-900 px-3 py-2 align-middle" style={{ width: '10%' }}>
                                                 {fullName || user.username || '-'}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '9%' }}>
                                                 {user.username || '-'}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '15%' }}>
                                                 {user.email || '-'}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '10%' }}>
                                                 {phoneNumber}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '10%' }}>
                                                 {company}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '9%' }}>
                                                 {businessType}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '8%' }}>
                                                 {vatNumber}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
-                                                <span className="truncate block max-w-[130px]" title={address}>
+                                            </td>
+                                            <td className="text-sm text-gray-700 px-3 py-2 align-middle" style={{ width: '12%' }}>
+                                                <span className="truncate block" title={address}>
                                                     {address}
                                                 </span>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-center text-gray-900 font-semibold px-3 py-2 align-middle" style={{ width: '5%' }}>
                                                 <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700">
                                                     {cartItems.length}
                                                 </span>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-3 py-2">
+                                            </td>
+                                            <td className="text-sm text-center text-gray-900 font-semibold px-3 py-2 align-middle" style={{ width: '5%' }}>
                                                 <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-orange-100 text-orange-700">
                                                     {holdItems.length}
                                                 </span>
-                                            </TableCell>
-                                            <TableCell className="text-center px-3 py-2">
+                                            </td>
+                                            <td className="text-center px-3 py-2 align-middle" style={{ width: '4%' }}>
                                                 <ChevronDown 
                                                     className={`h-5 w-5 text-gray-500 cursor-pointer mx-auto transition-transform ${
                                                         isExpanded ? 'transform rotate-180' : ''
                                                     }`}
                                                     onClick={() => toggleRow(user._id)}
                                                 />
-                                            </TableCell>
-                                        </TableRow>
+                                            </td>
+                                        </tr>
 
                                         {/* Expanded Row Content */}
                                         {isExpanded && (
-                                            <TableRow>
-                                                <TableCell
+                                            <tr>
+                                                <td
                                                     colSpan={12}
                                                     className="bg-gray-50 p-8"
                                                 >
@@ -891,15 +891,15 @@ const CustomerManagementContent = () => {
                                                             )}
                                                         </div> */}
                                                     </div>
-                                                </TableCell>
-                                            </TableRow>
+                                                </td>
+                                            </tr>
                                         )}
                                     </React.Fragment>
                                 );
                             })
                         )}
-                    </TableBody>
-                </Table>
+                    </tbody>
+                </table>
                 </div>
                 
                 {/* Loading Overlay */}

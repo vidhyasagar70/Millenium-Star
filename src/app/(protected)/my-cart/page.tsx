@@ -214,19 +214,8 @@ const MyCartPage = () => {
             <UserStatusHandler>
                 <div className="min-h-screen bg-gray-50 py-12">
                     <Container className="max-w-[1800px]">
-                        <div className="flex items-center justify-between mb-6">
-                            <h1 className="text-3xl font-medium">Your Cart</h1>
-                            <Button
-                                onClick={() => handleRemoveFromCart(selectedItems)}
-                                disabled={removing || selectedItems.length === 0}
-                                className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white disabled:bg-gray-400"
-                            >
-                                <Trash2 className="h-4 w-4 " />
-                                {removing ? "Removing..." : "Remove Selected"}
-                            </Button>
-                        </div>
-
-                        <Breadcrumb className="mb-6">
+                       <div className="flex items-center mb-6">
+    <Breadcrumb className="mb-6">
                             <BreadcrumbList>
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href="/">HOME</BreadcrumbLink>
@@ -237,6 +226,18 @@ const MyCartPage = () => {
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
+    <Button
+        onClick={() => handleRemoveFromCart(selectedItems)}
+        disabled={removing || selectedItems.length === 0}
+        className="ml-auto flex items-center gap-2 bg-black hover:bg-gray-800 text-white disabled:bg-gray-400"
+    >
+        <Trash2 className="h-4 w-4" />
+        {removing ? "Removing..." : "Remove Selected"}
+    </Button>
+</div>
+
+
+                        
 
                         {cartItems.length === 0 ? (
                             <div className="bg-white rounded-lg shadow-sm p-12 text-center">

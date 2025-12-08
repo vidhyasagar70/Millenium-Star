@@ -185,10 +185,7 @@ const MyHoldPage = () => {
             <UserStatusHandler>
                 <div className="min-h-screen bg-gray-50 py-12">
                     <Container className="max-w-[1800px]">
-                        <div className="flex items-center justify-between mb-6">
-                            <h1 className="text-3xl font-medium">My Hold Requests</h1>
-                        </div>
-
+                       
                         <Breadcrumb className="mb-6">
                             <BreadcrumbList>
                                 <BreadcrumbItem>
