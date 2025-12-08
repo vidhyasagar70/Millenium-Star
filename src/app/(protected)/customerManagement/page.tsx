@@ -537,40 +537,40 @@ const CustomerManagementContent = () => {
                     <Table className="w-full">
                     <TableHeader>
                         <TableRow className="bg-gray-100 border-b border-gray-200">
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '40px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '40px' }}>
                                 Sr
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '140px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '140px' }}>
                                 Name
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '120px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '120px' }}>
                                 Username
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '180px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '180px' }}>
                                 Email
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '120px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '120px' }}>
                                 Phone
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '120px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '120px' }}>
                                 Company
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '110px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '110px' }}>
                                 Business Type
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '100px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '100px' }}>
                                 VAT Number
                             </TableHead>
-                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-4 py-3" style={{ width: '150px' }}>
+                            <TableHead className="text-xs text-left font-semibold text-gray-700 px-3 py-2" style={{ width: '150px' }}>
                                 Address
                             </TableHead>
-                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-4 py-3" style={{ width: '70px' }}>
+                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-3 py-2" style={{ width: '70px' }}>
                                 Cart
                             </TableHead>
-                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-4 py-3" style={{ width: '70px' }}>
+                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-3 py-2" style={{ width: '70px' }}>
                                 Hold
                             </TableHead>
-                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-4 py-3" style={{ width: '70px' }}>
+                            <TableHead className="text-xs text-center font-semibold text-gray-700 px-3 py-2" style={{ width: '70px' }}>
                                 View
                             </TableHead>
                         </TableRow>
@@ -612,46 +612,46 @@ const CustomerManagementContent = () => {
                                         <TableRow 
                                             className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                                         >
-                                            <TableCell className="text-sm text-gray-900 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-900 px-3 py-2">
                                                 {serialNumber}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-900 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-900 px-3 py-2">
                                                 {fullName || user.username || '-'}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 {user.username || '-'}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 {user.email || '-'}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 {phoneNumber}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 {company}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 {businessType}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 {vatNumber}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-700 px-4 py-3">
+                                            <TableCell className="text-sm text-gray-700 px-3 py-2">
                                                 <span className="truncate block max-w-[130px]" title={address}>
                                                     {address}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-4 py-3">
+                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-3 py-2">
                                                 <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700">
                                                     {cartItems.length}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-4 py-3">
+                                            <TableCell className="text-sm text-center text-gray-900 font-semibold px-3 py-2">
                                                 <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-orange-100 text-orange-700">
                                                     {holdItems.length}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="text-center px-4 py-3">
+                                            <TableCell className="text-center px-3 py-2">
                                                 <ChevronDown 
                                                     className={`h-5 w-5 text-gray-500 cursor-pointer mx-auto transition-transform ${
                                                         isExpanded ? 'transform rotate-180' : ''
