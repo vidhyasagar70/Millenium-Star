@@ -170,7 +170,9 @@ const MyQuotationsPage = () => {
             <UserStatusHandler>
                 <div className="min-h-screen bg-gray-50 py-12">
                     <Container className="max-w-[1800px]">
-                       
+                        <div className="flex items-center justify-between mb-6">
+                            <h1 className="text-3xl font-medium">My Quotations</h1>
+                        </div>
 
                         <Breadcrumb className="mb-6">
                             <BreadcrumbList>
@@ -196,12 +198,7 @@ const MyQuotationsPage = () => {
                             </div>
                         ) : (
                             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                                <div className="p-6 border-b">
-                                    <h2 className="text-xl font-semibold flex items-center gap-2">
-                                        <FileText className="h-5 w-5  text-black" />
-                                        Quotation Requests ({quotations.length})
-                                    </h2>
-                                </div>
+                                
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
