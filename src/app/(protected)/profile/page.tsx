@@ -775,7 +775,7 @@ const ProfilePage = () => {
                                 )}
 
                                 {/* Show message if no customer data */}
-                                {!profile.customerData && (
+                                {/* {!profile.customerData && (
                                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
                                         <Clock className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
                                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -788,7 +788,7 @@ const ProfilePage = () => {
                                             information.
                                         </p>
                                     </div>
-                                )}
+                                )} */}
 
                                 {/* Account Details */}
                                 <div className="border-t border-gray-200 pt-8 mt-8">
