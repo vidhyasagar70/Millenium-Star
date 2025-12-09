@@ -460,7 +460,7 @@ export default function ClientPage() {
               {/* Search with Button Inside */}
               <div className="flex-1 min-w-0 relative">
                 <Input
-                  placeholder="Search Diamond ID"
+                  placeholder="Diamond ID"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
