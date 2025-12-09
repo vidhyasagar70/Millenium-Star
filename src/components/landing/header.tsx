@@ -284,9 +284,9 @@ const Navbar = () => {
                                 alt="Logo"
                                 width={200}
                                 height={200}
-                                className="h-8 sm:h-14 w-auto"
+                                className="h-10 lg:h-14 w-auto"
                             />
-                            <h1 className="font-playfair text-sm sm:text-xl font-semibold whitespace-nowrap">
+                            <h1 className="font-playfair text-xs lg:text-xl font-semibold whitespace-nowrap">
                                 MILLENNIUM&nbsp;STAR
                             </h1>
                         </Link>
@@ -332,18 +332,18 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Right Section - Auth Buttons + Hamburger */}
-                    <div className="flex lg:hidden items-center gap-2">
+                    <div className="flex lg:hidden items-center gap-1.5 ml-2">
                         {!isAuthenticated() ? (
                             // Guest user - show Register & Login buttons
                             <>
                                 <button
-                                    className="bg-white text-black border border-black rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-100 transition-colors whitespace-nowrap"
+                                    className="bg-white text-black border border-black rounded-full px-2.5 py-1 text-xs font-medium hover:bg-gray-100 transition-colors whitespace-nowrap"
                                     onClick={handleRegistrationClick}
                                 >
                                     Register
                                 </button>
                                 <button
-                                    className="bg-black text-white border border-black rounded-full px-3 py-1.5 text-sm font-medium hover:bg-black/80 transition-colors whitespace-nowrap"
+                                    className="bg-black text-white border border-black rounded-full px-2.5 py-1 text-xs font-medium hover:bg-black/80 transition-colors whitespace-nowrap"
                                     onClick={handleLoginClick}
                                 >
                                     Login
@@ -352,11 +352,11 @@ const Navbar = () => {
                         ) : (
                             // Authenticated user - show username button
                             <button
-                                className="bg-white text-black border border-black rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-100 transition-colors flex items-center gap-1.5"
+                                className="bg-white text-black border border-black rounded-full px-2.5 py-1 text-xs font-medium hover:bg-gray-100 transition-colors flex items-center gap-1"
                                 onClick={handleProfileClick}
                             >
-                                <User className="h-3.5 w-3.5" />
-                                <span className="max-w-[80px] truncate">
+                                <User className="h-3 w-3" />
+                                <span className="max-w-[60px] truncate">
                                     {user?.username || "Profile"}
                                 </span>
                             </button>
@@ -364,14 +364,14 @@ const Navbar = () => {
 
                         {/* Hamburger Menu Button */}
                         <button
-                            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+                            className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
                             onClick={toggleMobileMenu}
                             aria-label="Toggle menu"
                         >
                             {isMobileMenuOpen ? (
-                                <X className="h-6 w-6 text-black" />
+                                <X className="h-5 w-5 text-black" />
                             ) : (
-                                <Menu className="h-6 w-6 text-black" />
+                                <Menu className="h-5 w-5 text-black" />
                             )}
                         </button>
                     </div>
