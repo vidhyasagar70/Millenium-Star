@@ -282,7 +282,7 @@ const MyQuotationsPage = () => {
 
                         {/* Pagination */}
                         {allQuotations.length > 0 && (
-                            <div className="mt-6">
+                            
                                 <ClientPagination
                                     pagination={pagination}
                                     onPageChange={handlePageChange}
@@ -291,7 +291,7 @@ const MyQuotationsPage = () => {
                                     showPageSizeSelector={true}
                                     recordLabel="items"
                                 />
-                            </div>
+                            
                         )}
                     </Container>
                 </div>

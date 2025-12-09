@@ -317,7 +317,7 @@ const MyHoldPage = () => {
 
                         {/* Pagination */}
                         {allHoldItems.length > 0 && (
-                            <div className="mt-6">
+                            <div>
                                 <ClientPagination
                                     pagination={pagination}
                                     onPageChange={handlePageChange}
