@@ -199,7 +199,7 @@ export function ClientPagination({
     };
 
     return (
-        <div className="flex flex-col gap-4 px-2 py-2">
+        <div className="flex flex-col gap-4 px-0 md:px-2 py-0 md:py-2">
             {/* Desktop View */}
             <div className="hidden md:flex md:items-center md:justify-between">
                 {/* Records info */}
@@ -258,11 +258,11 @@ export function ClientPagination({
             </div>
 
            {/* Mobile View - Left aligned with left/right arrows at ends */}
-            <div className="md:hidden flex items-center justify-between bg-[#f4f4f4] px-3 py-2 rounded">
+            <div className="md:hidden flex items-center justify-between bg-[#f4f4f4] px-3 py-1.5 rounded-lg md:rounded">
                 {/* Left arrow at the start */}
                 <Button
                     variant="ghost"
-                    className="h-9 w-9 p-0 flex items-center justify-center border-0 bg-transparent hover:bg-transparent"
+                    className="h-7 w-7 p-0 flex items-center justify-center border-0 bg-transparent hover:bg-transparent"
                     onClick={handlePreviousPage}
                     disabled={!hasPrevPage}
                 >
@@ -277,7 +277,7 @@ export function ClientPagination({
                 {/* Right arrow at the end */}
                 <Button
                     variant="ghost"
-                    className="h-9 w-9 p-0 flex items-center justify-center border-0 bg-transparent hover:bg-transparent"
+                    className="h-7 w-7 p-0 flex items-center justify-center border-0 bg-transparent hover:bg-transparent"
                     onClick={handleNextPage}
                     disabled={!hasNextPage}
                 >

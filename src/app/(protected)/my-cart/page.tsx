@@ -391,7 +391,7 @@ const MyCartPage = () => {
 
                         {/* Pagination */}
                         {allCartItems.length > 0 && (
-                            <div>
+                            <div className="md:mt-4 -mt-0">
                                 <ClientPagination
                                     pagination={pagination}
                                     onPageChange={handlePageChange}
