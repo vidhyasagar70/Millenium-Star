@@ -447,10 +447,10 @@ export default function ClientPage() {
     >
       <TabsList className="bg-white h-7 rounded-lg p-0.5">
         <TabsTrigger value="table" className="rounded-md px-1.5 h-6">
-          <TableIcon className="w-3.5 h-3.5" />
+          <TableIcon className="w-3 h-3.5" />
         </TabsTrigger>
         <TabsTrigger value="grid" className="rounded-md px-1.5 h-6">
-          <Grid3X3 className="w-3.5 h-3.5" />
+          <Grid3X3 className="w-3 h-3.5" />
         </TabsTrigger>
       </TabsList>
     </Tabs>
