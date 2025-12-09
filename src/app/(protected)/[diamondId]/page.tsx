@@ -358,12 +358,12 @@ export default function DiamondDetailPage() {
     return (
         <div className="min-h-screen bg-gray-50 pb-10">
             <Container>
-                <div className="py-8">
+                <div className="py-4 md:py-8">
                     {/* Diamond Details */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sticky top-30 ">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 sticky top-30">
                         {/* Diamond Image/Visual */}
                         <div className="relative">
-                            <div className="bg-transparent rounded-lg  sticky top-30">
+                            <div className="bg-transparent rounded-lg sticky top-30">
                                 <div className="aspect-square bg-transparent rounded-lg flex items-center justify-center">
                                     <DiamondImage
                                         certificateNumber={diamond._id}
@@ -371,7 +371,7 @@ export default function DiamondDetailPage() {
                                         clickable
                                     />
                                 </div>
-                                <div className="flex items-center justify-center gap-10  mt-1  ">
+                                <div className="flex items-center justify-center gap-4 md:gap-10 mt-1">
                                     <DiamondCertificate
                                         certificateNumber={diamond._id}
                                         index={0}
@@ -384,13 +384,13 @@ export default function DiamondDetailPage() {
                             </div>
                         </div>
                         {/* Diamond Information */}
-                        <div className="space-y-3">
+                        <div className="space-y-3 px-2 md:px-0">
                             {/* Header */}
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                                     {diamond.shape} Diamond
                                 </h1>
-                                <p className="text-gray-600">
+                                <p className="text-sm md:text-base text-gray-600">
                                     Certificate Number:{" "}
                                     {diamond.certificateNumber}
                                 </p>
@@ -411,22 +411,16 @@ export default function DiamondDetailPage() {
                             </div>
 
                             {/* Price */}
-                            <div className="bg-gray-50 p-4 rounded-lg">
+                            <div className="bg-gray-50 p-3 md:p-4 rounded-lg">
                                 <div className="flex items-center gap-3">
                                     {diamond.discount ? (
                                         <>
-                                            <span className="text-2xl font-bold text-gray-600">
+                                            <span className="text-xl md:text-2xl font-bold text-gray-600">
                                                 ${diamond.price}
                                             </span>
-                                            {/* <span className="text-lg text-gray-500 line-through">
-                                                ${diamond.rapList}
-                                            </span>
-                                            <Badge variant="outline">
-                                                {diamond.discount}% OFF
-                                            </Badge> */}
                                         </>
                                     ) : (
-                                        <span className="text-2xl font-bold text-gray-900">
+                                        <span className="text-xl md:text-2xl font-bold text-gray-900">
                                             ${diamond.price}
                                         </span>
                                     )}
@@ -434,13 +428,13 @@ export default function DiamondDetailPage() {
                             </div>
 
                             {/* Specifications */}
-                            <h1 className="text-lg font-semibold pl-1">
+                            <h1 className="text-base md:text-lg font-semibold pl-1">
                                 Specifications
                             </h1>
                             <Card className="py-3 px-0">
                                 <CardContent className="py-0 px-0">
-                                    <div className="flex flex-col text-base">
-                                        <div className="flex justify-between px-5 items-center py-4 border-b border-gray-100">
+                                    <div className="flex flex-col text-sm md:text-base">
+                                        <div className="flex justify-between px-3 md:px-5 items-center py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Carat:
                                             </span>
@@ -448,7 +442,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.size} ct
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Color:
                                             </span>
@@ -456,7 +450,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.color}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Clarity:
                                             </span>
@@ -464,7 +458,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.clarity}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Cut:
                                             </span>
@@ -472,7 +466,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.cut}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Polish:
                                             </span>
@@ -480,7 +474,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.polish}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Symmetry:
                                             </span>
@@ -488,7 +482,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.symmetry}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Fluorescence Color:
                                             </span>
@@ -497,7 +491,7 @@ export default function DiamondDetailPage() {
                                             </span>
                                         </div>
 
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Fancy Color:
                                             </span>
@@ -505,7 +499,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.fancyColor}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Fancy Color Intensity:
                                             </span>
@@ -513,7 +507,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.fancyColorIntensity}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Fancy Color Overtone:
                                             </span>
@@ -521,7 +515,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.fancyColorOvertone}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Laboratory:
                                             </span>
@@ -529,7 +523,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.laboratory}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Length:
                                             </span>
@@ -538,7 +532,7 @@ export default function DiamondDetailPage() {
                                                 mm
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Width:
                                             </span>
@@ -546,7 +540,7 @@ export default function DiamondDetailPage() {
                                                 {diamond.measurements?.width} mm
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+                                        <div className="flex justify-between items-center px-3 md:px-5 py-3 md:py-4 border-b border-gray-100">
                                             <span className="text-gray-600 font-bold">
                                                 Depth:
                                             </span>
@@ -558,26 +552,26 @@ export default function DiamondDetailPage() {
                                 </CardContent>
                             </Card>
 
-                            {/* Action Buttons */}
-                            <div className="flex gap-3">
+                            {/* Action Buttons - Mobile Optimized */}
+                            <div className="flex flex-col sm:flex-row gap-2 md:gap-3 px-2 md:px-0">
                                 <Button
-                                    className="flex-1 bg-gray-700 hover:bg-gray-900"
+                                    className="w-full sm:flex-1 bg-gray-700 hover:bg-gray-900 text-xs sm:text-sm md:text-base h-9 md:h-10"
                                     disabled={!diamond.isAvailable || isAddingToCart}
                                     onClick={handleAddToCart}
                                 >
-                                    <ShoppingCart className="w-4 h-4 mr-2" />
+                                    <ShoppingCart className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                                     {isAddingToCart ? "Adding..." : "Add to Cart"}
                                 </Button>
                                 <Button
-                                    className="flex-1 bg-gray-700 hover:bg-gray-900"
+                                    className="w-full sm:flex-1 bg-gray-700 hover:bg-gray-900 text-xs sm:text-sm md:text-base h-9 md:h-10"
                                     disabled={!diamond.isAvailable || isAddingToHold}
                                     onClick={handleAddToHold}
                                 >
-                                    <Hand className="w-4 h-4 mr-2" />
+                                    <Hand className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                                     {isAddingToHold ? "Holding..." : "Hold"}
                                 </Button>
                                 <Button
-                                    className="flex-1 bg-gray-700 hover:bg-gray-900"
+                                    className="w-full sm:flex-1 bg-gray-700 hover:bg-gray-900 text-xs sm:text-sm md:text-base h-9 md:h-10"
                                     disabled={!diamond.isAvailable}
                                     onClick={handleRequestQuote}
                                 >
@@ -592,8 +586,8 @@ export default function DiamondDetailPage() {
 
                 {/* Admin File Management Panel */}
                 {isAdmin() && (
-                    <div className="mt-12">
-                        <Separator className="mb-8" />
+                    <div className="mt-8 md:mt-12 px-2 md:px-0">
+                        <Separator className="mb-6 md:mb-8" />
                         <div className="space-y-6">
                             <div className="flex items-center gap-2">
                                 <Badge
@@ -602,12 +596,12 @@ export default function DiamondDetailPage() {
                                 >
                                     ADMIN PANEL
                                 </Badge>
-                                <h3 className="text-2xl font-bold text-gray-900">
+                                <h3 className="text-xl md:text-2xl font-bold text-gray-900">
                                     File Management
                                 </h3>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                                 <div>
                                     {renderFileList(
                                         fileUrls.images,
@@ -685,14 +679,14 @@ export default function DiamondDetailPage() {
                 )}
 
                 {/* Learn More Section */}
-                <div className="mt-12 mb-12 h-full flex flex-col justify-between text-center">
-                    <p className="text-gray-600 mb-4">
+                <div className="mt-8 md:mt-12 mb-8 md:mb-12 h-full flex flex-col justify-between text-center px-4 md:px-0">
+                    <p className="text-sm md:text-base text-gray-600 mb-4">
                         Want to learn more about diamond quality and
                         characteristics?
                     </p>
                     <Button
                         variant="outline"
-                        className="max-w-full mx-auto"
+                        className="max-w-full mx-auto text-sm md:text-base"
                         asChild
                     >
                         <a href="/diamond-knowledge">Learn about Diamonds</a>
