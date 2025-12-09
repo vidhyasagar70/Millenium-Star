@@ -496,9 +496,9 @@ export default function ClientPage() {
                       className="bg-black hover:bg-gray-800 text-white rounded-full h-7 px-1.5 flex items-center gap-0.5 disabled:opacity-50 min-w-0"
                     >
                       <ShoppingCart className="w-3 h-3" />
-                      {selected.length > 0 && (
+                      {/* {selected.length > 0 && (
                         <span className="text-[9px] font-medium leading-none">{selected.length}</span>
-                      )}
+                      )} */}
                     </Button>
 
                     <Button
@@ -508,9 +508,9 @@ export default function ClientPage() {
                       className="bg-gray-700 hover:bg-gray-900 text-white rounded-full h-7 px-1.5 flex items-center gap-0.5 disabled:opacity-50 min-w-0"
                     >
                       <Hand className="w-3 h-3" />
-                      {selected.length > 0 && (
+                      {/* {selected.length > 0 && (
                         <span className="text-[9px] font-medium leading-none">{selected.length}</span>
-                      )}
+                      )} */}
                     </Button>
                   </>
                 )}
@@ -522,9 +522,9 @@ export default function ClientPage() {
                   className="bg-gray-700 hover:bg-gray-900 text-white rounded-full h-7 px-1.5 flex items-center gap-0.5 disabled:opacity-50 min-w-0"
                 >
                   <GitCompare className="w-3 h-3" />
-                  {selected.length > 0 && (
+                  {/* {selected.length > 0 && (
                     <span className="text-[9px] font-medium leading-none">{selected.length}</span>
-                  )}
+                  )} */}
                 </Button>
 
                 <Button
