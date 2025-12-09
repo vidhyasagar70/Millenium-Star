@@ -324,7 +324,21 @@ const MyCartPage = () => {
                                         <table className="w-full">
                                             <thead>
                                                 <tr className="bg-gray-100">
-                                                    <th className="text-xs font-semibold text-center px-2 py-2">Select</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2 w-12">
+                                                        <div className="flex items-center justify-center">
+                                                            <Checkbox
+                                                                checked={selectedItems.length === cartItems.length && cartItems.length > 0}
+                                                                onCheckedChange={(checked) => {
+                                                                    if (checked) {
+                                                                        setSelectedItems(cartItems.map(item => item.diamond.certificateNumber));
+                                                                    } else {
+                                                                        setSelectedItems([]);
+                                                                    }
+                                                                }}
+                                                                className="border-gray-400 data-[state=checked]:bg-black data-[state=checked]:border-black"
+                                                            />
+                                                        </div>
+                                                    </th>
                                                     <th className="text-xs font-semibold text-left px-3 py-2">Certificate</th>
                                                     <th className="text-xs font-semibold text-center px-2 py-2">Shape</th>
                                                     <th className="text-xs font-semibold text-center px-2 py-2">Size</th>
