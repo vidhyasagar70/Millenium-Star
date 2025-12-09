@@ -305,7 +305,7 @@ function CartAndHoldContent() {
                         size="sm"
                     >
                         <Trash2 className="h-4 w-4" />
-                        Remove Selected
+                        Remove 
                     </Button>
                 </div>
                 <div className="overflow-x-auto">
