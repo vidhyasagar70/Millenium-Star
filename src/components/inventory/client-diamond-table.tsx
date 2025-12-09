@@ -540,15 +540,16 @@ export function ClientDiamondTable({
                         ))}
                     </TableBody>
                 </Table>
-            </div>
-
-            {/* Pagination */}
+                  {/* Pagination */}
             <ClientPagination
                 pagination={pagination}
                 onPageChange={onPageChange}
                 onPageSizeChange={onPageSizeChange}
                 pageSizeOptions={[10, 20, 30, 50, 100]}
             />
+            </div>
+
+          
         </div>
     );
 }

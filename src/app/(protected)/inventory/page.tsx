@@ -21,6 +21,7 @@ import {
   Filter,
   ShoppingCart,
   Hand,
+  Search,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -58,6 +59,7 @@ export default function ClientPage() {
   const [isAddingToHold, setIsAddingToHold] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+  const [mobileFilterSearch, setMobileFilterSearch] = useState("");
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
@@ -208,7 +210,6 @@ export default function ClientPage() {
       let failedCount = 0;
       const errors: string[] = [];
 
-      // Add each diamond to cart one by one
       for (const diamond of selected) {
         try {
           await clientDiamondAPI.addToCart(diamond.certificateNumber);
@@ -219,15 +220,14 @@ export default function ClientPage() {
         }
       }
 
-      // Show appropriate feedback
       if (successCount > 0 && failedCount === 0) {
         toast.success(`${successCount} diamond(s) added to cart successfully`);
-        setSelected([]); // Clear selection after successful add
+        setSelected([]);
       } else if (successCount > 0 && failedCount > 0) {
         toast.warning(
           `${successCount} diamond(s) added, ${failedCount} failed`
         );
-        setSelected([]); // Clear selection
+        setSelected([]);
       } else {
         toast.error(errors[0] || "Failed to add diamonds to cart");
       }
@@ -257,7 +257,6 @@ export default function ClientPage() {
       let failedCount = 0;
       const errors: string[] = [];
 
-      // Add each diamond to hold one by one
       for (const diamond of selected) {
         try {
           await clientDiamondAPI.addToHold(diamond.certificateNumber);
@@ -268,15 +267,14 @@ export default function ClientPage() {
         }
       }
 
-      // Show appropriate feedback
       if (successCount > 0 && failedCount === 0) {
         toast.success(`${successCount} diamond(s) added to hold successfully`);
-        setSelected([]); // Clear selection after successful add
+        setSelected([]);
       } else if (successCount > 0 && failedCount > 0) {
         toast.warning(
           `${successCount} diamond(s) added to hold, ${failedCount} failed`
         );
-        setSelected([]); // Clear selection
+        setSelected([]);
       } else {
         toast.error(errors[0] || "Failed to add diamonds to hold");
       }
@@ -425,14 +423,14 @@ export default function ClientPage() {
               </div>
             ) : (
               <ClientDiamondGrid
-  diamonds={diamonds}
-  loading={loading}
-  pagination={pagination}
-  onPageChange={handlePageChange}
-  onPageSizeChange={handlePageSizeChange}
-  isAuthenticated={!!user}  
-  onLoginClick={handleLoginClick}    
-/>
+                diamonds={diamonds}
+                loading={loading}
+                pagination={pagination}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
+                isAuthenticated={!!user}  
+                onLoginClick={handleLoginClick}    
+              />
             )}
           </div>
         </div>
@@ -537,7 +535,8 @@ export default function ClientPage() {
                       : "bg-white text-black border border-gray-300"
                   }`}
                 >
-                  <span className="text-xs">Filters</span>
+                  <Filter className="w-4 h-4" />
+                  
                 </Button>
               </div>
             </div>
@@ -546,9 +545,22 @@ export default function ClientPage() {
           {/* Two Column Layout - Mobile */}
           <div className="flex flex-1 min-h-0 overflow-hidden">
             {/* Left Column - Filter Sidebar (Conditional) */}
-
             {mobileFiltersOpen && (
               <div className="w-3/6 border-r overflow-y-auto bg-gray-50 max-h-full">
+                {/* Search Input in Mobile Filter Sidebar */}
+                <div className="sticky top-0 bg-white border-b border-gray-200 z-10 p-2">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search filters..."
+                      value={mobileFilterSearch}
+                      onChange={(e) => setMobileFilterSearch(e.target.value)}
+                      className="w-full pl-8 pr-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+                    />
+                  </div>
+                </div>
+
                 <ClientFilterSidebar
                   filters={filters}
                   onFiltersChange={handleFiltersChange}
@@ -585,14 +597,14 @@ export default function ClientPage() {
                   </div>
                 ) : (
                   <ClientDiamondGrid
-  diamonds={diamonds}
-  loading={loading}
-  pagination={pagination}
-  onPageChange={handlePageChange}
-  onPageSizeChange={handlePageSizeChange}
-  isAuthenticated={!!user}  
-  onLoginClick={handleLoginClick}    
-/>
+                    diamonds={diamonds}
+                    loading={loading}
+                    pagination={pagination}
+                    onPageChange={handlePageChange}
+                    onPageSizeChange={handlePageSizeChange}
+                    isAuthenticated={!!user}  
+                    onLoginClick={handleLoginClick}    
+                  />
                 )}
               </div>
             </div>
