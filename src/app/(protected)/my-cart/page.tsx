@@ -385,13 +385,27 @@ const MyCartPage = () => {
                                             </tbody>
                                         </table>
                                     </div>
+                                    
+                                    {/* Mobile Pagination - Inside same container */}
+                                    {allCartItems.length > 0 && (
+                                        <div className="border-t border-gray-100">
+                                            <ClientPagination
+                                                pagination={pagination}
+                                                onPageChange={handlePageChange}
+                                                onPageSizeChange={handlePageSizeChange}
+                                                pageSizeOptions={[10, 20, 30, 50]}
+                                                showPageSizeSelector={true}
+                                                recordLabel="items"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </>
                         )}
 
-                        {/* Pagination */}
+                        {/* Pagination - Desktop only */}
                         {allCartItems.length > 0 && (
-                            <div className="md:mt-4 -mt-0">
+                            <div className="hidden md:block md:mt-4">
                                 <ClientPagination
                                     pagination={pagination}
                                     onPageChange={handlePageChange}

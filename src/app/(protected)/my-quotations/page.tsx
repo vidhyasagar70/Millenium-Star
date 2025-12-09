@@ -246,11 +246,11 @@ const MyQuotationsPage = () => {
                                             <thead>
                                                 <tr className="bg-gray-100">
                                                     <th className="text-xs font-semibold text-left px-3 py-2">Quote ID</th>
-                                                    <th className="text-xs font-semibold text-center px-3 py-2">Carat</th>
-                                                    <th className="text-xs font-semibold text-center px-3 py-2">Pieces</th>
-                                                    <th className="text-xs font-semibold text-center px-3 py-2">Price</th>
-                                                    <th className="text-xs font-semibold text-center px-3 py-2">Status</th>
-                                                    <th className="text-xs font-semibold text-center px-3 py-2">Date</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Carat</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Pieces</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Price</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Status</th>
+                                                    <th className="text-xs font-semibold text-center px-2 py-2">Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -259,30 +259,44 @@ const MyQuotationsPage = () => {
                                                         <td className="text-xs px-3 py-3 font-mono">
                                                             {quotation.quotationId.slice(-8).toUpperCase()}
                                                         </td>
-                                                        <td className="text-xs text-center px-3 py-3">{quotation.carat}</td>
-                                                        <td className="text-xs text-center px-3 py-3">{quotation.noOfPieces}</td>
-                                                        <td className="text-xs font-semibold text-center px-3 py-3">
+                                                        <td className="text-xs text-center px-2 py-3">{quotation.carat}</td>
+                                                        <td className="text-xs text-center px-2 py-3">{quotation.noOfPieces}</td>
+                                                        <td className="text-xs font-semibold text-center px-2 py-3">
                                                             ${quotation.quotePrice?.toLocaleString() || '0'}
                                                         </td>
-                                                        <td className="text-center px-3 py-3">
+                                                        <td className="text-center px-2 py-3">
                                                             <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded border ${getStatusColor(quotation.status)}`}>
                                                                 {getStatusIcon(quotation.status)}
                                                                 {quotation.status.toUpperCase()}
                                                             </span>
                                                         </td>
-                                                        <td className="text-xs text-center px-3 py-3 whitespace-nowrap">{formatDate(quotation.submittedAt)}</td>
+                                                        <td className="text-xs text-center px-2 py-3 whitespace-nowrap">{formatDate(quotation.submittedAt)}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </div>
+                                    
+                                    {/* Mobile Pagination - Inside same container */}
+                                    {allQuotations.length > 0 && (
+                                        <div className="border-t border-gray-100">
+                                            <ClientPagination
+                                                pagination={pagination}
+                                                onPageChange={handlePageChange}
+                                                onPageSizeChange={handlePageSizeChange}
+                                                pageSizeOptions={[10, 20, 30, 50]}
+                                                showPageSizeSelector={true}
+                                                recordLabel="items"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </>
                         )}
 
-                        {/* Pagination */}
+                        {/* Pagination - Desktop only */}
                         {allQuotations.length > 0 && (
-                            
+                            <div className="hidden md:block md:mt-4">
                                 <ClientPagination
                                     pagination={pagination}
                                     onPageChange={handlePageChange}
@@ -291,7 +305,7 @@ const MyQuotationsPage = () => {
                                     showPageSizeSelector={true}
                                     recordLabel="items"
                                 />
-                            
+                            </div>
                         )}
                     </Container>
                 </div>
