@@ -546,20 +546,6 @@ export default function ClientPage() {
             {/* Left Column - Filter Sidebar (Conditional) */}
             {mobileFiltersOpen && (
               <div className="w-3/6 border-r overflow-y-auto bg-gray-50 max-h-full">
-                {/* Search Input in Mobile Filter Sidebar */}
-                <div className="sticky top-0 bg-white border-b border-gray-200 z-10 p-2">
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search filters..."
-                      value={mobileFilterSearch}
-                      onChange={(e) => setMobileFilterSearch(e.target.value)}
-                      className="w-full pl-8 pr-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                  </div>
-                </div>
-
                 <ClientFilterSidebar
                   filters={filters}
                   onFiltersChange={handleFiltersChange}
