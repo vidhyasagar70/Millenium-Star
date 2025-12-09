@@ -95,7 +95,7 @@ const HeroSection = () => {
                     <CarouselContent>
                         <CarouselItem>
                             <div className="flex flex-col lg:flex-row items-center justify-start w-full h-full">
-                                <div className="px-4 lg:px-6 w-full lg:w-auto">
+                                <div className="px-3 lg:px-6 w-full lg:w-auto">
                                     <TextAnimation
                                         text="Certified & Non Certified Diamonds Designed for Business"
                                         className={`mb-4 lg:mb-6 text-left max-w-lg text-black font-semibold text-2xl md:text-4xl lg:text-5xl font-abhaya`}
