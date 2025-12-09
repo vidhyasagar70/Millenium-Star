@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ClientDiamond } from "@/types/client/diamond";
 import { clientDiamondAPI } from "@/services/client-api";
 
-
 import { X, ArrowLeft } from "lucide-react";
 
 const diamondFields = [
@@ -149,12 +148,12 @@ function ComparePageContent() {
 
   if (diamonds.length < 2) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-lg text-black mb-4">Select at least two diamonds to compare.</p>
+          <p className="text-base md:text-lg text-black mb-4">Select at least two diamonds to compare.</p>
           <button
             onClick={() => router.push(diamondTablePath)}
-            className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-200 hover:text-black"
+            className="px-4 md:px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-200 hover:text-black text-sm md:text-base"
           >
             Back to Diamond List
           </button>
@@ -164,60 +163,60 @@ function ComparePageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-6 px-4">
+    <div className="min-h-screen bg-white py-4 md:py-6 px-2 md:px-4">
       <div className="max-w-[1600px] mx-auto">
         {/* Back to List button above the table */}
-        <div className="mb-6 flex items-center">
+        <div className="mb-4 md:mb-6 flex items-center">
           <button
             onClick={() => router.push(diamondTablePath)}
-            className="flex items-center gap-1 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200 transition-colors border border-black text-sm"
+            className="flex items-center gap-1 px-3 md:px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200 transition-colors border border-black text-xs md:text-sm"
           >
-            <ArrowLeft className="w-4 h-4 text-black" />
-            Back to List
+            <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 text-black" />
+            <span className="hidden sm:inline">Back to List</span>
+            <span className="sm:hidden">Back</span>
           </button>
         </div>
 
-        {/* Comparison Table */}
+        {/* Comparison Table - Horizontal Scroll for All Devices */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border border-black border-collapse">
               <thead>
                 <tr className="bg-white">
-                  <th className="sticky left-0 z-20 bg-white text-black px-6 py-4 text-left font-semibold min-w-[180px] border border-black">
-                    <div className="flex flex-col items-center justify-center" style={{ minHeight: '70px' }}>
+                  <th className="sticky left-0 z-20 bg-white text-black px-3 md:px-6 py-3 md:py-4 text-left font-semibold min-w-[120px] md:min-w-[180px] border border-black">
+                    <div className="flex flex-col items-center justify-center" style={{ minHeight: '60px' }}>
                       <img
                         src="/assets/logo.png"
                         alt="Logo"
-                        style={{ width: '80px', height: 'auto', marginBottom: '0.5rem' }}
+                        className="w-12 md:w-20 h-auto mb-1 md:mb-2"
                       />
-                      <span className="font-playfair text-xs font-semibold whitespace-nowrap">MILLENNIUM&nbsp;STAR</span>
+                      <span className="font-playfair text-[10px] md:text-xs font-semibold whitespace-nowrap">MILLENNIUM&nbsp;STAR</span>
                     </div>
                   </th>
                   {diamonds.map((diamond, idx) => (
                     <th
                       key={diamond._id}
-                      className="bg-white text-black px-6 py-4 min-w-[220px] border border-black"
+                      className="bg-white text-black px-3 md:px-6 py-3 md:py-4 min-w-[160px] md:min-w-[220px] border border-black"
                     >
-                      <div className="flex flex-col items-center gap-3">
+                      <div className="flex flex-col items-center gap-2 md:gap-3">
                         {/* Diamond Image */}
-                        <div className="relative w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div className="relative w-20 h-20 md:w-32 md:h-32 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                           <img
                             src={getShapeImage(diamond.shape || "Round")}
                             alt={diamond.shape || "Diamond"}
-                            className="w-24 h-24 object-contain"
+                            className="w-16 h-16 md:w-24 md:h-24 object-contain"
                             onError={(e) => {
                               (e.target as HTMLImageElement).src = "/assets/diamondShapes/others.png";
                             }}
                           />
                         </div>
-                        {/* Diamond Label removed */}
                         {/* Remove Button */}
                         <button
                           onClick={() => handleRemoveDiamond(diamond._id)}
                           className="text-black hover:text-red-400 transition-colors"
                           title="Remove from comparison"
                         >
-                          <X className="w-6 h-6" />
+                          <X className="w-5 h-5 md:w-6 md:h-6" />
                         </button>
                       </div>
                     </th>
@@ -230,13 +229,13 @@ function ComparePageContent() {
                     key={field.key}
                     className="bg-white"
                   >
-                    <td className="sticky left-0 z-10 px-6 py-3 font-semibold text-black border border-black bg-white">
+                    <td className="sticky left-0 z-10 px-3 md:px-6 py-2 md:py-3 font-semibold text-black border border-black bg-white text-xs md:text-base">
                       {field.label}
                     </td>
                     {diamonds.map((diamond) => (
                       <td
                         key={diamond._id}
-                        className="px-6 py-3 text-center text-black border border-black bg-white"
+                        className="px-3 md:px-6 py-2 md:py-3 text-center text-black border border-black bg-white text-xs md:text-base"
                       >
                         {getDiamondFieldValue(diamond, field.key)}
                       </td>
