@@ -222,7 +222,7 @@ const MyCartPage = () => {
                                 className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white disabled:bg-gray-400"
                             >
                                 <Trash2 className="h-4 w-4 " />
-                                {removing ? "Removing..." : "Remove Selected"}
+                                {removing ? "Removing..." : "Remove"}
                             </Button>
                         </div>
 
