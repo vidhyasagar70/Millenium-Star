@@ -7,7 +7,7 @@ interface User {
     username: string;
     email: string;
     status: "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE";
-    role: "USER" | "ADMIN";
+    role: "USER" | "ADMIN" | "SUPER_ADMIN";
     kyc: object | null; // Define a more specific KYC interface if needed
 }
 
@@ -36,7 +36,7 @@ class AuthService {
     async login(credentials: LoginRequest): Promise<User> {
         try {
             const response = await axios.post<LoginSuccessResponse>(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+                `https://millennium-star-inventory-service-dev.caratlogic.com/api/auth/login`,
                 credentials,
                 {
                     withCredentials: true, // Important for cookie-based auth with Axios

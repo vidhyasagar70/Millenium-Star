@@ -97,7 +97,7 @@ export function LoginModal({
             console.log("Using API URL:", process.env.NEXT_PUBLIC_BASE_URL);
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/users/login`,
+                `https://millennium-star-inventory-service-dev.caratlogic.com/api/users/login`,
                 {
                     method: "POST",
                     headers: {
@@ -126,12 +126,14 @@ export function LoginModal({
 
             if (result.success) {
                 const userData = {
-                    id: result.data.user._id,
+                    _id: result.data.user._id,
                     username: result.data.user.username,
                     email: result.data.user.email,
                     status: result.data.user.status,
                     role: result.data.user.role,
                     kyc: result.data.user.kyc || null,
+                    createdAt: result.data.user.createdAt,
+                    updatedAt: result.data.user.updatedAt,
                     loggedIn: true,
                     timestamp: new Date().toISOString(),
                 };
@@ -141,7 +143,7 @@ export function LoginModal({
 
                 onClose();
 
-                if (result.data.user.role === "ADMIN") {
+                if (result.data.user.role === "ADMIN" || result.data.user.role === "SUPER_ADMIN") {
                     window.location.href = "/admin";
                 } else {
                     window.location.href = "/inventory";

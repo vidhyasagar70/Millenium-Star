@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 interface RouteGuardProps {
     children: React.ReactNode;
-    requiredRole?: "USER" | "ADMIN";
+    requiredRole?: "USER" | "ADMIN" | "SUPER_ADMIN";
     requiredStatus?: "DEFAULT" | "PENDING" | "APPROVED" | "REJECTED";
     fallbackPath?: string;
     loadingComponent?: React.ReactNode;
@@ -122,8 +122,8 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
                 }
             }
 
-            // Admin bypass logic - if user is ADMIN and bypass is allowed, skip all checks
-            if (allowAdminBypass && user?.role === "ADMIN") {
+            // Admin bypass logic - if user is ADMIN or SUPER_ADMIN and bypass is allowed, skip all checks
+            if (allowAdminBypass && (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN")) {
                 return;
             }
 
@@ -167,8 +167,8 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
         return null; // Will redirect
     }
 
-    // Admin bypass logic - if user is ADMIN and bypass is allowed, render children
-    if (allowAdminBypass && user?.role === "ADMIN") {
+    // Admin bypass logic - if user is ADMIN or SUPER_ADMIN and bypass is allowed, render children
+    if (allowAdminBypass && (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN")) {
         return <>{children}</>;
     }
 
@@ -212,7 +212,11 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 // Specific guard components for common use cases
 export const AdminGuard: React.FC<{ children: React.ReactNode }> = ({
     children,
-}) => <RouteGuard requiredRole="ADMIN">{children}</RouteGuard>;
+}) => <RouteGuard requiredRole="ADMIN" allowAdminBypass={true}>{children}</RouteGuard>;
+
+export const SuperAdminGuard: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => <RouteGuard requiredRole="SUPER_ADMIN">{children}</RouteGuard>;
 
 // Updated: Allow both ADMIN users and APPROVED USER users with login message
 export const InventoryGuard: React.FC<{ children: React.ReactNode }> = ({

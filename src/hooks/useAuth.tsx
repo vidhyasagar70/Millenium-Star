@@ -6,7 +6,7 @@ export interface User {
     username: string;
     email: string;
     status: "DEFAULT" | "PENDING" | "APPROVED" | "REJECTED";
-    role: "USER" | "ADMIN";
+    role: "USER" | "ADMIN" | "SUPER_ADMIN";
     kyc?: {
         firstName: string;
         lastName: string;
@@ -85,7 +85,7 @@ export const useAuth = () => {
             setAuthState((prev) => ({ ...prev, loading: true, error: null }));
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/users/profile`,
+                `https://millennium-star-inventory-service-dev.caratlogic.com/api/users/profile`,
                 {
                     method: "GET",
                     credentials: "include",
@@ -109,9 +109,15 @@ export const useAuth = () => {
 
             const result = await response.json();
 
-            if (result.success && result.data?.user) {
+            // Support both result.data.user and result.data formats
+            let userObj = null;
+            if (result.success && result.data) {
+                userObj = result.data.user ? result.data.user : result.data;
+            }
+
+            if (userObj && userObj.role) {
                 const userData = {
-                    ...result.data.user,
+                    ...userObj,
                     timestamp: new Date().toISOString(),
                 };
 
@@ -124,7 +130,7 @@ export const useAuth = () => {
                     error: null,
                 });
             } else {
-                throw new Error("Invalid response format");
+                throw new Error("Invalid response format: missing user role");
             }
         } catch (error) {
             console.error("Error fetching user profile:", error);
@@ -145,7 +151,7 @@ export const useAuth = () => {
             setAuthState((prev) => ({ ...prev, loading: true }));
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/users/logout`,
+                `https://millennium-star-inventory-service-dev.caratlogic.com/api/users/logout`,
                 {
                     method: "POST",
                     credentials: "include",

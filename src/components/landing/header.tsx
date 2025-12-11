@@ -81,6 +81,7 @@ const Navbar = () => {
         { href: "/admin/members", label: "Members" },
         { href: "/customerManagement", label: "Cart Management" },
         { href: "/admin/quotations", label: "Offer Enquiry" },
+        ...(user?.role === "SUPER_ADMIN" ? [{ href: "/admin/create-admin", label: "Create Admin" }] : []),
     ];
 
     const navItems = baseNavItems;
@@ -197,7 +198,7 @@ const Navbar = () => {
                                 </li>
                             ))}
                             {/* User Panel Dropdown - for authenticated non-admin users */}
-                            {isAuthenticated() && user?.role !== "ADMIN" && (
+                            {isAuthenticated() && user?.role !== "ADMIN" && user?.role !== "SUPER_ADMIN" && (
                                 <li>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -236,7 +237,7 @@ const Navbar = () => {
                                 </li>
                             )}
                             {/* Admin Panel Dropdown */}
-                            {isAuthenticated() && user?.role === "ADMIN" && (
+                            {isAuthenticated() && (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN") && (
                                 <li>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -407,7 +408,7 @@ const Navbar = () => {
                                 ))}
                                 
                                 {/* Mobile User Panel Section */}
-                                {isAuthenticated() && user?.role !== "ADMIN" && (
+                                {isAuthenticated() && user?.role !== "ADMIN" && user?.role !== "SUPER_ADMIN" && (
                                     <li>
                                         <div className="font-medium text-xs text-gray-500 px-3 py-2 uppercase">
                                             User Panel
