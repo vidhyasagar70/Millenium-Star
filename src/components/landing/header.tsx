@@ -198,7 +198,7 @@ const Navbar = () => {
                                 </li>
                             ))}
                             {/* User Panel Dropdown - for authenticated non-admin users */}
-                            {isAuthenticated() && user?.role !== "ADMIN" && user?.role !== "SUPER_ADMIN" && (
+                            {isAuthenticated() && user?.role === "USER" && (
                                 <li>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -408,7 +408,7 @@ const Navbar = () => {
                                 ))}
                                 
                                 {/* Mobile User Panel Section */}
-                                {isAuthenticated() && user?.role !== "ADMIN" && user?.role !== "SUPER_ADMIN" && (
+                                {isAuthenticated() && user?.role === "USER" && (
                                     <li>
                                         <div className="font-medium text-xs text-gray-500 px-3 py-2 uppercase">
                                             User Panel
