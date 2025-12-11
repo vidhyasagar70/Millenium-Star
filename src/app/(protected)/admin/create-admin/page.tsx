@@ -372,27 +372,27 @@ export default function CreateAdminPage() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow className="bg-gray-100">
-                                            <TableHead className="font-semibold">Sr. No.</TableHead>
-                                            <TableHead className="font-semibold">Username</TableHead>
-                                            <TableHead className="font-semibold">Email</TableHead>
-                                            <TableHead className="font-semibold">Role</TableHead>
-                                            <TableHead className="font-semibold">Created At</TableHead>
-                                            <TableHead className="font-semibold text-center">Actions</TableHead>
+                                            <TableHead className="text-xs font-semibold text-center min-w-[80px]">Sr. No.</TableHead>
+                                            <TableHead className="text-xs font-semibold text-center min-w-[140px]">Username</TableHead>
+                                            <TableHead className="text-xs font-semibold text-center min-w-[200px]">Email</TableHead>
+                                            <TableHead className="text-xs font-semibold text-center min-w-[100px]">Role</TableHead>
+                                            <TableHead className="text-xs font-semibold text-center min-w-[180px]">Created At</TableHead>
+                                            <TableHead className="text-xs font-semibold text-center min-w-[100px]">Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {admins.map((admin, index) => (
                                             <TableRow key={admin._id} className="hover:bg-gray-50">
-                                                <TableCell className="font-medium">{index + 1}</TableCell>
-                                                <TableCell>{admin.username}</TableCell>
-                                                <TableCell>{admin.email}</TableCell>
-                                                <TableCell>
+                                                <TableCell className="text-sm text-center py-4 font-medium">{index + 1}</TableCell>
+                                                <TableCell className="text-sm text-center py-4">{admin.username}</TableCell>
+                                                <TableCell className="text-sm text-center py-4">{admin.email}</TableCell>
+                                                <TableCell className="text-sm text-center py-4">
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                         {admin.role}
                                                     </span>
                                                 </TableCell>
-                                                <TableCell>{formatDate(admin.createdAt)}</TableCell>
-                                                <TableCell className="text-center">
+                                                <TableCell className="text-sm text-center py-4">{formatDate(admin.createdAt)}</TableCell>
+                                                <TableCell className="text-sm text-center py-4">
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
